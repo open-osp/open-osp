@@ -12,7 +12,7 @@ This is a script to deploy master branch from OSCAR repository on a docker conta
 
 ## How to Use this
 * Just clone this repo, add database dump (Oscar15ON.sql) to dbdump and ./install.sh
-* Access Tomcat at http://localhost:8091/ and start oscar_mcmaster service.
+* Access Tomcat at http://localhost:8091/ (oscar/oscar) and start oscar_mcmaster service.
 * Access oscar at http://localhost:8091/oscar_mcmaster/
 * You can setup your development environment such as IntelliJ to auto-deploy into the container.
 
