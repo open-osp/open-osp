@@ -1,0 +1,49 @@
+# Dockerized OSCAR EMR by Bell Eapen
+# Date: May 8, 2017
+# Website: http://nuchange.ca
+# MySQL database shared with tomcat containers.
+db:
+  restart: "always"
+  #build: web
+  #image: mysql:latest
+  image: mariadb:10
+  command: "mysqld --character-set-server=utf8 --collation-server=utf8_general_ci"
+  environment:
+    MYSQL_ROOT_PASSWORD: liyi
+    MYSQL_DATABASE: oscar_mcmaster
+    MYSQL_USER: oscar
+    MYSQL_PASSWORD: oscar
+  volumes:
+    - ./dbdump:/docker-entrypoint-initdb.d
+
+# Tomcat container
+tomcat_oscar:
+  restart: "always"
+  #image: tomcat:latest
+  image: tomcat:7-jre8
+  ports:
+      - "8091:8080"  #HOST:CONTAINER
+  environment:
+    JDBC_URL: jdbc:mysql://db:3306/oscar_mcmaster?autoReconnect=true
+    JDBC_USER: root
+    JDBC_PASS: liyi
+  volumes:
+    - ./oscar/target/oscar-14.0.0-SNAPSHOT.war:/usr/local/tomcat/webapps/oscar_mcmaster.war
+    - ./code/logging.properties:/usr/local/tomcat/conf/logging.properties
+    - ./code/logging-servlet.properties:/usr/local/tomcat/conf/logging-servlet.properties
+    - ./code/oscar_mcmaster.properties:/usr/share/tomcat/oscar_mcmaster.properties
+    - ./code/oscar_mcmaster.properties:/usr/local/tomcat/conf/oscar_mcmaster.properties
+    - ./code/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
+    - ./code/copy.sh:/usr/local/tomcat/conf/copy.sh
+  links:
+    - db    
+
+# During development
+  #docker cp oscar-14.0.0-SNAPSHOT.war tomcat_oscar:/usr/local/tomcat/webapps
+  #docker exec -it -t dockeroscar15_tomcat_oscar_1 /bin/bash
+
+#Added by Bell
+#INTEGRATOR_SLEEP_ON_ERROR=300000
+#JDBC_URL: jdbc:mysql://db:3306/oscar_mcmaster?autoReconnect=true
+#db_name = oscar_mcmaster?autoReconnect=true&zeroDateTimeBehavior=round&useOldAliasMetadataBehavior=true&jdbcCompliantTruncation=false
+#db_uri = jdbc:mysql://db:3306/
