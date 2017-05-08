@@ -8,6 +8,7 @@ This is a script to deploy master branch from OSCAR repository on a docker conta
 * Maven
 * Docker
 * Docker-compose
+* USE THE LATEST DATABASE DUMP. You may have to add all update sql too.  
 
 ## How to Use this
 * Just clone this repo, add database dump (Oscar15ON.sql) to dbdump and ./install.sh

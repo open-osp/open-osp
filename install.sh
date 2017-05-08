@@ -13,8 +13,8 @@ docker-compose up -d
 echo "Waiting for containers to initialize (1 min)"
 sleep 60
 echo "Copying configuration files.."
-docker exec -d dockeroscar15_tomcat_oscar_1 chmod 755 /usr/local/tomcat/conf/copy.sh
-docker exec -d dockeroscar15_tomcat_oscar_1 /usr/local/tomcat/conf/copy.sh
+docker exec -d oscarlatestdocker_tomcat_oscar_1 chmod 755 /usr/local/tomcat/conf/copy.sh
+docker exec -d oscarlatestdocker_tomcat_oscar_1 /usr/local/tomcat/conf/copy.sh
 echo "OSCAR is set up at http://localhost:8091/oscar_mcmaster"
 echo "You may have to restart the container http://localhost:8091/  (oscar/oscar)"
 echo "Thank You.."
