@@ -17,7 +17,7 @@ This is a script to deploy master branch from OSCAR repository on a docker conta
 * You can setup your development environment such as IntelliJ to auto-deploy into the container.
 
 ## What the script does
-* Checks out master branch from OSCAR repo at bitbucket
+* Checks out master branch from OSCAR repo at bitbucket.
 * Compile with maven.
 * Create Docker containers.
 * Deploy the database and application in the containers.
