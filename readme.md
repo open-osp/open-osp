@@ -22,5 +22,5 @@ This is a script to deploy master branch from OSCAR repository on a docker conta
 * Create Docker containers.
 * Deploy the database and application in the containers.
 
-## Feedback
-* [Visit my blog](http://nuchange.ca)
+## Author
+* [Bell Eapen (McMaster U)](http://nuchange.ca)
