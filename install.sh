@@ -2,7 +2,7 @@
 echo "Cloning oscar from bitbucket"
 git clone --depth 1 https://bitbucket.org/oscaremr/oscar.git
 echo "Disabling Caisi"
-cp code/CaisiIntegratorUpdateTask.java oscar/src/main/java/org/oscarehr/PMmodule/caisi_integrator/
+#cp code/CaisiIntegratorUpdateTask.java oscar/src/main/java/org/oscarehr/PMmodule/caisi_integrator/
 #cp code/Security.java oscar/src/main/java/org/oscarehr/common/model/
 cd oscar
 echo "Compiling OSCAR. This may take some time...."
