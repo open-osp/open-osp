@@ -1,21 +1,27 @@
 #!/bin/sh
+
+set -euxo
+
+echo "Destroy any old instance."
+docker-compose down
+
 echo "Cloning oscar from bitbucket"
-git clone --depth 1 https://bitbucket.org/oscaremr/oscar.git
-echo "Disabling Caisi"
-#cp code/CaisiIntegratorUpdateTask.java oscar/src/main/java/org/oscarehr/PMmodule/caisi_integrator/
-#cp code/Security.java oscar/src/main/java/org/oscarehr/common/model/
-cd oscar
+if [ -d "./oscar" ]; then
+    echo "already cloned"
+else
+    git clone --depth 1 https://bitbucket.org/oscaremr/oscar.git
+fi
+
 echo "Compiling OSCAR. This may take some time...."
-mvn package -Dmaven.test.skip=true
-cd ..
+docker-compose run builder
 echo "Setting up docker containers. This may take some time...."
-docker-compose up -d
-echo "Waiting for containers to initialize (1 min)"
-sleep 60
-echo "Copying configuration files.."
-docker exec -d oscarlatestdocker_tomcat_oscar_1 chmod 755 /usr/local/tomcat/conf/copy.sh
-docker exec -d oscarlatestdocker_tomcat_oscar_1 /usr/local/tomcat/conf/copy.sh
+docker-compose up -d db
+echo "Waiting for db containers initialize (1 min)"
+sleep 20
+docker-compose exec db sh -c "cd /code/ && ./populate-db.sh"
+echo "Bringing up tomcat"
+docker-compose up -d tomcat_oscar
+
 echo "OSCAR is set up at http://localhost:8091/oscar_mcmaster"
-echo "You may have to restart the container http://localhost:8091/  (oscar/oscar)"
-echo "Thank You.."
-echo "Visit our website for more info: http://nuchange.ca"
+echo "This script is a fork of "Oscar in a Box" by http://nuchange.ca"
+
