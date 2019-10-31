@@ -3,5 +3,4 @@
 cd oscar
 apt-get update
 apt-get install -y maven
-mvn package -Dmaven.test.skip=true
-
+mvn -Dmaven.test.skip=true clean verify
