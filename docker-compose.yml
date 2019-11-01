@@ -11,9 +11,10 @@ builder:
   command: ./build.sh
 
 db:
-  restart: "always"
+  restart: 'always'
   image: mariadb:10.4
-  command: "mysqld --character-set-server=utf8 --collation-server=utf8_general_ci"
+  command: 'mysqld --character-set-server=utf8 --collation-server=utf8_general_ci'
+  working_dir: /code
   environment:
     MYSQL_ROOT_PASSWORD: liyi
     MYSQL_DATABASE: oscar_mcmaster
@@ -21,23 +22,24 @@ db:
     MYSQL_PASSWORD: oscar
   volumes:
     - ./dbdump:/docker-entrypoint-initdb.d
-    - ./my.cnf:/etc/mysql/my.cnf
+    - ./conf/my.cnf:/etc/mysql/my.cnf
     - .:/code
 
 tomcat_oscar:
-  restart: "always"
+  restart: 'always'
   image: tomcat:7-jre8
   ports:
-      - "8091:8080"
+    - '8091:8080'
   environment:
     JDBC_URL: jdbc:mysql://db:3306/oscar_mcmaster?autoReconnect=true&zeroDateTimeBehavior=round&useOldAliasMetadataBehavior=true&jdbcCompliantTruncation=false
     JDBC_USER: root
     JDBC_PASS: liyi
   volumes:
     - ./oscar/target/oscar-14.0.0-SNAPSHOT.war:/usr/local/tomcat/webapps/oscar_mcmaster.war
-    - ./code/logging.properties:/usr/local/tomcat/conf/logging.properties
-    - ./code/logging-servlet.properties:/usr/local/tomcat/conf/logging-servlet.properties
-    - ./code/oscar_mcmaster_bc.properties:/usr/share/tomcat/oscar_mcmaster.properties
+    - ./conf/logging.properties:/usr/local/tomcat/conf/logging.properties
+    - ./conf/logging-servlet.properties:/usr/local/tomcat/conf/logging-servlet.properties
+    - ./conf/oscar_mcmaster_bc_merged.properties:/usr/share/tomcat/oscar_mcmaster.properties
+    - ./conf/oscar_mcmaster_bc_merged.properties:/root/oscar_mcmaster.properties
+    - ./conf/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
   links:
-    - db    
-
+    - db
