@@ -24,7 +24,8 @@ services:
         - ./conf/my.cnf:/etc/mysql/my.cnf
         - .:/code
         - mariadb-files:/var/lib/mysql
-
+      networks:
+        - back-tier
     tomcat_oscar:
       restart: 'always'
       image: tomcat:7-jre8
