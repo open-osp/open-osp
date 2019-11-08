@@ -1,55 +1,53 @@
-version: '3.3'
-# Changelog
-# Updated by Clark Van Oyen from countable.ca 2019
-# Forked from Dockerized OSCAR EMR by Bell Eapen 2017
+version: "3.3"
 
-builder:
-  image: openjdk:8
-  volumes:
-    - .:/code
-    - $HOME/.m2:/root/.m2
-  working_dir: /code
-  command: ./build.sh
+services:
+    builder:
+      image: openjdk:8
+      volumes:
+        - .:/code
+        - $HOME/.m2:/root/.m2
+      working_dir: /code
+      command: ./build.sh
 
-db:
-  restart: 'always'
-  image: mariadb:10.4
-  command: 'mysqld --character-set-server=utf8 --collation-server=utf8_general_ci'
-  working_dir: /code
-  environment:
-    MYSQL_ROOT_PASSWORD: liyi
-    MYSQL_DATABASE: oscar_mcmaster
-    MYSQL_USER: oscar
-    MYSQL_PASSWORD: oscar
-  volumes:
-    - ./dbdump:/docker-entrypoint-initdb.d
-    - ./conf/my.cnf:/etc/mysql/my.cnf
-    - .:/code
-    - mariadb-files:/var/lib/mysql
+    db:
+      restart: 'always'
+      image: mariadb:10.4
+      command: 'mysqld --character-set-server=utf8 --collation-server=utf8_general_ci'
+      working_dir: /code
+      environment:
+        MYSQL_ROOT_PASSWORD: liyi
+        MYSQL_DATABASE: oscar_mcmaster
+        MYSQL_USER: oscar
+        MYSQL_PASSWORD: oscar
+      volumes:
+        - ./dbdump:/docker-entrypoint-initdb.d
+        - ./conf/my.cnf:/etc/mysql/my.cnf
+        - .:/code
+        - mariadb-files:/var/lib/mysql
 
-tomcat_oscar:
-  restart: 'always'
-  image: tomcat:7-jre8
-  environment:
-    JDBC_URL: jdbc:mysql://db:3306/oscar_mcmaster?autoReconnect=true&zeroDateTimeBehavior=round&useOldAliasMetadataBehavior=true&jdbcCompliantTruncation=false
-    JDBC_USER: root
-    JDBC_PASS: liyi
-  volumes:
-    - ./oscar/target/oscar-14.0.0-SNAPSHOT.war:/usr/local/tomcat/webapps/oscar_mcmaster.war
-    - ./conf/logging.properties:/usr/local/tomcat/conf/logging.properties
-    - ./conf/logging-servlet.properties:/usr/local/tomcat/conf/logging-servlet.properties
+    tomcat_oscar:
+      restart: 'always'
+      image: tomcat:7-jre8
+      environment:
+        JDBC_URL: jdbc:mysql://db:3306/oscar_mcmaster?autoReconnect=true&zeroDateTimeBehavior=round&useOldAliasMetadataBehavior=true&jdbcCompliantTruncation=false
+        JDBC_USER: root
+        JDBC_PASS: liyi
+      volumes:
+        - ./oscar/target/oscar-14.0.0-SNAPSHOT.war:/usr/local/tomcat/webapps/oscar_mcmaster.war
+        - ./conf/logging.properties:/usr/local/tomcat/conf/logging.properties
+        - ./conf/logging-servlet.properties:/usr/local/tomcat/conf/logging-servlet.properties
 #    - ./conf/oscar_mcmaster_bc.properties:/usr/share/tomcat/oscar_mcmaster.properties
-    - ./conf/oscar_mcmaster_bc.properties:/root/oscar_mcmaster.properties
-    - ./conf/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
-  networks:
-    - back-tier
+        - ./conf/oscar_mcmaster_bc.properties:/root/oscar_mcmaster.properties
+        - ./conf/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
+      networks:
+        - back-tier
 
 volumes:
   mariadb-files:
-    driver: local
+  driver: local
 
 networks:
   back-tier:
-    driver: bridge
+  driver: bridge
 
 

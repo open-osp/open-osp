@@ -1,7 +1,7 @@
-version: '3.3'
+version: "3.3"
 
 services:
 
-  oscar_tomcat:
+  tomcat_oscar:
     ports:
       - "80:8080"
