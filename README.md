@@ -39,5 +39,5 @@ docker-compose exec tomcat_oscar bash
 ```
 
 ## Thanks (References)
-* [Bell Eapen (McMaster U)](http://nuchange.ca)'s [Oscar in a Box](https://github.com/dermatologist/oscar-latest-docker)
+* [Bell Eapen (McMaster U)](http://nuchange.ca) for [Oscar in a Box](https://github.com/dermatologist/oscar-latest-docker)
 
