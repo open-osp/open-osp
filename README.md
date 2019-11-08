@@ -16,12 +16,19 @@ We're not aware of anyone using this system for production usage at this time, a
 ## Prerequisites
 * GIT
 * Docker
-* Docker-compose
+* docker-compose
 
 ## To start a new oscar deployment.
 ```
 ./deploy.sh
 ```
+
+In the future, to bring up Oscar you can just do
+```
+docker-compose up -d
+```
+
+Visit `http://localhost/oscar` in your browser.
 
 ## Steps
 * Builds the lastest Oscar from source (no development environment setup needed).
