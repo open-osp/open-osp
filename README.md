@@ -19,6 +19,14 @@ We're not aware of anyone using this system for production usage at this time, a
 * docker-compose
 
 ## To start a new oscar deployment.
+
+```
+git clone git@github.com:countable/oscaremr-devops.git
+cd oscaremr-devops
+```
+
+This process is only for new deployments. It will not work if you have a run it before in the same folder, because you may have EMR data we don't want to overwrite. For a 2nd deployment, just copy the folder again with a new name.
+
 ```
 ./deploy.sh
 ```
