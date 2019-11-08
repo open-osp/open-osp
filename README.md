@@ -2,7 +2,7 @@
 
 Deployment Tooling for [OSCAR EMR/EHR], an open-source Electronic Medical Record (EMR) for the Canadian family physicians.
 
-This repo was originally based on [scoophealth (UVIC)](https://github.com/scoophealth/oscar-latest-docker), which was forked from [Bell]'s [Oscar in a Box](https://github.com/dermatologist/oscar-latest-docker).
+This repo was originally based on [scoophealth (UVIC)](https://github.com/scoophealth/oscar-latest-docker), which was forked from [Bell](http://nuchange.ca)'s [Oscar in a Box](https://github.com/dermatologist/oscar-latest-docker).
 
 ## Purpose
 The goal of this repo is to provide a toolkit for automated Oscar EMR deployment. We want to centralize Oscar configurations for modern DevOps tools. This may help Service Providers who need to automate deployments, Oscar integrators/vendors who need to do testing, and self-hosted users. At this time, we recommend using OscarEMR DevOps to run Oscar quckly and easily for:
