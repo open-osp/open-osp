@@ -6,9 +6,9 @@ OSCAR EMR is an open-source Electronic Medical Record (EMR) for the Canadian fam
 * Docker
 * Docker-compose
 
-## How to Use this
+## To start a new oscar deployment.
 ```
-./install.sh
+./deploy.sh
 ```
 
 ## What the script does

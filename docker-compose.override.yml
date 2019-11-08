@@ -1,0 +1,7 @@
+version: '3.3'
+
+services:
+
+  oscar_tomcat:
+    ports:
+      - "80:8080"

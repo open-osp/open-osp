@@ -1,3 +1,4 @@
+version: '3.3'
 # Changelog
 # Updated by Clark Van Oyen from countable.ca 2019
 # Forked from Dockerized OSCAR EMR by Bell Eapen 2017
@@ -24,12 +25,11 @@ db:
     - ./dbdump:/docker-entrypoint-initdb.d
     - ./conf/my.cnf:/etc/mysql/my.cnf
     - .:/code
+    - mariadb-files:/var/lib/mysql
 
 tomcat_oscar:
   restart: 'always'
   image: tomcat:7-jre8
-  ports:
-    - '8091:8080'
   environment:
     JDBC_URL: jdbc:mysql://db:3306/oscar_mcmaster?autoReconnect=true&zeroDateTimeBehavior=round&useOldAliasMetadataBehavior=true&jdbcCompliantTruncation=false
     JDBC_USER: root
@@ -38,8 +38,18 @@ tomcat_oscar:
     - ./oscar/target/oscar-14.0.0-SNAPSHOT.war:/usr/local/tomcat/webapps/oscar_mcmaster.war
     - ./conf/logging.properties:/usr/local/tomcat/conf/logging.properties
     - ./conf/logging-servlet.properties:/usr/local/tomcat/conf/logging-servlet.properties
-    - ./conf/oscar_mcmaster_bc.properties:/usr/share/tomcat/oscar_mcmaster.properties
+#    - ./conf/oscar_mcmaster_bc.properties:/usr/share/tomcat/oscar_mcmaster.properties
     - ./conf/oscar_mcmaster_bc.properties:/root/oscar_mcmaster.properties
     - ./conf/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
-  links:
-    - db
+  networks:
+    - back-tier
+
+volumes:
+  mariadb-files:
+    driver: local
+
+networks:
+  back-tier:
+    driver: bridge
+
+
