@@ -38,6 +38,12 @@ docker-compose up -d
 
 Visit `http://localhost/oscar` in your browser.
 
+## Options
+
+Options may be passed in via environment variables on the host.
+
+* Deploy an Oscar fork - `OSCAR_REPO=https://countable@bitbucket.org/dennis_warren/release-ubcpc-15.10.git ./deploy.sh`
+
 ## Steps
 * Builds the lastest Oscar from source (no development environment setup needed).
 * Create Docker containers for Tomcat and MariaDB.
