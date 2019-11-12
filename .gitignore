@@ -1,10 +1,11 @@
+docker-compose.override.yml
 oscar/
 .vagrant
 .vagrant.v1.*
 .DS_Store
 *~
 ._*
-dbdump/OscarON15.sql
+*.sql
 *.war
 *.log
 
