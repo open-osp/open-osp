@@ -25,7 +25,7 @@ git clone git@github.com:countable/oscaremr-devops.git
 cd oscaremr-devops
 ```
 
-This process is only for new deployments. It will not work if you have a run it before in the same folder, because you may have EMR data we don't want to overwrite. For a 2nd deployment, just copy the folder again with a new name.
+This process is only for new deployments. It will not work if you have a run it before in the same folder, because you may have EMR data we don't want to overwrite. For a 2nd deployment, just copy the folder again with a new name. If you want to purge the database and start from scratch, do `docker volume rm oscaremr-devops_mariadb-files` first.
 
 ```
 ./deploy.sh

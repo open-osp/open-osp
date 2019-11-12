@@ -1,10 +1,14 @@
 #!/bin/bash
 
+branch=${OSCAR_BRANCH:-https://bitbucket.org/oscaremr/oscar.git}
+repo=${OSCAR_REPO:-master}
+
 echo "Cloning oscar from bitbucket"
 if [ -d "./oscar" ]; then
     echo "already cloned"
 else
-    git clone --depth 1 https://bitbucket.org/oscaremr/oscar.git
+#    git clone --depth 1 https://bitbucket.org/oscaremr/oscar.git
+    git clone --single-branch --branch $branch $repo
 fi
 
 cd oscar

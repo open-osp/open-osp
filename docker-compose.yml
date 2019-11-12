@@ -8,6 +8,9 @@ services:
         - $HOME/.m2:/root/.m2
       working_dir: /code
       command: ./build.sh
+      environment:
+        - OSCAR_BRANCH
+        - OSCAR_REPO
 
     db:
       restart: 'always'
