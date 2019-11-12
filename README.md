@@ -42,7 +42,7 @@ Visit `http://localhost/oscar` in your browser.
 
 Options may be passed in via environment variables on the host.
 
-* Deploy an Oscar fork - `OSCAR_REPO=https://countable@bitbucket.org/dennis_warren/release-ubcpc-15.10.git ./deploy.sh` (when you change this variable, delete the `oscar` directory created in the repo root.
+* Deploy an Oscar fork - `OSCAR_REPO=https://bitbucket.org/dennis_warren/release-ubcpc-15.10.git ./deploy.sh` (when you change this variable, delete the `oscar` directory created in the repo root.
 
 ## Steps
 * Builds the lastest Oscar from source (no development environment setup needed).
