@@ -1,6 +1,7 @@
 #!/bin/bash
 
-set -euxo
+
+set -uxo
 
 branch=${OSCAR_BRANCH:-master}
 repo=${OSCAR_REPO:-https://bitbucket.org/oscaremr/oscar.git}
