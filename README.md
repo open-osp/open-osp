@@ -25,7 +25,7 @@ git clone git@github.com:countable/oscaremr-devops.git
 cd oscaremr-devops
 ```
 
-This process is only for new deployments. It will not work if you have a run it before in the same folder, because you may have EMR data we don't want to overwrite. For a 2nd deployment, just copy the folder again with a new name. If you want to purge the database and start from scratch, do `docker volume rm oscaremr-devops_mariadb-files` first.
+This process is only for new deployments. It will not work if you have a run it before in the same folder, because you may have EMR data we don't want to overwrite. For a 2nd deployment, just copy the folder again with a new name. If you want to DELETE the database and start from scratch, do `./purge.sh` first.
 
 ```
 ./deploy.sh
@@ -42,7 +42,7 @@ Visit `http://localhost/oscar` in your browser.
 
 Options may be passed in via environment variables on the host.
 
-* Deploy an Oscar fork - `OSCAR_REPO=https://countable@bitbucket.org/dennis_warren/release-ubcpc-15.10.git ./deploy.sh`
+* Deploy an Oscar fork - `OSCAR_REPO=https://countable@bitbucket.org/dennis_warren/release-ubcpc-15.10.git ./deploy.sh` (when you change this variable, delete the `oscar` directory created in the repo root.
 
 ## Steps
 * Builds the lastest Oscar from source (no development environment setup needed).
