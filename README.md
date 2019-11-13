@@ -13,9 +13,9 @@ The goal of this repo is to provide a toolkit for automated Oscar EMR deployment
 
 ./deploy-source.sh will download the latest official develop branch, or a branch specified by `OSCAR_REPO=<url>` and `OSCAR_BRANCH=<branchname>`.
 
-*./deploy-release.sh* will use any war file you download to your directory, or one specified in `OSCAR_WAR=<url>`. If neither is found, the latest stable oscar release (currently 15) will be used.
+./deploy-release.sh will use any war file you download to your directory, or one specified in `OSCAR_WAR=<url>`. If neither is found, the latest stable oscar release (currently 15) will be used.
 
-*./start.sh* will resume a previously installed oscar.
+./start.sh will resume a previously installed oscar.
 
 ./purge.sh will completely delete your oscar installation *and database*. Your data will be lost.
 
@@ -36,12 +36,12 @@ cd oscaremr-devops
 This process is only for new deployments. It will not work if you have a run it before in the same folder, because you may have EMR data we don't want to overwrite. For a 2nd deployment, just copy the folder again with a new name. If you want to DELETE the database and start from scratch, do `./purge.sh` first.
 
 ```
-./deploy.sh
+./deploy-release.sh
 ```
 
 In the future, to bring up Oscar you can just do
 ```
-docker-compose up -d
+./start.sh
 ```
 
 Visit `http://localhost/oscar` in your browser.
@@ -51,6 +51,8 @@ Visit `http://localhost/oscar` in your browser.
 Options may be passed in via environment variables on the host.
 
 * Deploy an Oscar fork - `OSCAR_REPO=https://bitbucket.org/dennis_warren/release-ubcpc-15.10.git ./deploy.sh` (when you change this variable, delete the `oscar` directory created in the repo root.
+* Deploy a specific commit - `OSCAR_TREEISH=<commit, branch or tag id>`
+* Deploy a specific WAR (build) you have downloaded in the same folder - `OSCAR_WARFILE`
 
 ## Steps
 * Builds the lastest Oscar from source (no development environment setup needed).

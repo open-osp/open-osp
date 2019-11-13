@@ -37,7 +37,7 @@ services:
         JDBC_USER: root
         JDBC_PASS: liyi
       volumes:
-        - ./oscar/target/oscar-14.0.0-SNAPSHOT.war:/usr/local/tomcat/webapps/oscar_mcmaster.war
+        - ${OSCAR_WAR}:/usr/local/tomcat/webapps/oscar_mcmaster.war
         - ./conf/logging.properties:/usr/local/tomcat/conf/logging.properties
         - ./conf/logging-servlet.properties:/usr/local/tomcat/conf/logging-servlet.properties
 #    - ./conf/oscar_mcmaster_bc.properties:/usr/share/tomcat/oscar_mcmaster.properties

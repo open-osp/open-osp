@@ -6,7 +6,7 @@ echo "Destroy any old instance."
 docker-compose down
 
 echo "Compiling OSCAR. This may take some time...."
-docker-compose run builder
+#docker-compose run builder
 echo "Setting up docker containers. This may take some time...."
 docker-compose up -d db
 echo "Waiting for db containers initialize (1 min)"
