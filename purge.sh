@@ -1,5 +1,10 @@
 #!/bin/sh
 
+docker-compose down
+
 sudo rm -fr oscar
-docker volume rm oscaremr-devops_mariadb-files
+
+dcid=$(pwd | grep -oh "[^/]*$" | sed "s/[^a-z\d_]//g")
+
+docker volume rm ${dcid}_mariadb-files
 
