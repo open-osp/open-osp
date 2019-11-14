@@ -2,6 +2,9 @@
 
 set -euxo
 
+rm -f *.war.*
+rm -f *.war
+
 docker-compose down
 
 sudo rm -fr oscar

@@ -31,11 +31,7 @@ services:
         - back-tier
     tomcat_oscar:
       restart: 'always'
-      image: tomcat:7-jre8
-      environment:
-        JDBC_URL: jdbc:mysql://db:3306/oscar_mcmaster?autoReconnect=true&zeroDateTimeBehavior=round&useOldAliasMetadataBehavior=true&jdbcCompliantTruncation=false
-        JDBC_USER: root
-        JDBC_PASS: liyi
+      build: .
       volumes:
         - ${OSCAR_WAR}:/usr/local/tomcat/webapps/oscar_mcmaster.war
         - ./conf/logging.properties:/usr/local/tomcat/conf/logging.properties
