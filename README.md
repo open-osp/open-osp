@@ -1,4 +1,4 @@
-# Open Source Oscar Service Provider
+# Open Oscar Service Provider
 
 A collection of tools for deploying and running [OSCAR EMR/EHR](https://oscar-emr.com/), an open-source Electronic Medical Record (EMR) for the Canadian family physicians.
 
@@ -50,7 +50,7 @@ Visit `http://localhost/oscar` in your browser.
 
 Options may be passed in via environment variables on the host.
 
-* Deploy an Oscar fork - `OSCAR_REPO=https://bitbucket.org/dennis_warren/release-ubcpc-15.10.git ./deploy.sh` (when you change this variable, delete the `oscar` directory created in the repo root.
+* Deploy an Oscar fork - `OSCAR_REPO=https://bitbucket.org/dennis_warren/release-ubcpc-15.10.git ./deploy-source.sh` (when you change this variable, delete the `oscar` directory created in the repo root.
 * Deploy a specific commit - `OSCAR_TREEISH=<commit, branch or tag id>`
 * Deploy a specific WAR (build) you have downloaded in the same folder - `OSCAR_WARFILE`
 
