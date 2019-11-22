@@ -2,8 +2,10 @@
 
 echo "Setting up docker containers. This may take some time...."
 docker-compose up -d db
+sleep 10
 echo "Waiting for db containers initialize (1 min)"
 docker-compose exec db ./bin/populate-db.sh
+sleep 10
 echo "Bringing up tomcat"
 docker-compose up -d tomcat_oscar
 

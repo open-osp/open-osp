@@ -4,5 +4,5 @@ services:
 
   tomcat_oscar:
     ports:
-      - "80:8080"
+      - "8094:8080"
 

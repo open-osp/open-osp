@@ -11,6 +11,7 @@ if [ -d "./oscar" ]; then
     echo "already cloned"
 else
     git clone $repo oscar
+    cd oscar
     git checkout $branch
 fi
 

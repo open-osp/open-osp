@@ -9,7 +9,7 @@ services:
       working_dir: /code
       command: ./build.sh
       environment:
-        - OSCAR_BRANCH
+        - OSCAR_TREEISH
         - OSCAR_REPO
 
     db:
