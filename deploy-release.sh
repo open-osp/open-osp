@@ -2,8 +2,7 @@
 
 set -euxo
 
-echo "Destroy any old instance."
-#docker-compose down
+echo "This deploys an oscar from a WAR file, with DB bootstrapped from a specified matching commit."
 
 # Latest OscarBC downloaded file.
 export OSCAR_WAR=${OSCAR_WAR:-"http://jenkins.oscar-emr.com:8080/job/oscar-bc/5/artifact/target/oscar-14.0.0-SNAPSHOT.war"}
