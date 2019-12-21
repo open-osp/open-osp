@@ -11,6 +11,8 @@ The goal of this repo is to provide a hosting-agnostic toolkit for automated Osc
 * Continuous integration of Oscar integrations (use ./deploy-release.sh or ./deploy-source.sh)
 * Testing (use ./deploy-release.sh or ./deploy-source.sh)
 
+## Usage
+
 ./deploy-source.sh will download the latest official develop branch, or a branch specified by `OSCAR_REPO=<url>` and `OSCAR_BRANCH=<branchname>`.
 
 ./deploy-release.sh will use any war file you download to your directory, or one specified in `OSCAR_WAR=<url>`. If neither is found, the latest stable oscar release (currently 15) will be used.
