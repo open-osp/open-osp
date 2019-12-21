@@ -10,6 +10,7 @@ The goal of this repo is to provide a hosting-agnostic toolkit for automated Osc
 * Training (use ./deploy-release.sh)
 * Continuous integration of Oscar integrations (use ./deploy-release.sh or ./deploy-source.sh)
 * Testing (use ./deploy-release.sh or ./deploy-source.sh)
+* Oscar develpment environments with high [dev/prod parity](https:/12factor.net)
 
 ## Usage
 
