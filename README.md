@@ -72,6 +72,10 @@ To shell into the tomcat container
 docker-compose exec tomcat_oscar bash
 ```
 
+## TODO
+
+For backlog, see the [GitHub issues tab](https://github.com/open-osp/open-osp/issues).
+
 ## Thanks (References)
 * [Bell Eapen (McMaster U)](http://nuchange.ca) for [Oscar in a Box](https://github.com/dermatologist/oscar-latest-docker)
 
