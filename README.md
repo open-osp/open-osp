@@ -72,6 +72,10 @@ To shell into the tomcat container
 docker-compose exec tomcat_oscar bash
 ```
 
+## Docker Image
+
+A Docker image built from the Dockerfile in this repo is published [here](https://hub.docker.com/repository/docker/openosp/open-osp).
+
 ## TODO
 
 For backlog, see the [GitHub issues tab](https://github.com/open-osp/open-osp/issues).
