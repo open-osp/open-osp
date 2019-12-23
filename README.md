@@ -16,9 +16,11 @@ The goal of this repo is to provide a hosting-agnostic toolkit for automated Osc
 
 ./deploy-source.sh will download the latest official develop branch, or a branch specified by `OSCAR_REPO=<url>` and `OSCAR_BRANCH=<branchname>`.
 
-./deploy-release.sh will use any war file you download to your directory, or one specified in `OSCAR_WAR=<url>`. If neither is found, the latest stable oscar release (currently 15) will be used.
+./build-release.sh will build a Docker image to be used with any war file you download to your directory, or one specified in `OSCAR_WAR=<url>`. If neither is found, the latest stable oscar release (currently 15) will be used.
 
-./start.sh will resume a previously installed oscar.
+./deploy-release will create a newly installed Oscar environment in the current folder.
+
+./start.sh will resume a previously installed Oscar in this folder.
 
 ./purge.sh will completely delete your oscar installation *and database*. Your data will be lost.
 
