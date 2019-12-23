@@ -18,6 +18,7 @@ What does this repo do?
 * Builds Oscar from source, for usage locally or to published to DockerHub for use by others.
 * Bootstraps a MariaDB database from the same source code as you built from.
 * Runs a new containerized Oscar environment including database, in one command (from source or from a tested image).
+* Runs drugref locally.
 
 ## Usage
 
