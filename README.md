@@ -12,6 +12,13 @@ The goal of this repo is to provide a hosting-agnostic toolkit for automated Osc
 * Testing (use ./deploy-release.sh or ./deploy-source.sh)
 * Oscar develpment environments with high [dev/prod parity](https://12factor.net/dev-prod-parity)
 
+## Scope
+What does this repo do?
+
+* Builds Oscar from source, for usage locally or to published to DockerHub for use by others.
+* Bootstraps a MariaDB database from the same source code as you built from.
+* Runs a new containerized Oscar environment including database, in one command (from source or from a tested image).
+
 ## Usage
 
 ./deploy-source.sh will download the latest official develop branch, or a branch specified by `OSCAR_REPO=<url>` and `OSCAR_BRANCH=<branchname>`.
