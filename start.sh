@@ -1,4 +1,4 @@
 #!/bin/bash
 
-docker-compose up -d
+docker-compose up -d tomcat_oscar db
 
