@@ -49,6 +49,14 @@ services:
 #        - CATALINA_OPTS="-javaagent:/spring-instrument-3.2.9.RELEASE.jar"
       networks:
         - back-tier
+    nginx:
+      image: nginx:1.13
+      networks:
+        - back-tier
+      volumes:
+        - ./conf/nginx/conf.d:/etc/nginx/conf.d
+      depends_on:
+        - tomcat_oscar
 
 volumes:
   mariadb-files:
