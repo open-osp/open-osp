@@ -2,3 +2,7 @@
 body, p, * {
     font-style: italic;
 }
+#open-osp-custom {
+    text-decoration: solid;
+    font-size: small;
+}
