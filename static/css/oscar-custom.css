@@ -1,5 +1,4 @@
+/* Insert custom css here */
 body, p, * {
-    font-size: 100px;
     font-style: italic;
-    text-decoration: solid;
 }
