@@ -1,10 +1,9 @@
 version: "3.3"
 
 services:
-
   nginx:
     ports:
       - '80:80'
       - '443:443'
     links:
-      - "tomcat_oscar"
+      - 'tomcat_oscar'
