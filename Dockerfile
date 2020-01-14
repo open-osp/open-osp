@@ -13,3 +13,4 @@ ADD ./conf/oscar_mcmaster_bc.properties /root/oscar_mcmaster.properties
 ADD ./conf/tomcat-users.xml /usr/local/tomcat/conf/tomcat-users.xml
 ADD ./conf/drugref2.properties /root/drugref2.properties
 ADD ./conf/index.jsp /usr/local/tomcat/webapps/ROOT/index.jsp
+
