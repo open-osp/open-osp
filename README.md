@@ -4,6 +4,12 @@ A collection of tools for deploying and running [OSCAR EMR/EHR](https://oscar-em
 
 This repo was originally based on [scoophealth (UVIC)](https://github.com/scoophealth/oscar-latest-docker)'s fork of [Bell Eapen's](http://nuchange.ca) [Oscar in a Box](https://github.com/dermatologist/oscar-latest-docker).
 
+## Quickstart
+  * Install Docker and docker-compose
+  * `git clone <this repo>`
+  * `cd open-osp`
+  * `./deploy-release.sh`
+
 ## Purpose
 The goal of this repo is to provide a hosting-agnostic toolkit for automated Oscar EMR deployment. We want to centralize Oscar configurations for modern DevOps tools and share [best practices](https://12factor.net/) for modern web application deployment for Oscar. This may help Service Providers who need to automate deployments, Oscar integrators/vendors/developers who need to do testing, and self-hosted users. At this time, we recommend using OscarEMR DevOps to run Oscar quckly and easily for:
 
