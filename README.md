@@ -6,7 +6,7 @@ This repo was originally based on [scoophealth (UVIC)](https://github.com/scooph
 
 ## Quickstart
   * Install Docker and docker-compose
-  * `git clone <this repo>`
+  * `git clone git@github.com:open-osp/open-osp.git`
   * `cd open-osp`
   * `./deploy-release.sh`
 
