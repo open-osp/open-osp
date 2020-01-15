@@ -6,7 +6,7 @@ This repo was originally based on [scoophealth (UVIC)](https://github.com/scooph
 
 ## Quickstart
   * Install Docker and docker-compose
-  * `git clone git@github.com:open-osp/open-osp.git`
+  * `git clone https://github.com/open-osp/open-osp.git`
   * `cd open-osp`
   * `./deploy-release.sh`
   * Browse to Oscar on localhost!
