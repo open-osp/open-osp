@@ -11,12 +11,12 @@ export DRUGREF_WAR=${DRUGREF_WAR:-"http://jenkins.oscar-emr.com:8080/job/drugref
 
 if [ ! -f oscar.war ]; then
   # TODO: support deploying a locally downloaded file directly.
-  wget $OSCAR_WAR -O oscar.war
+  wget http://jenkins.oscar-emr.com:8080/job/oscar-bc/5/artifact/target/oscar-14.0.0-SNAPSHOT.war -O oscar.war
 fi
 
 if [ ! -f drugref2.war ]; then
   # Latest OscarBC as of Nov 13 2019.
-  wget $DRUGREF_WAR -O drugref2.war
+  wget http://jenkins.oscar-emr.com:8080/job/drugref2/18/org.drugref\$drugref2/artifact/org.drugref/drugref2/1.0-SNAPSHOT/drugref2-1.0-SNAPSHOT.war -O drugref2.war
 fi
 
 # OscarBC built commit (for db bootstrap)

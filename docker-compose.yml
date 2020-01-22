@@ -54,7 +54,7 @@ services:
       networks:
         - back-tier
       volumes:
-        - ./conf/nginx/conf.d:/etc/nginx/conf.d
+        - ./conf/nginx/conf.d/oscar.conf:/etc/nginx/conf.d/oscar.template
         - ./static:/static
       depends_on:
         - tomcat_oscar
