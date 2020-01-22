@@ -93,6 +93,30 @@ docker-compose exec tomcat_oscar bash
 
 A Docker image built from the Dockerfile in this repo is published [here](https://hub.docker.com/repository/docker/openosp/open-osp).
 
+## Customize
+
+If you want to customize some pages, you might want to do these before starting your Oscar instance, or if you have already started an instance you can do
+```
+docker-compose up --build -d nginx
+```
+to restart both tomcat_oscar and nginx.
+
+### Customizing Login Page
+You can customize the login page by adding environment variables to nginx. You can add/edit a file named 'oscar-login.env' and add variables;
+```
+LOGIN_TEXT=Html text that can <br> be added in the front page
+LOGIN_TITLE=Title you want
+BUILD_DATE=JAN-10-20
+BUILD_NAME=Oscar-build-v12
+BUILD_NUMBER=12
+```
+### Adding Login page Logo
+1. You can add a logo by adding a file in the ./static/images directory named OSCAR-LOGO.png (Recommended)
+2. You can change CSS for 'login-logo' id
+
+### Custom CSS
+We have provided a sample CSS in ./static/css/oscar-custom.css. Feel free to play with this.
+
 ## TODO
 
 For backlog, see the [GitHub issues tab](https://github.com/open-osp/open-osp/issues).
