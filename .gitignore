@@ -10,5 +10,5 @@ oscar/
 *.war
 *.log
 
-conf/nginx/default.conf
-static/images/*
+conf/nginx/conf.d/default.conf
+static/images/
