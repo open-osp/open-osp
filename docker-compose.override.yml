@@ -5,3 +5,8 @@ services:
     ports:
       - '80:80'
       - '443:443'
+    env_file:
+      - oscar-login.env
+    volumes:
+      - ./conf/nginx/nginx.sh:/script/nginx.sh
+    command: sh -c "envsubst \"`env | awk -F = '{printf \" $$%s\", $$1}'`\" < /etc/nginx/conf.d/oscar.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
