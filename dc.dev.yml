@@ -1,0 +1,10 @@
+version: "3.3"
+
+services:
+  nginx:
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./conf/ssl:/ssl
+      - ./conf/nginx/conf.d/dev.conf:/etc/nginx/conf.d/oscar.template
