@@ -50,11 +50,11 @@ services:
       networks:
         - back-tier
     nginx:
-      image: nginx:1.13
+      image: nginx:latest
       networks:
         - back-tier
       volumes:
-        - ./conf/nginx/conf.d/oscar.conf:/etc/nginx/conf.d/oscar.template
+        - ./conf/nginx/conf.d:/etc/nginx/conf.d
         - ./static:/static
       depends_on:
         - tomcat_oscar

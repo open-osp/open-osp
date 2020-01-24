@@ -6,4 +6,5 @@ services:
       - '80:80'
       - '443:443'
     volumes:
-      - ./conf/ssl:/ssl_certificates
+      - ./conf/ssl:/ssl
+      - ./conf/nginx/conf.d/dev.conf:/etc/nginx/conf.d/oscar.template
