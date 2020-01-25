@@ -7,7 +7,7 @@ services:
         - .:/code
         - $HOME/.m2:/root/.m2
       working_dir: /code
-      command: ./build.sh
+      command: ./build-release.sh
       environment:
         - OSCAR_TREEISH
         - OSCAR_REPO
