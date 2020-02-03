@@ -11,10 +11,10 @@ body, p, * {
     word-wrap: break-word;
 }
 #login-logo {
-    /* custom image using CSS */
     width:300px;
-    height:250px;
-    box-sizing:border-box;
-    padding-left: 300px;
-    background: url('https://googlechrome.github.io/samples/picture-element/images/butterfly.jpg');
+    height:300px;
+    /* box-sizing:border-box;
+    padding-left: 300px; */
+    /* If you want custom images through CSS, change url here. (I still recommend adding you own logo file) */
+    /* background: url('https://googlechrome.github.io/samples/picture-element/images/butterfly.jpg'); */
 }
