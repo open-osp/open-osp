@@ -39,6 +39,9 @@ services:
 #        - ./conf/logging-servlet.properties:/usr/local/tomcat/conf/logging-servlet.properties
         - ./conf/oscar_mcmaster_bc.properties:/root/oscar_mcmaster.properties
         - ./OscarDocument:/var/lib/OscarDocument/
+        - ./conf/ssl.crt:/usr/local/tomcat/conf/ssl.crt
+        - ./conf/ssl.key:/usr/local/tomcat/conf/ssl.key
+        - ./conf/server.xml:/usr/local/tomcat/conf/server.xml
 #        - ./conf/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
 #        - ./drugref2.war:/usr/local/tomcat/webapps/drugref2.war
 #        - ./conf/drugref2.properties:/root/drugref2.properties

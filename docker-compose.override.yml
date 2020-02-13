@@ -8,3 +8,7 @@ services:
     volumes:
       - ./conf/ssl:/ssl
       - ./conf/nginx/conf.d/prod.conf:/etc/nginx/conf.d/oscar.template
+#  tomcat_oscar:
+#    ports:
+#      - '8443:443'
+#      - '8080:8080'
