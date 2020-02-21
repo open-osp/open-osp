@@ -13,3 +13,4 @@ oscar/
 
 conf/nginx/conf.d/default.conf
 static/images/
+*.env
