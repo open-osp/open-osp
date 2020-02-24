@@ -15,10 +15,11 @@ services:
     volumes:
       - $HOME/.aws/credentials:/root/.aws/credentials
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./bin/mysql_backup.sh:/mysql_backup.sh
     env_file: 
       - local.env
     environment:
-      - BACKUP_CMD='mysqldump -uroot -pliyi oscar_mcmaster > dump'
+      - BACKUP_CMD=/mysql_backup.sh
     restart: always
     
 #  tomcat_oscar:
