@@ -31,8 +31,6 @@ services:
         - back-tier
     tomcat_oscar:
       restart: 'always'
-      ports:
-        - 
       image: openosp/open-osp:oscarbc15.2020.02.25
       build: .
       volumes:
