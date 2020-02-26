@@ -12,3 +12,4 @@ oscar/
 *.log
 
 conf/nginx/conf.d/default.conf
+*.env
