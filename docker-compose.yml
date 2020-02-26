@@ -31,7 +31,9 @@ services:
         - back-tier
     tomcat_oscar:
       restart: 'always'
-      image: openosp/open-osp
+      ports:
+        - 
+      image: openosp/open-osp:oscarbc15.2020.02.25
       build: .
       volumes:
 #        - ./oscar.war:/usr/local/tomcat/webapps/oscar_mcmaster.war
