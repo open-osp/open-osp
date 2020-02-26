@@ -135,6 +135,18 @@ You should then recreate your nginx with
 docker-compose up --build --force-recreate nginx
 ```
 
+## Enabling Backups
+The backups use AWS to store your database dumps and OscarDocuments. For that you would need to:
+1. Create a `~/.aws/credentials` directory containing your credentials OR install awscli `apt install awscli` and run `aws configure`.
+2. Create a `local.env` file containing the following.
+```
+BACKUP_BUCKET=`your directory in aws e.g oscar/backups`
+BACKUP_FREQ=`seconds of your backup, defaults to 86400`
+```
+3. Finally run ./bin/backups.sh to start your backups container.
+
+For more information regarding the backup image, you can go to `https://github.com/countable-web/s3-backup-jobs`
+
 ## TODO
 
 For backlog, see the [GitHub issues tab](https://github.com/open-osp/open-osp/issues).
