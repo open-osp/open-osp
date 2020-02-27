@@ -3,7 +3,7 @@ version: "3.3"
 services:
   nginx:
     ports:
-      - '80:80'
+      - '8095:80'
       - '443:443'
     volumes:
       - ./nginx/conf.d/default.conf:/etc/nginx/conf.d/oscar.template
