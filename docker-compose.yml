@@ -58,7 +58,7 @@ services:
         - back-tier
       volumes:
         - ./static:/static
-        - ./conf/ssl.cert:/ssl/ssl.cert
+        - ./conf/ssl.cert:/ssl/ssl.crt
         - ./conf/ssl.key:/ssl/ssl.key
       env_file:
         - oscar-login.env

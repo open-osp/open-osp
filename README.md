@@ -118,7 +118,7 @@ BUILD_NUMBER=12
 We have provided a sample CSS in ./static/css/oscar-custom.css. Feel free to play with this.
 
 ## Adding SSL
-After deploying, there will be auto-generated ssl keys that are provided but if you have one for that generated you can simply copy them to the `conf` folder and rename them as `ssl.cert` and `ssl.key`.
+After deploying, there will be auto-generated ssl keys that are provided but if you have one for that generated you can simply copy them to the `conf` folder and rename them as `ssl.crt` and `ssl.key`.
 
 You can now restart your OpenOsp by doing `./start.sh`
 
