@@ -8,3 +8,5 @@ services:
   tomcat_oscar:
     ports:
       - '8443:443'
+  backups:
+    image: ./backups

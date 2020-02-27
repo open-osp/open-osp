@@ -131,14 +131,22 @@ Our backups use AWS so you must install AWS with `apt-get install awscli` then r
 
 You can modify your aws bucket location by changing BACKUP_BUCKET in your `local.env`
 ```
-BACKUP_BUCKET="your/aws/bucket"
+BACKUP_BUCKET=your/aws/bucket
 ```
 
 ### Manual Backups
-2. Go to your openosp repo, `cd openosp`
-3. Run the script `./bin/backups.sh`
+1. Go to your openosp repo, `cd openosp`
+2. Run the script `./backups/backups.sh`
 
-For more information regarding the backup image, you can go to `https://github.com/countable-web/s3-backup-jobs`
+### Automated Backups
+This will run the backup job every midnight
+1. `./bin/run-auto-backups.sh`
+
+If you want a custom time for your backups, you can add a variable in your local.env
+```
+CRON_SCHEDULE="*  *  *  *  *"
+# this will run every minute. Read about cron scheduling if you are planning to use this.
+```
 
 ## TODO
 
