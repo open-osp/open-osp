@@ -11,7 +11,6 @@ openssl req -new -newkey rsa:4096 -days 3650 -nodes -x509 -subj "/C=CA/ST=BC/L=V
 
 sleep 10
 echo "Bringing up tomcat"
-docker pull openosp/open-osp
 docker-compose up -d tomcat_oscar
 docker-compose up -d nginx
 
