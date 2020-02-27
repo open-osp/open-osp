@@ -118,22 +118,9 @@ BUILD_NUMBER=12
 We have provided a sample CSS in ./static/css/oscar-custom.css. Feel free to play with this.
 
 ## Adding SSL
-Follow the steps below:
-```
-# Go to your open osp directory
-cd openosp
-cp dc.prod.yml docker-compose.override.yml
+After deploying, there will be auto-generated ssl keys that are provided but if you have one for that generated you can simply copy them to the `conf` folder and rename them as `ssl.cert` and `ssl.key`.
 
-openssl req -x509 -out {openosp-directory}/conf/ssl/oscar.crt -keyout {openosp-directory}/conf/ssl/oscar.key   -newkey rsa:2048 -nodes -sha256
-
-# if it asks for a PEM pass phrase, just type any 4+ digits that you can remember
-# Next, it will ask for details about you Country Name, State or Province Name, etc
-# you can fill these or skip through them
-```
-You should then recreate your nginx with
-```
-docker-compose up --build --force-recreate nginx
-```
+You can now restart your OpenOsp by doing `./start.sh`
 
 ## Enabling Backups
 The backups use AWS to store your database dumps and OscarDocuments. For that you would need to:
