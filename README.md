@@ -8,6 +8,8 @@ This repo was originally based on [scoophealth (UVIC)](https://github.com/scooph
   * Install Docker and docker-compose
   * `git clone https://github.com/open-osp/open-osp.git`
   * `cd open-osp`
+  * `cp dc.dev.yml docker-compose.override.yml`
+  * `cp local.env.template local.env`
   * `./deploy-release.sh`
   * Browse to Oscar on localhost!
 
@@ -102,7 +104,7 @@ docker-compose up --build -d nginx
 to restart both tomcat_oscar and nginx.
 
 ### Customizing Login Page
-You can customize the login page by adding environment variables to nginx. You can add/edit a file named 'oscar-login.env' and add variables;
+You can customize the login page by adding environment variables to nginx. You can edit the file named 'local.env' and add variables;
 ```
 LOGIN_TEXT=Html text that can <br> be added in the front page
 LOGIN_TITLE=Title you want
