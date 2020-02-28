@@ -41,7 +41,7 @@ folder=$(date +%Y%m)
 
 rm -rf $DUMP_LOCATION
 rm -f $DUMP_LOCATION.tar.lrz
-rm -rf $DUMP_LOCATION.tar
+rm -f $DUMP_LOCATION.tar
 
 mkdir $DUMP_LOCATION
 
