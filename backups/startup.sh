@@ -3,7 +3,7 @@
 if [ -z "$CRON_SCHEDULE" ]
 then
     CRON_SCHEDULE="midnight"
-    echo "0  0  *  *  *    /backups.sh" > /etc/crontabs/root
+    echo "0  1  *  *  *    /backups.sh" > /etc/crontabs/root
 else
     CRON_SCHEDULE="${CRON_SCHEDULE//\"}"
     echo "$CRON_SCHEDULE   /backups.sh" > /etc/crontabs/root
