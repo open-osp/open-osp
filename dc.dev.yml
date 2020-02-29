@@ -5,5 +5,3 @@ services:
     ports:
       - '80:80'
       - '443:443'
-    volumes:
-      - ./nginx/conf.d/default.conf:/etc/nginx/conf.d/oscar.template

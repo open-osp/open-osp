@@ -124,17 +124,29 @@ After deploying, there will be auto-generated ssl keys that are provided but if 
 
 You can now restart your OpenOsp by doing `./start.sh`
 
-## Enabling Backups
-The backups use AWS to store your database dumps and OscarDocuments. For that you would need to:
-1. Create a `~/.aws/credentials` directory containing your credentials OR install awscli `apt install awscli` and run `aws configure`.
-2. Create a `local.env` file containing the following.
-```
-BACKUP_BUCKET=`your directory in aws e.g oscar/backups`
-BACKUP_FREQ=`seconds of your backup, defaults to 86400`
-```
-3. Finally run ./bin/backups.sh to start your backups container.
+## Backups
+Backups will create backups for your OpenOsp database and OscarDocuments.
 
-For more information regarding the backup image, you can go to `https://github.com/countable-web/s3-backup-jobs`
+Our backups use AWS so you must install AWS with `apt-get install awscli` then run `aws config`.
+
+You can modify your aws bucket location by changing BACKUP_BUCKET in your `local.env`
+```
+BACKUP_BUCKET=your/aws/bucket
+```
+
+### Manual Backups
+1. Go to your openosp repo, `cd openosp`
+2. Run the script `./backups/backups.sh`
+
+### Automated Backups
+This will run the backup job every midnight
+1. `./bin/run-auto-backups.sh`
+
+If you want a custom time for your backups, you can add a variable in your local.env
+```
+CRON_SCHEDULE="*  *  *  *  *"
+# this will run every minute. Read about cron scheduling if you are planning to use this.
+```
 
 ## TODO
 
