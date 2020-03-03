@@ -148,6 +148,10 @@ BACKUP_FREQ=`seconds of your backup, defaults to 86400`
 
 For more information regarding the backup image, you can go to `https://github.com/countable-web/s3-backup-jobs`
 
+## Host Architecture
+
+[host architecture pdf](!./host-architecture.pdf)
+
 ## TODO
 
 For backlog, see the [GitHub issues tab](https://github.com/open-osp/open-osp/issues).
