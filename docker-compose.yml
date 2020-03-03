@@ -11,6 +11,17 @@ services:
       env_file: 
         - local.env
 
+    flask_oscar: 
+      build: ./flask-oscarproperties
+      ports:
+        - 5000:5000
+      volumes:
+        - ./flask-oscarproperties:/code
+        - ./conf/oscar_mcmaster_bc.properties:/code/oscar_mcmaster_bc.properties
+      env_file: 
+        - local.env
+      restart: always
+
     db:
       restart: 'always'
       image: mariadb:10.4
