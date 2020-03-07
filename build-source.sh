@@ -5,7 +5,7 @@ set -euxo
 echo "This deploys a fresh oscar from source."
 
 echo "Compiling OSCAR. This may take some time...."
-docker-compose run builder ./bin/build-oscar.sh
+docker-compose -f docker-compose.admin.yml run builder ./bin/build-oscar.sh
 
 cp ./oscar/target/oscar-*-SNAPSHOT.war oscar.war
 
