@@ -8,7 +8,11 @@ set -uxo
 cd oscar
 apt-get update
 apt-get install -y maven
-mvn -Dmaven.test.skip=true clean verify
-mvn package -Dmaven.test.skip=true
+
+mvn clean verify
+mvn package
+
+#mvn -Dmaven.test.skip=true clean verify
+#mvn package -Dmaven.test.skip=true
 
 
