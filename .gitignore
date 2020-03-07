@@ -1,4 +1,4 @@
-oscar_mcmaster_bc.properties
+oscar.properties
 conf/ssl.*
 conf/ssl
 OscarDocument
