@@ -26,7 +26,7 @@ services:
       volumes:
 #        - ./conf/logging.properties:/usr/local/tomcat/conf/logging.properties
 #        - ./conf/logging-servlet.properties:/usr/local/tomcat/conf/logging-servlet.properties
-        - ./oscar.properties:/root/oscar_mcmaster.properties
+        - ./oscar.properties:/root/oscar.properties
         - ./OscarDocument:/var/lib/OscarDocument/
         - ./conf/ssl.crt:/usr/local/tomcat/conf/ssl.crt
         - ./conf/ssl.key:/usr/local/tomcat/conf/ssl.key
