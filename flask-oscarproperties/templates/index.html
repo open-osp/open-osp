@@ -1,12 +1,46 @@
 <html>
     <head>
-
+    {{ pagedown.html_head() }}
     </head>
-
     <body>
-        <form method="POST" action="/">
-            <button type="submit"></button>
+        {% if submitted %}
+            <h3>Oscar Properties Saved</h3>
+        {% endif %}
+        <form method="POST">
+            {{ form.csrf_token }}
+            {{ form.pagedown(rows=10, cols=10) }}
+            {{ form.submit }}
 
         </form>
+
+        <button type="button" id="show-pagedown-preview" onclick="showPageDownPreview()">
+            Show Preview
+        </button>
+        <div class="preview">
+            {{ form.pagedown(only_preview=True) }}
+        </div>
+
+        <style>
+            #flask-pagedown-pagedown {
+                width: 100%;
+                min-height: 250px;
+            }
+            #flask-pagedown-pagedown-preview {
+                display: none
+            }
+        </style>
+
+        <script>
+            function showPageDownPreview() {
+                let preview = document.getElementById("flask-pagedown-pagedown-preview")
+                let display = preview.style.display
+
+                if (display == "none") {
+                    preview.style.display = "block"
+                } else {
+                    preview.style.display = "none"
+                }
+            }
+        </script>
     </body>
 </html>
