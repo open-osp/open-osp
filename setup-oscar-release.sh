@@ -9,7 +9,7 @@ if [ ! -f oscar.properties ]; then
 fi
 if [ ! -f drugref.properties ]; then
   echo "copying drugref2 properties template"
-  cp ./conf/drugref2.properties drugref2.properties
+  cp ./conf/drugref2.properties ./drugref2.properties
 fi
 
 #if [[ $* == *--bootstrap* ]]; then
