@@ -1,6 +1,6 @@
 # Open Oscar Service Provider
 
-A collection of tools for deploying and running [OSCAR EMR/EHR](https://oscar-emr.com/), an open-source Electronic Medical Record (EMR) for the Canadian family physicians.
+This project was developed during the formation of the [OpenOSP](https://openosp.ca) service cooperative. It is a set of open source tools for deploying and running [OSCAR EMR/EHR](https://oscar-emr.com/), an open-source Electronic Medical Record (EMR) for the Canadian family physicians.
 
 This repo was originally based on [scoophealth (UVIC)](https://github.com/scoophealth/oscar-latest-docker)'s fork of [Bell Eapen's](http://nuchange.ca) [Oscar in a Box](https://github.com/dermatologist/oscar-latest-docker).
 
@@ -11,14 +11,15 @@ This repo was originally based on [scoophealth (UVIC)](https://github.com/scooph
   * `cp dc.dev.yml docker-compose.override.yml`
   * `cp local.env.template local.env`
   * `./deploy-release.sh`
-  * Browse to Oscar on localhost!
+  * Browse to Oscar on http://localhost!
 
 ## Purpose
-The goal of this repo is to provide a hosting-agnostic toolkit for automated Oscar EMR deployment. We want to centralize Oscar configurations for modern DevOps tools and share [best practices](https://12factor.net/) for modern web application deployment for Oscar. This may help Service Providers who need to automate deployments, Oscar integrators/vendors/developers who need to do testing, and self-hosted users. At this time, we recommend using OscarEMR DevOps to run Oscar quckly and easily for:
+The goal of this repo is to provide a hosting-agnostic (Dockerized) toolkit for automated Oscar EMR deployment. We want to centralize Oscar configurations for modern DevOps tools and share [best practices](https://12factor.net/) for modern web application deployment for Oscar. This may help Service Providers who need to automate deployments, Oscar integrators/vendors/developers who need to do testing, and self-hosted users. ie)
 
 * Training (use ./deploy-release.sh)
 * Continuous integration of Oscar integrations (use ./deploy-release.sh or ./deploy-source.sh)
 * Testing (use ./deploy-release.sh or ./deploy-source.sh)
+* Oscar build toolchains (use ./build-source.sh)
 * Oscar develpment environments with high [dev/prod parity](https://12factor.net/dev-prod-parity)
 
 ## Scope
@@ -147,6 +148,10 @@ If you want a custom time for your backups, you can add a variable in your local
 CRON_SCHEDULE="*  *  *  *  *"
 # this will run every minute. Read about cron scheduling if you are planning to use this.
 ```
+
+## Host Architecture
+
+[host architecture pdf](!./host-architecture.pdf)
 
 ## TODO
 

@@ -1,1 +1,1 @@
-<% response.sendRedirect("/oscar_mcmaster"); %>
+<% response.sendRedirect("/oscar"); %>
