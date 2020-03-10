@@ -1,5 +1,7 @@
 #!/bin/sh
 
+#TODO: add a warning
+
 set -euxo
 
 rm -f *.war.*
