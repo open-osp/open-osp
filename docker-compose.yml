@@ -13,7 +13,6 @@ services:
         MYSQL_USER: oscar
         MYSQL_PASSWORD: oscar
       volumes:
-        - ./dbdump:/docker-entrypoint-initdb.d
         - ./conf/my.cnf:/etc/mysql/my.cnf
         - .:/code
         - mariadb-files:/var/lib/mysql
@@ -35,6 +34,8 @@ services:
         - ./drugref2.properties:/root/drugref2.properties
       networks:
         - back-tier
+      environment:
+        TZ: America/Vancouver
     nginx:
       image: nginx:latest
       networks:

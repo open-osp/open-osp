@@ -5,11 +5,11 @@ set -euxo
 # if this is a fresh install
 if [ ! -f oscar.properties ]; then
   echo "copying oscar properties template"
-  cp ./conf/oscar_mcmaster_bc.properties oscar.properties
+  cp ./conf/oscar_mcmaster_bc.properties ./oscar.properties
 fi
 if [ ! -f drugref.properties ]; then
   echo "copying drugref2 properties template"
-  cp ./conf/drugref2.properties drugref2.properties
+  cp ./conf/drugref2.properties ./drugref2.properties
 fi
 
 if [[ $* == *--flag* ]]; then

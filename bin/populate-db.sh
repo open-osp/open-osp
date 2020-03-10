@@ -7,10 +7,10 @@ done
 
 #./wait-for-it.sh localhost 3306
 cd oscar/database/mysql
-./createdatabase_bc.sh oscar oscar oscar_mcmaster
+./createdatabase_bc.sh oscar oscar oscar
 
 echo "Disabling default user expiry..."
-mysql -uroot -pliyi oscar_mcmaster << QUERY
+mysql -uroot -pliyi oscar << QUERY
 update security set date_ExpireDate=DATE_ADD(CURDATE(), INTERVAL 360 MONTH), b_ExpireSet=1 
 where user_name='oscardoc';
 QUERY
