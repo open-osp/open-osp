@@ -17,7 +17,7 @@ services:
         - 5000:5000
       volumes:
         - ./flask-oscarproperties:/code
-        - .oscar.properties:/code/oscar.properties
+        - ./oscar.properties:/code/oscar.properties
       env_file: 
         - local.env
       restart: always

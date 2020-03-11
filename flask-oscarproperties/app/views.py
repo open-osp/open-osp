@@ -1,4 +1,5 @@
 import sys
+import os
 
 from flask import render_template, request, session, redirect
 
@@ -6,14 +7,17 @@ from app import app, pagedown
 from forms import PageDownForm, LoginForm
 from utils import authenticate_user
 
-@app.route('/properties/')
+@app.route('/edit')
 def index():
+    if bool(os.environ.get('FLASK_ENABLED')) == False:
+        return redirect('/')
+        
     if session.get('logged_in'):
-        return redirect('/properties/edit')
+        return redirect('/edit/oscar')
     else:
-        return redirect('/properties/login')
+        return redirect('/edit/login')
 
-@app.route('/properties/login', methods=['GET', 'POST'])
+@app.route('/edit/login', methods=['GET', 'POST'])
 def login_properties():
     session.permanent = True
 
@@ -33,12 +37,12 @@ def login_properties():
             if not authenticated:
                 context['error'] = 'Invalid credentials!'
             else:
-                redirect('/properties')
+                redirect('/edit')
 
     return render_template('login.html', **context)
 
 
-@app.route('/properties/edit', methods=['GET', 'POST'])
+@app.route('/edit/oscar', methods=['GET', 'POST'])
 def edit_properties():
     oscar_properties = open('oscar.properties', 'r+')
 

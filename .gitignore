@@ -14,4 +14,5 @@ oscar/
 
 *.env
 
-flask-oscarproperties/app/__pycache__
+**pycache**
+*.pyc
