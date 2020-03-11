@@ -1,3 +1,3 @@
 #!bin/bash
 mkdir -p dump
-mysqldump -uoscar -p vdsrlhcgS+411 oscar > dump/
+mysqldump -uoscar -p oscar oscar > dump/

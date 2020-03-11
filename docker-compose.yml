@@ -37,6 +37,7 @@ services:
       environment:
         TZ: America/Vancouver
     nginx:
+      restart: 'always'
       image: nginx:latest
       networks:
         - back-tier
