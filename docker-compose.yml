@@ -21,6 +21,8 @@ services:
       env_file: 
         - local.env
       restart: always
+      networks:
+        - back-tier
 
     db:
       restart: 'always'

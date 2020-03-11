@@ -1,0 +1,22 @@
+<html>
+    <head></head>
+
+    <body>
+        {% if error %}
+            <p>{{ error }}</p>
+        {% endif %}
+
+        <form method='POST'>
+            {{ form.csrf_token }}
+            <p>
+                {{ form.username.label }}
+                {{ form.username }}
+            </p>
+            <p>
+            {{ form.password.label }}
+            {{ form.password }}
+            </p>
+            {{ form.submit }}
+        </form>
+    </body>
+</html>
