@@ -28,7 +28,55 @@ What does this repo do?
 * Runs a new containerized Oscar environment including database, in one command (from source or from a tested image).
 * Runs drugref locally.
 
-## Usage
+## Design Change
+
+We intend OpenOSP to essentially have 3 operations.
+
+## Oscar Environment Setup and Run
+```
+./openosp setup
+```
+ALL configuration options other than specific config files in section 1 below should be set in this ENV file.
+
+This should:
+1. Generate a new local.env file, with unique password for Oscar db, if not already done. (notify user of action taken)
+1. Copy all locally editable configs to the volumes/ folder (gitignored), if they dont exist already. Nothing should ever be mounted in a container except from inside this folder and those files are always gitignored copies from a templates/ folder. (notify user)
+1. Bootstrap the database if it's missing. (notify user)
+
+```
+openosp start
+```
+
+## Oscar Environment Update
+
+Pull the latest dockerhub image and recreate `tomcat_oscar` container
+```
+openosp update
+```
+
+## Oscar and Local Development
+
+Build war file and tomcat image only. (in the future, .deb)
+```
+openosp build
+```
+
+Tag and push to DockerHub
+```
+openosp publish
+```
+
+## Clean Up Environment
+
+This is only intended for development purposes.
+
+Delete/reset everything, returning to a fresh clone of openosp. Confirm before deleting configs. Confirm before deleting database. Do not allow this command to run unless the environment variable DEVELOPMENT=1 is set in the local.env file.
+
+```
+openosp purge
+```
+
+## Usage (outdated, please await rewrite)
 
 ./deploy-source.sh will download the latest official develop branch, or a branch specified by `OSCAR_REPO=<url>` and `OSCAR_BRANCH=<branchname>`.
 
@@ -118,24 +166,6 @@ BUILD_NUMBER=12
 ### Custom CSS
 We have provided a sample CSS in ./static/css/oscar-custom.css. Feel free to play with this.
 
-## Adding SSL
-Follow the steps below:
-```
-# Go to your open osp directory
-cd openosp
-cp dc.prod.yml docker-compose.override.yml
-
-openssl req -x509 -out {openosp-directory}/conf/ssl/oscar.crt -keyout {openosp-directory}/conf/ssl/oscar.key   -newkey rsa:2048 -nodes -sha256
-
-# if it asks for a PEM pass phrase, just type any 4+ digits that you can remember
-# Next, it will ask for details about you Country Name, State or Province Name, etc
-# you can fill these or skip through them
-```
-You should then recreate your nginx with
-```
-docker-compose up --build --force-recreate nginx
-```
-
 ## Enabling Backups
 The backups use AWS to store your database dumps and OscarDocuments. For that you would need to:
 1. Create a `~/.aws/credentials` directory containing your credentials OR install awscli `apt install awscli` and run `aws configure`.
@@ -155,6 +185,10 @@ For more information regarding the backup image, you can go to `https://github.c
 ## TODO
 
 For backlog, see the [GitHub issues tab](https://github.com/open-osp/open-osp/issues).
+
+## License
+
+This repository is licensed under the GPL V3
 
 ## Thanks (References)
 * [Bell Eapen (McMaster U)](http://nuchange.ca) for [Oscar in a Box](https://github.com/dermatologist/oscar-latest-docker)
