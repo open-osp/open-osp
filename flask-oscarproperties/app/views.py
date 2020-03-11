@@ -40,7 +40,7 @@ def login_properties():
 
 @app.route('/properties/edit', methods=['GET', 'POST'])
 def edit_properties():
-    oscar_properties = open('oscar_mcmaster_bc.properties', 'r+')
+    oscar_properties = open('oscar.properties', 'r+')
 
     form = PageDownForm()
     form.pagedown.data = oscar_properties.read()
@@ -53,7 +53,7 @@ def edit_properties():
         if form.validate_on_submit():
             markdown = request.form.get('pagedown')
 
-            oscar_properties = open('oscar_mcmaster_bc.properties', 'w')
+            oscar_properties = open('oscar.properties', 'w')
             oscar_properties.write(markdown)
             oscar_properties.truncate()
 
