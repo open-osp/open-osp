@@ -9,11 +9,10 @@ services:
       working_dir: /code
       environment:
         MYSQL_ROOT_PASSWORD: liyi
-        MYSQL_DATABASE: oscar_mcmaster
+        MYSQL_DATABASE: drugref2
         MYSQL_USER: oscar
         MYSQL_PASSWORD: oscar
       volumes:
-        - ./dbdump:/docker-entrypoint-initdb.d
         - ./conf/my.cnf:/etc/mysql/my.cnf
         - .:/code
         - mariadb-files:/var/lib/mysql
@@ -26,16 +25,19 @@ services:
       volumes:
 #        - ./conf/logging.properties:/usr/local/tomcat/conf/logging.properties
 #        - ./conf/logging-servlet.properties:/usr/local/tomcat/conf/logging-servlet.properties
-        - ./oscar.properties:/root/oscar_mcmaster.properties
+        - ./oscar.properties:/root/oscar.properties
         - ./OscarDocument:/var/lib/OscarDocument/
         - ./conf/ssl.crt:/usr/local/tomcat/conf/ssl.crt
         - ./conf/ssl.key:/usr/local/tomcat/conf/ssl.key
         - ./conf/server.xml:/usr/local/tomcat/conf/server.xml
 #        - ./conf/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
-#        - ./conf/drugref2.properties:/root/drugref2.properties
+        - ./drugref2.properties:/root/drugref2.properties
       networks:
         - back-tier
+      environment:
+        TZ: America/Vancouver
     nginx:
+      restart: 'always'
       image: nginx:latest
       networks:
         - back-tier

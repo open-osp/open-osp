@@ -1,15 +1,27 @@
-#!/bin/sh
+#!/bin/bash
+
+#TODO: add a warning
 
 set -euxo
 
-rm -f *.war.*
-rm -f *.war
+read -p "Are you sure you want to wipe the DB and all local config? " -n 1 -r
+echo    # (optional) move to a new line
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
 
-docker-compose down
+  rm -f *.war.*
+  rm -f *.war
 
-docker-compose run builder rm -fr oscar
+  docker-compose down
 
-dcid=$(pwd | grep -oh "[^/]*$" | sed "s/[^a-z\d_\-]//g")
+  docker-compose -f docker-compose.admin.yml run builder rm -fr oscar
 
-docker volume rm ${dcid}_mariadb-files &> /dev/null
+  dcid=$(pwd | grep -oh "[^/]*$" | sed "s/[^a-z\d_\-]//g")
+
+  docker volume rm ${dcid}_mariadb-files &> /dev/null
+
+  rm oscar.properties
+  rm drugref2.properties
+  rm docker-compose.override.yml
+fi
 
