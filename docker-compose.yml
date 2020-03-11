@@ -9,7 +9,7 @@ services:
       working_dir: /code
       environment:
         MYSQL_ROOT_PASSWORD: liyi
-        MYSQL_DATABASE: oscar
+        MYSQL_DATABASE: drugref2
         MYSQL_USER: oscar
         MYSQL_PASSWORD: oscar
       volumes:
