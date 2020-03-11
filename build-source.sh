@@ -16,5 +16,5 @@ if [ ! -f drugref2.war ]; then
   docker run -v $(pwd):/code/ busybox sh -c "cd /code/ && wget $DRUGREF_WAR -O drugref2.war"
 fi
 
-docker-compose build tomcat_oscar
+./setup-oscar-release.sh
 

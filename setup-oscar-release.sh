@@ -9,7 +9,7 @@ DB_PASSWORD=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '')
 # if this is a fresh install
 if [ ! -f oscar.properties ]; then
   echo "copying oscar properties template"
-  cp ./conf/templates/oscar_mcmaster_bc.properties oscar.properties
+  cp ./conf/templates/oscar_mcmaster_bc.properties ./oscar.properties
 fi
 
 if [ ! -f drugref.properties ]; then
