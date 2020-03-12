@@ -2,6 +2,8 @@
 
 #TODO: add a warning
 
+#TODO: add a warning
+
 set -euxo
 
 read -p "Are you sure you want to wipe the DB and all local config? " -n 1 -r

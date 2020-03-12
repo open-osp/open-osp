@@ -3,23 +3,21 @@ version: "3.3"
 services:
   nginx:
     ports:
-      - '80:80'
+      - '8095:80'
       - '443:443'
-    volumes:
-      - ./conf/ssl:/ssl
-      - ./conf/nginx/conf.d/prod.conf:/etc/nginx/conf.d/oscar.template
   tomcat_oscar:
     ports:
       - '8443:443'
-  backup:
-    build: .
-    image: ferdinandpolpol/s3-oscar-backup:latest
+  backups:
+    build: ./backups
+    environment:
+      - BACKUPS=1
+      - DUMP_LOCATION=/dump
+    env_file: 
+      - local.env
     volumes:
       - $HOME/.aws/credentials:/root/.aws/credentials
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./bin/mysql_backup.sh:/mysql_backup.sh
-    env_file: 
-      - local.env
-    environment:
-      - BACKUP_CMD=/mysql_backup.sh
-    restart: always
+    networks:
+      - back-tier
+    command: /startup.sh

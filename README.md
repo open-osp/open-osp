@@ -8,6 +8,8 @@ This repo was originally based on [scoophealth (UVIC)](https://github.com/scooph
   * Install Docker and docker-compose
   * `git clone https://github.com/open-osp/open-osp.git`
   * `cd open-osp`
+  * `cp dc.dev.yml docker-compose.override.yml`
+  * `cp local.env.template local.env`
   * `./deploy-release.sh`
   * Browse to Oscar on http://localhost!
 
@@ -151,7 +153,7 @@ docker-compose up --build -d nginx
 to restart both tomcat_oscar and nginx.
 
 ### Customizing Login Page
-You can customize the login page by adding environment variables to nginx. You can add/edit a file named 'oscar-login.env' and add variables;
+You can customize the login page by adding environment variables to nginx. You can edit the file named 'local.env' and add variables;
 ```
 LOGIN_TEXT=Html text that can <br> be added in the front page
 LOGIN_TITLE=Title you want
@@ -166,17 +168,35 @@ BUILD_NUMBER=12
 ### Custom CSS
 We have provided a sample CSS in ./static/css/oscar-custom.css. Feel free to play with this.
 
-## Enabling Backups
-The backups use AWS to store your database dumps and OscarDocuments. For that you would need to:
-1. Create a `~/.aws/credentials` directory containing your credentials OR install awscli `apt install awscli` and run `aws configure`.
-2. Create a `local.env` file containing the following.
-```
-BACKUP_BUCKET=`your directory in aws e.g oscar/backups`
-BACKUP_FREQ=`seconds of your backup, defaults to 86400`
-```
-3. Finally run ./bin/backups.sh to start your backups container.
+## Adding SSL
+After deploying, there will be auto-generated ssl keys that are provided but if you have one for that generated you can simply copy them to the `conf` folder and rename them as `ssl.crt` and `ssl.key`.
 
-For more information regarding the backup image, you can go to `https://github.com/countable-web/s3-backup-jobs`
+You can now restart your OpenOsp by doing `./start.sh`
+
+## Backups
+Backups will create backups for your OpenOsp database and OscarDocuments.
+
+Our backups use AWS so you must install AWS with `apt-get install awscli` then run `aws config`.
+
+You can modify your aws bucket location by changing BACKUP_BUCKET in your `local.env`
+```
+BACKUP_BUCKET=your/aws/bucket
+```
+
+### Manual Backups
+1. Go to your openosp repo, `cd openosp`
+2. Run the script `./backups/backups.sh`
+
+### Automated Backups
+This will run the backup job every midnight
+1. `./bin/run-auto-backups.sh`
+
+If you want a custom time for your backups, you can add a variable in your local.env
+
+```
+CRON_SCHEDULE="*  *  *  *  *"
+# this will run every minute. Read about cron scheduling if you are planning to use this.
+```
 
 ## Host Architecture
 
