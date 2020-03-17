@@ -38,7 +38,7 @@ fi
 site=$(docker ps --format '{{.Names}}' | grep _db_ | cut -d'_' -f1) 
 filename=$site.$(date +%Y%m%d-%H%M%S)
 folder=$(date +%Y%m)
-clinicname="${CLINIC_NAME//\"}"
+clinicname="openosp-${CLINIC_NAME//\"}"
 
 rm -rf $DUMP_LOCATION
 rm -f $DUMP_LOCATION.tar.lrz
@@ -50,7 +50,14 @@ docker exec -t ${site}_db_1 rm -fr /dump
 docker exec -t ${site}_db_1 mkdir /dump
 docker exec -t ${site}_db_1 $BACKUP_CMD
 docker cp ${site}_db_1:/dump/db.sql $DUMP_LOCATION/db.sql
-docker cp ${site}_tomcat_oscar_1:/var/lib/OscarDocument ./OscarDocument
+
+if [ -z "$BACKUPS" ]
+then
+    echo 'Manual backups, using OscarDocument volume'
+else
+    echo 'Automated backups'
+    docker cp ${site}_tomcat_oscar_1:/var/lib/OscarDocument ./OscarDocument
+fi
 docker cp ${site}_tomcat_oscar_1:/root/oscar.properties $DUMP_LOCATION/oscar.properties
 docker cp ${site}_tomcat_oscar_1:/root/drugref2.properties $DUMP_LOCATION/drugref2.properties
 
