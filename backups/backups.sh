@@ -17,7 +17,7 @@ fi
 
 if [ -z "$BACKUP_CMD" ]
 then
-    BACKUP_CMD='mysqldump -uoscar -poscar oscar --result-file=/dump/db.sql'
+    BACKUP_CMD='mysqldump -uroot -pliyi oscar --result-file=/dump/db.sql'
     echo "BACKUP_CMD env var not specified, defaulting to '${BACKUP_CMD}'."
 fi
 
