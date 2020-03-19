@@ -7,7 +7,7 @@ done
 
 #./wait-for-it.sh localhost 3306
 cd oscar/database/mysql
-./createdatabase_bc.sh oscar oscar oscar
+./createdatabase_bc.sh root liyi oscar
 
 echo "Disabling default user expiry..."
 mysql -uroot -pliyi oscar << QUERY
