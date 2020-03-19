@@ -17,3 +17,4 @@ ADD ./conf/index.jsp /usr/local/tomcat/webapps/ROOT/index.jsp
 # Integrator directory
 RUN mkdir -p /var/lib/bc-integrator/export
 
+CMD ["catalina.sh", "run"]
