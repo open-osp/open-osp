@@ -1,4 +1,98 @@
 #!/bin/bash
 
 # This script is intended to be a common entrypoint for managing this environment.
+export MSYS_NO_PATHCONV=1
+set -e
 
+# =================================================================================================================
+# Usage:
+# -----------------------------------------------------------------------------------------------------------------
+usage() {
+    cat <<-EOF
+
+        Usage: $0 [command] [options]
+
+        Commands:
+
+        setup - Copy properties files to volumes
+                Create Oscar instance
+                Boostrap the db with initial oscar db
+                
+                Examples:
+                - Setup OpenOSP environment.
+        
+                    $0 setup
+
+        purge - Delete OSCAR related files
+                Drop current databse.
+
+
+        backup - Trigger Backups, by default, will run the auto backup container
+
+                Examples:
+                - Run automated backups.
+        
+                    $0 backup
+                - Run manual backups.
+        
+                    $0 backup -m
+
+
+        build - to build the oscar source WAR and docker image
+
+
+        publish - to push to dockerhub
+
+
+        update - to update the openosp docker image
+
+
+        start - to bring up containers if needed.
+
+EOF
+    exit 1
+}
+
+toLower() {
+    echo $(echo ${@} | tr '[:upper:]' '[:lower:]')
+}
+
+#=============================================================================
+
+
+COMMAND=$(toLower ${1})
+
+case "${COMMAND}" in
+    setup)
+        ./deploy-source.sh
+        ./setup-oscar-release.sh
+
+        docker-compose up --build --force-recreate tomcat_oscar
+        ;;
+    purge)
+        ./purge.sh
+        ;;
+    start)
+        echo "Starting your OpenOSP instance."
+        ./start.sh
+        ;;
+    backup)
+        if  [[ $2 = "-m" ]]; then
+            echo "Manually Backing up files"
+            ./backups/backup.sh
+        else
+            echo "Running Auto backups"
+            ./bin/run-auto-backups.sh
+        fi
+        ;;
+    build)
+        ./bin/build-source.sh
+        ;;
+    publish)
+        ./publish-source.sh
+        ;;
+    update)
+        echo "Updating OpenOsp docker image"
+        ./update-oscar-release.sh
+        ;;
+esac

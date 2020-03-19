@@ -22,10 +22,8 @@ if [ ! -f docker-compose.override.yml ]; then
   cp dc.dev.yml docker-compose.override.yml
 fi
 
-#if [[ $* == *--bootstrap* ]]; then
-  docker-compose -f docker-compose.admin.yml run builder ./bin/clone.sh
-  ./bin/setup.sh
-#fi
+docker-compose -f docker-compose.admin.yml run builder ./bin/clone.sh
+./bin/setup.sh
 
 ./bin/run.sh
 
