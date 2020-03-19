@@ -1,4 +1,65 @@
 #!/bin/bash
 
 # This script is intended to be a common entrypoint for managing this environment.
+export MSYS_NO_PATHCONV=1
+set -e
 
+SCRIPT_HOME="$(cd "$(dirname "$0")" && pwd)"
+
+# =================================================================================================================
+# Usage:
+# -----------------------------------------------------------------------------------------------------------------
+usage() {
+    cat <<-EOF
+
+        Usage: $0 [command]
+
+        Commands:
+
+        setup - Copy properties files to volumes
+                Create Oscar instance
+                Boostrap the db with initial oscar db
+
+
+        purge - to drop the db, delete all local files. 
+                Require them to type CONFIRM.
+
+
+        backup - to trigger backups to run immediately
+
+
+        build - to build the oscar soruce WAR and docker image
+
+
+        publish - to push to dockerhub
+
+
+        update - to update the openosp docker image
+
+
+        start - to bring up containers if needed.
+
+EOF
+    exit 1
+}
+
+toLower() {
+    echo $(echo ${@} | tr '[:upper:]' '[:lower:]')
+}
+
+COMMAND=$(toLower ${1})
+
+case "${COMMAND}" in
+    setup)
+        ./deploy-source.sh
+        ./setup-oscar-release.sh
+
+        docker-compose up --build --force-recreate tomcat_oscar
+        ;;
+    purge)
+        ./purge.sh
+        ;;
+    start)
+        echo "start"
+        ;;
+esac

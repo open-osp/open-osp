@@ -4,13 +4,14 @@
 
 #TODO: add a warning
 
-set -euxo
+set -euo
 
-read -p "Are you sure you want to wipe the DB and all local config? " -n 1 -r
+read -p "This will delete all your settings, database, and Oscar related files."
+read -p "Are you sure you want to wipe the DB and all local config? [Type CONFIRM to delete]:" -n 7 -r
 echo    # (optional) move to a new line
-if [[ $REPLY =~ ^[Yy]$ ]]
+if [[ $REPLY =~ "CONFIRM" ]]
 then
-
+  echo "removing..."
   rm -f *.war.*
   rm -f *.war
 
@@ -25,5 +26,7 @@ then
   rm oscar.properties
   rm drugref2.properties
   rm docker-compose.override.yml
+else
+  echo "Not confirmed"
 fi
 

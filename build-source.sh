@@ -15,6 +15,3 @@ if [ ! -f drugref2.war ]; then
   # Latest OscarBC as of Nov 13 2019.
   docker run -v $(pwd):/code/ busybox sh -c "cd /code/ && wget $DRUGREF_WAR -O drugref2.war"
 fi
-
-./setup-oscar-release.sh
-
