@@ -9,7 +9,8 @@ services:
       - ./conf/nginx/conf.d/dev.conf:/etc/nginx/conf.d/oscar.template
   tomcat_oscar:
     ports:
-      - '8443:443'
+      - '8443:8443'
+      - '8080:8080'
   db:
     ports:
       - '3306:3306'
