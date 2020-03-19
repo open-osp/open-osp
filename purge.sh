@@ -11,7 +11,7 @@ read -p "Are you sure you want to wipe the DB and all local config? [Type CONFIR
 echo    # (optional) move to a new line
 if [[ $REPLY =~ "CONFIRM" ]]
 then
-  echo "removing..."
+  echo "Removing OSCAR files..."
   rm -f *.war.*
   rm -f *.war
 

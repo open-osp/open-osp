@@ -60,6 +60,17 @@ case "${COMMAND}" in
         ./purge.sh
         ;;
     start)
-        echo "start"
+        echo "Starting your OpenOSP instance."
+        ./start.sh
         ;;
+    backup)
+        if  [[ $2 = "-m" ]]; then
+            echo "Manually Backing up files"
+            ./backups/backup.sh
+        else
+            echo "Running Auto backups"
+            ./bin/run-auto-backups.sh
+        fi
+        ;;
+    
 esac
