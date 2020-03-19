@@ -4,31 +4,41 @@
 export MSYS_NO_PATHCONV=1
 set -e
 
-SCRIPT_HOME="$(cd "$(dirname "$0")" && pwd)"
-
 # =================================================================================================================
 # Usage:
 # -----------------------------------------------------------------------------------------------------------------
 usage() {
     cat <<-EOF
 
-        Usage: $0 [command]
+        Usage: $0 [command] [options]
 
         Commands:
 
         setup - Copy properties files to volumes
                 Create Oscar instance
                 Boostrap the db with initial oscar db
+                
+                Examples:
+                - Setup OpenOSP environment.
+        
+                    $0 setup
+
+        purge - Delete OSCAR related files
+                Drop current databse.
 
 
-        purge - to drop the db, delete all local files. 
-                Require them to type CONFIRM.
+        backup - Trigger Backups, by default, will run the auto backup container
+
+                Examples:
+                - Run automated backups.
+        
+                    $0 backup
+                - Run manual backups.
+        
+                    $0 backup -m
 
 
-        backup - to trigger backups to run immediately
-
-
-        build - to build the oscar soruce WAR and docker image
+        build - to build the oscar source WAR and docker image
 
 
         publish - to push to dockerhub
@@ -46,6 +56,9 @@ EOF
 toLower() {
     echo $(echo ${@} | tr '[:upper:]' '[:lower:]')
 }
+
+#=============================================================================
+
 
 COMMAND=$(toLower ${1})
 
@@ -72,5 +85,14 @@ case "${COMMAND}" in
             ./bin/run-auto-backups.sh
         fi
         ;;
-    
+    build)
+        ./bin/build-source.sh
+        ;;
+    publish)
+        ./publish-source.sh
+        ;;
+    update)
+        echo "Updating OpenOsp docker image"
+        ./update-oscar-release.sh
+        ;;
 esac
