@@ -17,6 +17,11 @@ if [ ! -f drugref.properties ]; then
   cp ./conf/drugref2.properties ./drugref2.properties
 fi
 
+if [ ! -f local.env ]; then
+  echo "copying drugref2 properties template"
+  cp ./local.env.template ./local.env
+fi
+
 if [ ! -f docker-compose.override.yml ]; then
   echo "copying docker-compose dev template"
   cp dc.dev.yml docker-compose.override.yml
