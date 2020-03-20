@@ -70,6 +70,38 @@ Tag and push to DockerHub
 openosp publish
 ```
 
+## Backups
+Backups will create backups for your OpenOsp database and OscarDocuments.
+
+Our backups use AWS so you must install AWS with `apt-get install awscli` then run `aws config`.
+
+You can modify your aws bucket location by changing BACKUP_BUCKET in your `local.env`
+```
+BACKUP_BUCKET=your/aws/bucket
+```
+Please also specify your clinic's name with CLINIC_NAME in `local.env`
+```
+CLINIC_NAME=your_clinic_name
+```
+
+You will also need the backups container to exist in your docker-override file. By default it uses the dc.dev.yml file but you can do `cp dc.prod.yml docker-compose.override.yml` to add a backup container.
+
+### Manual Backups
+1. Go to your openosp repo, `cd openosp`
+2. Run the script `./openosp backup -m`
+
+### Automated Backups
+This will run the backup job every midnight unless specified
+1. `./openosp backup `
+
+If you want a custom time for your backups, you can add a variable in your local.env
+
+```
+CRON_SCHEDULE="*  *  *  *  *"
+# this will run every minute. Read about cron scheduling if you are planning to use this.
+```
+
+
 ## Clean Up Environment
 
 This is only intended for development purposes.
@@ -140,31 +172,6 @@ We have provided a sample CSS in ./static/css/oscar-custom.css. Feel free to pla
 After deploying, there will be auto-generated ssl keys that are provided but if you have one for that generated you can simply copy them to the `conf` folder and rename them as `ssl.crt` and `ssl.key`.
 
 You can now restart your OpenOsp by doing `./openosp start`
-
-## Backups
-Backups will create backups for your OpenOsp database and OscarDocuments.
-
-Our backups use AWS so you must install AWS with `apt-get install awscli` then run `aws config`.
-
-You can modify your aws bucket location by changing BACKUP_BUCKET in your `local.env`
-```
-BACKUP_BUCKET=your/aws/bucket
-```
-
-### Manual Backups
-1. Go to your openosp repo, `cd openosp`
-2. Run the script `./openosp backup -m`
-
-### Automated Backups
-This will run the backup job every midnight unless specified
-1. `./openosp backup `
-
-If you want a custom time for your backups, you can add a variable in your local.env
-
-```
-CRON_SCHEDULE="*  *  *  *  *"
-# this will run every minute. Read about cron scheduling if you are planning to use this.
-```
 
 ## Host Architecture
 
