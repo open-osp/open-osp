@@ -14,8 +14,8 @@ This repo was originally based on [scoophealth (UVIC)](https://github.com/scooph
 ## Purpose
 The goal of this repo is to provide a hosting-agnostic (Dockerized) toolkit for automated Oscar EMR deployment. We want to centralize Oscar configurations for modern DevOps tools and share [best practices](https://12factor.net/) for modern web application deployment for Oscar. This may help Service Providers who need to automate deployments, Oscar integrators/vendors/developers who need to do testing, and self-hosted users. ie)
 
-* Training (use ./deploy-release.sh)
-* Continuous integration of Oscar integrations (use ./deploy-release.sh or ./deploy-source.sh)
+* Training (use ./openosp setup)
+* Continuous integration of Oscar integrations (use ./openosp setup)
 * Testing (use ./deploy-release.sh or ./deploy-source.sh)
 * Oscar build toolchains (use ./build-source.sh)
 * Oscar develpment environments with high [dev/prod parity](https://12factor.net/dev-prod-parity)
@@ -41,6 +41,7 @@ ALL configuration options other than specific config files in section 1 below sh
 If you want a custom Oscar WAR file, you can put it in yout open-osp directory and save it as `oscar.war` and `drugref2.war` for Drugref
 
 This should:
+1. Copy all the properties files and docker development yml file.
 1. Generate a new local.env file, with unique password for Oscar db, if not already done. (notify user of action taken)
 1. Copy all locally editable configs to the volumes/ folder (gitignored), if they dont exist already. Nothing should ever be mounted in a container except from inside this folder and those files are always gitignored copies from a templates/ folder. (notify user)
 1. Bootstrap the database if it's missing. (notify user)
@@ -138,7 +139,7 @@ We have provided a sample CSS in ./static/css/oscar-custom.css. Feel free to pla
 ## Adding SSL
 After deploying, there will be auto-generated ssl keys that are provided but if you have one for that generated you can simply copy them to the `conf` folder and rename them as `ssl.crt` and `ssl.key`.
 
-You can now restart your OpenOsp by doing `./start.sh`
+You can now restart your OpenOsp by doing `./openosp start`
 
 ## Backups
 Backups will create backups for your OpenOsp database and OscarDocuments.
@@ -152,11 +153,11 @@ BACKUP_BUCKET=your/aws/bucket
 
 ### Manual Backups
 1. Go to your openosp repo, `cd openosp`
-2. Run the script `./backups/backups.sh`
+2. Run the script `./openosp backup -m`
 
 ### Automated Backups
-This will run the backup job every midnight
-1. `./bin/run-auto-backups.sh`
+This will run the backup job every midnight unless specified
+1. `./openosp backup `
 
 If you want a custom time for your backups, you can add a variable in your local.env
 

@@ -8,6 +8,9 @@ services:
   tomcat_oscar:
     ports:
       - '8443:443'
+  db:
+    ports:
+      - '3306:3306'
   backups:
     build: ./backups
     environment:

@@ -6,7 +6,7 @@ services:
       - '8000:80'
     volumes:
       - ./conf/ssl:/ssl
-      - ./conf/nginx/conf.d/proxy.conf:/etc/nginx/conf.d/oscar.template
+      - ./nginx/conf.d/proxy.conf:/etc/nginx/conf.d/oscar.template
   tomcat_oscar:
     ports:
       - '8443:443'
