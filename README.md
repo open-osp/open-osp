@@ -10,7 +10,7 @@ This repo was originally based on [scoophealth (UVIC)](https://github.com/scooph
   * `cd open-osp`
   * `cp dc.dev.yml docker-compose.override.yml`
   * `cp local.env.template local.env`
-  * `./deploy-release.sh`
+  * `./setup-oscar-release.sh`
   * Browse to Oscar on http://localhost!
 
 ## Purpose
