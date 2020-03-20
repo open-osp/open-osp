@@ -73,8 +73,20 @@ case "${COMMAND}" in
         ./purge.sh
         ;;
     start)
-        echo "Starting your OpenOSP instance."
-        ./start.sh
+        container_count=0
+        for container_id in $(docker-compose ps -q); do 
+            container_count=$((container_count+1))
+        done
+
+        if [ "$container_count" -gt "0" ]; then
+            echo "Starting your OpenOSP instance."
+            ./start.sh
+        else
+            echo "Building Oscar from scratch..."
+            sleep 2
+            ./openosp setup
+        fi
+
         ;;
     backup)
         if  [[ $2 = "-m" ]]; then
