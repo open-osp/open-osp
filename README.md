@@ -8,9 +8,7 @@ This repo was originally based on [scoophealth (UVIC)](https://github.com/scooph
   * Install Docker and docker-compose
   * `git clone https://github.com/open-osp/open-osp.git`
   * `cd open-osp`
-  * `cp dc.dev.yml docker-compose.override.yml`
-  * `cp local.env.template local.env`
-  * `./setup-oscar-release.sh`
+  * `./openosp setup`
   * Browse to Oscar on http://localhost!
 
 ## Purpose
@@ -40,27 +38,30 @@ We intend OpenOSP to essentially have 3 operations.
 ```
 ALL configuration options other than specific config files in section 1 below should be set in this ENV file.
 
+If you want a custom Oscar WAR file, you can put it in yout open-osp directory and save it as `oscar.war` and `drugref2.war` for Drugref
+
 This should:
 1. Generate a new local.env file, with unique password for Oscar db, if not already done. (notify user of action taken)
 1. Copy all locally editable configs to the volumes/ folder (gitignored), if they dont exist already. Nothing should ever be mounted in a container except from inside this folder and those files are always gitignored copies from a templates/ folder. (notify user)
 1. Bootstrap the database if it's missing. (notify user)
 
+Start or Restart current OpenOsp instance
 ```
-openosp start
+./openosp start
 ```
 
 ## Oscar Environment Update
 
 Pull the latest dockerhub image and recreate `tomcat_oscar` container
 ```
-openosp update
+./openosp update
 ```
 
 ## Oscar and Local Development
 
 Build war file and tomcat image only. (in the future, .deb)
 ```
-openosp build
+./openosp build
 ```
 
 Tag and push to DockerHub
@@ -78,44 +79,10 @@ Delete/reset everything, returning to a fresh clone of openosp. Confirm before d
 openosp purge
 ```
 
-## Usage (outdated, please await rewrite)
-
-./deploy-source.sh will download the latest official develop branch, or a branch specified by `OSCAR_REPO=<url>` and `OSCAR_BRANCH=<branchname>`.
-
-./build-release.sh will build a Docker image to be used with any war file you download to your directory, or one specified in `OSCAR_WAR=<url>`. If neither is found, the latest stable oscar release (currently 15) will be used.
-
-./deploy-release will create a newly installed Oscar environment in the current folder.
-
-./start.sh will resume a previously installed Oscar in this folder.
-
-./purge.sh will completely delete your oscar installation *and database*. Your data will be lost.
-
-We're not aware of anyone using this system for production usage at this time, and don't recommend it until it's more fully tested and supports some features geared towards production usage.
-
 ## Prerequisites
 * GIT
 * Docker
 * docker-compose
-
-## To start a new oscar deployment.
-
-```
-git clone git@github.com:countable/oscaremr-devops.git
-cd oscaremr-devops
-```
-
-This process is only for new deployments. It will not work if you have a run it before in the same folder, because you may have EMR data we don't want to overwrite. For a 2nd deployment, just copy the folder again with a new name. If you want to DELETE the database and start from scratch, do `./purge.sh` first.
-
-```
-./deploy-release.sh
-```
-
-In the future, to bring up Oscar you can just do
-```
-./start.sh
-```
-
-Visit `http://localhost/oscar` in your browser.
 
 ## Options
 
