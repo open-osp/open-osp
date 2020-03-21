@@ -13,8 +13,8 @@ services:
         MYSQL_USER: oscar
         MYSQL_PASSWORD: oscar
       volumes:
-        # TODO: capture changes made in prod.
-        - ./conf/my.cnf:/etc/mysql/my.cnf
+        # TODO: build this in to the image.
+        - ./docker/db/my.cnf:/etc/mysql/my.cnf
         # TODO: build some scripts in so we need not mount everything.
         - .:/code
         - mariadb-files:/var/lib/mysql
@@ -28,14 +28,10 @@ services:
         dockerfile: docker/tomcat_oscar/Dockerfile
       volumes:
         - ./volumes/oscar.properties:/root/oscar.properties
-        - ./OscarDocument:/var/lib/OscarDocument/
-        - ./conf/ssl.crt:/usr/local/tomcat/conf/ssl.crt
-        - ./conf/ssl.key:/usr/local/tomcat/conf/ssl.key
-        # TODO: does this really need to be customizable?
-        - ./conf/server.xml:/usr/local/tomcat/conf/server.xml
-        # - ./conf/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
-        # TODO: does this really need to be customizable?       
-        - ./drugref2.properties:/root/drugref2.properties
+        - ./volumes/OscarDocument:/var/lib/OscarDocument
+        - ./volumes/ssl.crt:/usr/local/tomcat/conf/ssl.crt
+        - ./volumes/ssl.key:/usr/local/tomcat/conf/ssl.key
+        # Add other volumes to the volumes/ folder, and mount them via docker-compose.override.yml
       networks:
         - back-tier
       environment:
