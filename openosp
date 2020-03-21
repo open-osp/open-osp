@@ -26,26 +26,18 @@ usage() {
         purge - Delete OSCAR related files
                 Drop current databse.
 
-
         backup - Trigger Backups, by default, will run the auto backup container
-
                 Examples:
                 - Run automated backups.
-        
                     $0 backup
                 - Run manual backups.
-        
                     $0 backup -m
-
 
         build - to build the oscar source WAR and docker image
 
-
         publish - to push to dockerhub
 
-
         update - to update the openosp docker image
-
 
         start - to bring up containers if needed.
 
