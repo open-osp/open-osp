@@ -23,8 +23,8 @@ then
 
   docker volume rm ${dcid}_mariadb-files &> /dev/null
 
-  rm oscar.properties
-  rm drugref2.properties
+  rm volumes/oscar.properties
+  rm volumes/drugref2.properties
   rm docker-compose.override.yml
 else
   echo "Not confirmed"
