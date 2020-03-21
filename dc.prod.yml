@@ -1,10 +1,10 @@
 version: "3.3"
 
 services:
-  nginx:
-    ports:
-      - '8095:80'
-      - '443:443'
+#  nginx:
+#    ports:
+#      - '8095:80'
+#      - '443:443'
   tomcat_oscar:
     ports:
       - '8443:443'

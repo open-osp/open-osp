@@ -40,19 +40,6 @@ services:
         - back-tier
       environment:
         TZ: America/Vancouver
-    nginx:
-      restart: 'always'
-      image: nginx:latest
-      networks:
-        - back-tier
-      volumes:
-        - ./static:/static
-        - ./conf/ssl.crt:/ssl/ssl.crt
-        - ./conf/ssl.key:/ssl/ssl.key
-        - ./nginx/conf.d/default.conf:/etc/nginx/conf.d/oscar.template
-      env_file:
-        - local.env
-      command: sh -c "envsubst \"`env | awk -F = '{printf \" $$%s\", $$1}'`\" < /etc/nginx/conf.d/oscar.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
     
 
 volumes:
