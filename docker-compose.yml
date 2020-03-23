@@ -13,7 +13,9 @@ services:
         MYSQL_USER: oscar
         MYSQL_PASSWORD: oscar
       volumes:
-        - ./conf/my.cnf:/etc/mysql/my.cnf
+        # TODO: build this in to the image.
+        - ./docker/db/my.cnf:/etc/mysql/my.cnf
+        # TODO: build some scripts in so we need not mount everything.
         - .:/code
         - mariadb-files:/var/lib/mysql
       networks:
@@ -21,17 +23,13 @@ services:
     tomcat_oscar:
       restart: 'always'
       image: openosp/open-osp:latest
-      build: .
+      build: docker/tomcat_oscar
       volumes:
-#        - ./conf/logging.properties:/usr/local/tomcat/conf/logging.properties
-#        - ./conf/logging-servlet.properties:/usr/local/tomcat/conf/logging-servlet.properties
-        - ./oscar.properties:/root/oscar.properties
-        - ./OscarDocument:/var/lib/OscarDocument/
-        - ./conf/ssl.crt:/usr/local/tomcat/conf/ssl.crt
-        - ./conf/ssl.key:/usr/local/tomcat/conf/ssl.key
-        - ./conf/server.xml:/usr/local/tomcat/conf/server.xml
-#        - ./conf/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
-        - ./drugref2.properties:/root/drugref2.properties
+        - ./volumes/oscar.properties:/root/oscar.properties
+        - ./volumes/OscarDocument:/var/lib/OscarDocument
+        - ./volumes/ssl.crt:/usr/local/tomcat/conf/ssl.crt
+        - ./volumes/ssl.key:/usr/local/tomcat/conf/ssl.key
+        # Add other volumes to the volumes/ folder, and mount them via docker-compose.override.yml
       networks:
         - back-tier
       environment:

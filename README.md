@@ -8,9 +8,7 @@ This repo was originally based on [scoophealth (UVIC)](https://github.com/scooph
   * Install Docker and docker-compose
   * `git clone https://github.com/open-osp/open-osp.git`
   * `cd open-osp`
-  * `cp dc.dev.yml docker-compose.override.yml`
-  * `cp local.env.template local.env`
-  * `./setup-oscar-release.sh`
+  * `./openosp setup`
   * Browse to Oscar on http://localhost!
   * Log in with the initial credentials. You will be prompted to change your password upon initial login.
       - Username: oscardoc
@@ -20,10 +18,10 @@ This repo was originally based on [scoophealth (UVIC)](https://github.com/scooph
 ## Purpose
 The goal of this repo is to provide a hosting-agnostic (Dockerized) toolkit for automated Oscar EMR deployment. We want to centralize Oscar configurations for modern DevOps tools and share [best practices](https://12factor.net/) for modern web application deployment for Oscar. This may help Service Providers who need to automate deployments, Oscar integrators/vendors/developers who need to do testing, and self-hosted users. ie)
 
-* Training (use ./deploy-release.sh)
-* Continuous integration of Oscar integrations (use ./deploy-release.sh or ./deploy-source.sh)
-* Testing (use ./deploy-release.sh or ./deploy-source.sh)
-* Oscar build toolchains (use ./build-source.sh)
+* Training (use ./openosp setup)
+* Continuous integration of Oscar integrations (use ./openosp setup)
+* Testing
+* Oscar build toolchains (use openosp build)
 * Oscar develpment environments with high [dev/prod parity](https://12factor.net/dev-prod-parity)
 
 ## File Layout
@@ -50,33 +48,69 @@ We intend OpenOSP to essentially have 3 operations.
 ```
 ALL configuration options other than specific config files in section 1 below should be set in this ENV file.
 
+If you want a custom Oscar WAR file, you can put it in yout open-osp directory and save it as `oscar.war` and `drugref2.war` for Drugref
+
 This should:
+1. Copy all the properties files and docker development yml file.
 1. Generate a new local.env file, with unique password for Oscar db, if not already done. (notify user of action taken)
 1. Copy all locally editable configs to the volumes/ folder (gitignored), if they dont exist already. Nothing should ever be mounted in a container except from inside this folder and those files are always gitignored copies from a templates/ folder. (notify user)
 1. Bootstrap the database if it's missing. (notify user)
 
+Start or Restart current OpenOsp instance
 ```
-openosp start
+./openosp start
 ```
 
 ## Oscar Environment Update
 
 Pull the latest dockerhub image and recreate `tomcat_oscar` container
 ```
-openosp update
+./openosp update
 ```
 
 ## Oscar and Local Development
 
 Build war file and tomcat image only. (in the future, .deb)
 ```
-openosp build
+./openosp build
 ```
 
 Tag and push to DockerHub
 ```
 openosp publish
 ```
+
+## Backups
+Backups will create backups for your OpenOsp database and OscarDocuments.
+
+Our backups use AWS so you must install AWS with `apt-get install awscli` then run `aws config`.
+
+You can modify your aws bucket location by changing BACKUP_BUCKET in your `local.env`
+```
+BACKUP_BUCKET=your/aws/bucket
+```
+Please also specify your clinic's name with CLINIC_NAME in `local.env`
+```
+CLINIC_NAME=your_clinic_name
+```
+
+You will also need the backups container to exist in your docker-override file. By default it uses the dc.dev.yml file but you can do `cp dc.prod.yml docker-compose.override.yml` to add a backup container.
+
+### Manual Backups
+1. Go to your openosp repo, `cd openosp`
+2. Run the script `./openosp backup -m`
+
+### Automated Backups
+This will run the backup job every midnight unless specified
+1. `./openosp backup `
+
+If you want a custom time for your backups, you can add a variable in your local.env
+
+```
+CRON_SCHEDULE="*  *  *  *  *"
+# this will run every minute. Read about cron scheduling if you are planning to use this.
+```
+
 
 ## Clean Up Environment
 
@@ -88,44 +122,10 @@ Delete/reset everything, returning to a fresh clone of openosp. Confirm before d
 openosp purge
 ```
 
-## Usage (outdated, please await rewrite)
-
-./deploy-source.sh will download the latest official develop branch, or a branch specified by `OSCAR_REPO=<url>` and `OSCAR_BRANCH=<branchname>`.
-
-./build-release.sh will build a Docker image to be used with any war file you download to your directory, or one specified in `OSCAR_WAR=<url>`. If neither is found, the latest stable oscar release (currently 15) will be used.
-
-./deploy-release will create a newly installed Oscar environment in the current folder.
-
-./start.sh will resume a previously installed Oscar in this folder.
-
-./purge.sh will completely delete your oscar installation *and database*. Your data will be lost.
-
-We're not aware of anyone using this system for production usage at this time, and don't recommend it until it's more fully tested and supports some features geared towards production usage.
-
 ## Prerequisites
 * GIT
 * Docker
 * docker-compose
-
-## To start a new oscar deployment.
-
-```
-git clone git@github.com:countable/oscaremr-devops.git
-cd oscaremr-devops
-```
-
-This process is only for new deployments. It will not work if you have a run it before in the same folder, because you may have EMR data we don't want to overwrite. For a 2nd deployment, just copy the folder again with a new name. If you want to DELETE the database and start from scratch, do `./purge.sh` first.
-
-```
-./deploy-release.sh
-```
-
-In the future, to bring up Oscar you can just do
-```
-./start.sh
-```
-
-Visit `http://localhost/oscar` in your browser.
 
 ## Options
 
@@ -181,32 +181,7 @@ We have provided a sample CSS in ./static/css/oscar-custom.css. Feel free to pla
 ## Adding SSL
 After deploying, there will be auto-generated ssl keys that are provided but if you have one for that generated you can simply copy them to the `conf` folder and rename them as `ssl.crt` and `ssl.key`.
 
-You can now restart your OpenOsp by doing `./start.sh`
-
-## Backups
-Backups will create backups for your OpenOsp database and OscarDocuments.
-
-Our backups use AWS so you must install AWS with `apt-get install awscli` then run `aws config`.
-
-You can modify your aws bucket location by changing BACKUP_BUCKET in your `local.env`
-```
-BACKUP_BUCKET=your/aws/bucket
-```
-
-### Manual Backups
-1. Go to your openosp repo, `cd openosp`
-2. Run the script `./backups/backups.sh`
-
-### Automated Backups
-This will run the backup job every midnight
-1. `./bin/run-auto-backups.sh`
-
-If you want a custom time for your backups, you can add a variable in your local.env
-
-```
-CRON_SCHEDULE="*  *  *  *  *"
-# this will run every minute. Read about cron scheduling if you are planning to use this.
-```
+You can now restart your OpenOsp by doing `./openosp start`
 
 ## Host Architecture
 
