@@ -2,10 +2,10 @@
 
 echo "Setting up database..."
 docker-compose up -d db
-sleep 20
+sleep 10
 
 echo "Waiting for db containers to initialize"
-docker-compose run db ./bin/populate-db.sh
+docker-compose exec db ./bin/populate-db.sh
 
 if [ ! -f ./conf/ssl.key ] || [ ! -f ./conf/ssl.crt ] ; then 
     echo "Generating self-signed cert for temporary use. Please replace with a CA signed one."
