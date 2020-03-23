@@ -1,6 +1,7 @@
 volumes/*
+!volumes/.gitkeep
 docker-compose.override.yml
-docker/tomcat_oscar/oscar/
+oscar/
 docker/tomcat_oscar/*.war
 .vagrant
 .vagrant.v1.*

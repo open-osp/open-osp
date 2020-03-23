@@ -23,9 +23,7 @@ services:
     tomcat_oscar:
       restart: 'always'
       image: openosp/open-osp:latest
-      build:
-        context: .
-        dockerfile: docker/tomcat_oscar/Dockerfile
+      build: docker/tomcat_oscar
       volumes:
         - ./volumes/oscar.properties:/root/oscar.properties
         - ./volumes/OscarDocument:/var/lib/OscarDocument
