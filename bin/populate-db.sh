@@ -2,10 +2,12 @@
 
 while ! mysqladmin --user=root --password=liyi --host "127.0.0.1" ping --silent &> /dev/null ; do
     echo "Waiting for database connection..."
-    sleep 2
+    
+    sleep 10
 done
 
 #./wait-for-it.sh localhost 3306
+echo "Populating oscar database"
 cd oscar/database/mysql
 ./createdatabase_bc.sh root liyi oscar
 
