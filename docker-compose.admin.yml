@@ -2,7 +2,7 @@ version: '3'
 
 services:
     builder:
-      image: openjdk:8
+      build: docker/builder
       volumes:
         - .:/code
         - $HOME/.m2:/root/.m2

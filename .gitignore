@@ -1,12 +1,12 @@
+volumes/*
+!volumes/.gitkeep
 expedius
 *.jar
 drugref2.properties
 oscar.properties
-conf/ssl.*
-conf/ssl
-OscarDocument
 docker-compose.override.yml
 oscar/
+docker/tomcat_oscar/*.war
 .vagrant
 .vagrant.v1.*
 .DS_Store
@@ -16,4 +16,4 @@ oscar/
 *.war
 *.log
 
-*.env
+local.env
