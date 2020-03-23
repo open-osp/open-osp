@@ -67,7 +67,11 @@ case "${COMMAND}" in
         ./deploy-source.sh
         ./setup-oscar-release.sh
 
-        docker-compose up --build --force-recreate tomcat_oscar
+        echo "Bootstrapping Database"
+        ./bin/setup.sh
+        ./bin/run.sh
+
+        docker-compose up --build --force-recreate -d tomcat_oscar
         ;;
     purge)
         ./purge.sh

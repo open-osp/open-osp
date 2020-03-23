@@ -15,17 +15,26 @@ then
   rm -f *.war.*
   rm -f *.war
 
-  docker-compose down
+  echo "Removing local files (Properties, Docker settings, Environment variables)"
+  rm -f ./oscar.properties
+  rm -f ./drugref2.properties
+  rm -f ./docker-compose.override.yml
+  if [ ! -f ./local.env ]; then
+    echo "local.env file already removed..."
+  else
+    echo "Removing docker containers"
+    docker-compose down -v
 
-  docker-compose -f docker-compose.admin.yml run builder rm -fr oscar
+    docker-compose -f docker-compose.admin.yml run builder rm -fr oscar
+
+    rm -f ./local.env
+  fi
+
 
   dcid=$(pwd | grep -oh "[^/]*$" | sed "s/[^a-z\d_\-]//g")
-
   docker volume rm ${dcid}_mariadb-files &> /dev/null
 
-  rm oscar.properties
-  rm drugref2.properties
-  rm docker-compose.override.yml
+  echo "Done"
 else
   echo "Not confirmed"
 fi

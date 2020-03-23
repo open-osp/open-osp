@@ -6,6 +6,7 @@ while ! mysqladmin --user=root --password=liyi --host "127.0.0.1" ping --silent 
 done
 
 #./wait-for-it.sh localhost 3306
+echo "Populating oscar database"
 cd oscar/database/mysql
 ./createdatabase_bc.sh root liyi oscar
 

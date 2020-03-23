@@ -33,7 +33,4 @@ if [ ! -f docker-compose.override.yml ]; then
 fi
 
 docker-compose -f docker-compose.admin.yml run builder ./bin/clone.sh
-./bin/setup.sh
-
-./bin/run.sh
 
