@@ -26,26 +26,18 @@ usage() {
         purge - Delete OSCAR related files
                 Drop current databse.
 
-
         backup - Trigger Backups, by default, will run the auto backup container
-
                 Examples:
                 - Run automated backups.
-        
                     $0 backup
                 - Run manual backups.
-        
                     $0 backup -m
-
 
         build - to build the oscar source WAR and docker image
 
-
         publish - to push to dockerhub
 
-
         update - to update the openosp docker image
-
 
         start - to bring up containers if needed.
 
@@ -64,17 +56,10 @@ COMMAND=$(toLower ${1})
 
 case "${COMMAND}" in
     setup)
-        ./deploy-source.sh
-        ./setup-oscar-release.sh
-
-        echo "Bootstrapping Database"
-        ./bin/setup.sh
-        ./bin/run.sh
-
-        docker-compose up --build --force-recreate -d tomcat_oscar
+        ./bin/openosp-setup.sh
         ;;
     purge)
-        ./purge.sh
+        ./bin/openosp-purge.sh
         ;;
     start)
         container_count=0
@@ -84,9 +69,9 @@ case "${COMMAND}" in
 
         if [ "$container_count" -gt "0" ]; then
             echo "Starting your OpenOSP instance."
-            ./start.sh
+            ./bin/openosp-start.sh
         else
-            echo "Building Oscar from scratch..."
+            echo "Setting up Oscar from scratch..."
             sleep 2
             ./openosp setup
         fi
@@ -95,20 +80,23 @@ case "${COMMAND}" in
     backup)
         if  [[ $2 = "-m" ]]; then
             echo "Manually Backing up files"
-            ./backups/backup.sh
+            ./bin/openosp-backup.sh
         else
             echo "Running Auto backups"
             ./bin/run-auto-backups.sh
         fi
         ;;
     build)
-        ./bin/build-source.sh
+        ./bin/openosp-build.sh
         ;;
     publish)
-        ./publish-source.sh
+        ./bin/openosp-publish.sh
         ;;
     update)
         echo "Updating OpenOsp docker image"
-        ./update-oscar-release.sh
+        ./bin/openosp-update.sh
+        ;;
+    *)
+        usage
         ;;
 esac
