@@ -1,5 +1,9 @@
 volumes/*
 !volumes/.gitkeep
+expedius
+*.jar
+drugref2.properties
+oscar.properties
 docker-compose.override.yml
 oscar/
 docker/tomcat_oscar/*.war
