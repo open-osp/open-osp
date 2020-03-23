@@ -26,6 +26,12 @@ The goal of this repo is to provide a hosting-agnostic (Dockerized) toolkit for 
 * Oscar build toolchains (use ./build-source.sh)
 * Oscar develpment environments with high [dev/prod parity](https://12factor.net/dev-prod-parity)
 
+## File Layout
+
+`volumes` is intially empty, but will contain any local data that will live in your containers.
+`docker` contains data for building docker images to run services.
+`bin` holds the scripts that comprise the `./openosp` control command.
+
 ## Scope
 What does this repo do?
 
