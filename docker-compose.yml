@@ -15,7 +15,7 @@ services:
       volumes:
         - ./conf/my.cnf:/etc/mysql/my.cnf
         - .:/code
-        # - mariadb-files:/var/lib/mysql
+        - mariadb-files:/var/lib/mysql
       networks:
         - back-tier
     tomcat_oscar:
