@@ -26,7 +26,7 @@ The goal of this repo is to provide a hosting-agnostic (Dockerized) toolkit for 
 
 ## File Layout
 
-`volumes` is intially empty, but will contain any local data that will live in your containers.
+`volumes` (gitignored) is intially empty, but will contain any local data that will live in your containers.
 `docker` contains data for building docker images to run services.
 `bin` holds the scripts that comprise the `./openosp` control command.
 
