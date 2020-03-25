@@ -38,6 +38,8 @@ services:
       restart: 'always'
       image: openosp/expedius:latest
       build: docker/tomcat_expedius
+      volumes:
+        - ./volumes/expedius:/var/lib/expedius
       networks:
         - back-tier
       environment:
