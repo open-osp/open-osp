@@ -13,8 +13,8 @@ ADD ./conf/expedius.properties /var/lib/expedius/expedius.properties
 # Fetch and modify a tomcat-users and server config.
 ADD ./conf/tomcat-users.xml /usr/local/tomcat/conf/tomcat-users.xml
 
-# not sure if server.xml needs to be configured. 
-## ADD ./conf/server.xml /usr/local/tomcat/conf/server.xml
+# server.xml is set with a 8081 port 
+ADD ./conf/server.xml /usr/local/tomcat/conf/server.xml
 
 # Deploy the tomcat war file.
 ADD Expedius*.war /usr/local/tomcat/webapps/Expedius.war
