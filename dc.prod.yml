@@ -8,6 +8,9 @@ services:
   tomcat_oscar:
     ports:
       - '8443:443'
+  tomcat_expedius:
+    ports: 
+      - '8080:8081'
   db:
     ports:
       - '3306:3306'
