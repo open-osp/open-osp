@@ -47,6 +47,7 @@ mv tomcat-users.xml.tmp docker/tomcat_expedius/conf/tomcat-users.xml
 
 # get the Oscar context path and then set everything in the expedius.properties file.
 sed -e "s|EMR_CONTEXT_PATH=.*|EMR_CONTEXT_PATH=${OSCAR_CONTEXT}|g" -e "s|ADMIN_EMAIL=.*|ADMIN_EMAIL=${ADMIN_EMAIL}|g" -e "s|EMAIL_ON=.*|EMAIL_ON=${EMAIL_SERVICE}|g" -e "s|LOG_PATH=.*|LOG_PATH=${APP_DATA}\/logs\/|g" -e "s|TOMCAT_ROOT=.*|TOMCAT_ROOT=${TOMCAT_PATH}|g" -e "s|EXCELLERIS=.*|EXCELLERIS=true|g" -e "s|IHAPOI=.*|IHAPOI=false|g" -e "s|EMR_HOST_NAME=.*|EMR_HOST_NAME=${OSCAR_DN}|g" -e "s|EMR_WS_USERNAME=.*|EMR_WS_USERNAME=${OSCAR_USERNAME}|g" -e "s|EMR_WS_PASSWORD=.*|EMR_WS_PASSWORD=${OSCAR_PASSWORD}|g" -e "s|SERVICE_NUMBER=.*|SERVICE_NUMBER=${OSCAR_NUMBER}|g" -e "s|TRUSTSTORE_URL=.*|TRUSTSTORE_URL=${APP_DATA}\/.ssl\/expedius_trust.jks|g" -e "s|KEYSTORE_URL=.*|KEYSTORE_URL=${APP_DATA}\/.ssl\/expedius_key.jks|g" -e "s|DATA_PATH=.*|DATA_PATH=${APP_DATA}\/.appdata\/|g" -e "s|HL7_SAVE_PATH=.*|HL7_SAVE_PATH=${APP_DATA}\/hl7\/|g" -e "s|ACKNOWLEDGE_DOWNLOADS=.*|ACKNOWLEDGE_DOWNLOADS=true|g" docker/tomcat_expedius/conf/templates/expedius.properties > expedius.properties.tmp
+mkdir -p volumes/expedius/expedius.properties
 mv -f expedius.properties.tmp volumes/expedius/expedius.properties
 
 # set up trust store with an Oscar SSL trust cert
