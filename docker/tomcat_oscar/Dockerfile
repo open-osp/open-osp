@@ -3,6 +3,11 @@ FROM tomcat:7-jre8
 ADD oscar.war /usr/local/tomcat/webapps/oscar.war
 ADD drugref2.war /usr/local/tomcat/webapps/drugref2.war
 
+# RUN mkdir -p /var/lib/OscarDocument/login
+
+# ADD ./conf/templates/AcceptableUseAgreement.txt /var/lib/OscarDocument/login/AcceptableUseAgreement.txt
+# ADD ./conf/templates/login_page_template.txt /var/lib/OscarDocument/login/.env
+
 ADD ./conf/logging.properties /usr/local/tomcat/conf/logging.properties
 ADD ./conf/logging-servlet.properties /usr/local/tomcat/conf/logging-servlet.properties
 ADD ./conf/templates/oscar_mcmaster_bc.properties /root/oscar.properties

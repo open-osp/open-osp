@@ -1,0 +1,37 @@
+##
+# Environment settings for the Oscar Login page
+##
+
+# Support data is placed under the Login dialog
+
+## HTML link to the support provider website.
+
+supportLink=https://openosp.ca
+
+## Sub text for the support provider. such as telephone or email.
+
+supportText=support@openosp.ca <br /> +1 (604) 428-0105 <br /> +1 (800) 511-6778
+
+## Full name or title of the support provider.
+
+supportName=
+
+# Clinic information is placed above the login dialog under 
+# a clinic logo if one is supplied.
+
+## clinic subtext such as address phone etc.
+
+clinicText=
+
+## clinic HTML link to a clinic website if one is supplied.
+
+clinicLink=
+
+## Name or title of the clinic
+
+clinicName=Dr. Monk and Klipenstien
+
+## Name or title that goes in the browser window tab
+## This is set to Oscar by default
+
+tabName=Oscar EMR
