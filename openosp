@@ -1,5 +1,10 @@
 #!/bin/bash
 
+set -a
+source local.env
+
+echo $BUILD_NUMBER
+
 # This script is intended to be a common entrypoint for managing this environment.
 export MSYS_NO_PATHCONV=1
 set -e

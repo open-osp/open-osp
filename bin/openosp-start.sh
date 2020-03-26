@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo BUILD NUMBER: $BUILD_NUMBER
+
 docker-compose stop tomcat_oscar
 docker-compose rm tomcat_oscar
 
