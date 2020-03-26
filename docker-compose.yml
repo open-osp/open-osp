@@ -39,6 +39,8 @@ services:
       image: openosp/expedius:latest
       build: docker/tomcat_expedius
       volumes:
+        - ./volumes/ssl.crt:/usr/local/tomcat/conf/ssl.crt
+        - ./volumes/ssl.key:/usr/local/tomcat/conf/ssl.key
         - ./volumes/expedius:/var/lib/expedius
       networks:
         - back-tier
