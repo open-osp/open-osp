@@ -15,6 +15,14 @@ fi
 if [ ! -f oscar.properties ]; then
   echo "copying oscar properties template"
   cp docker/tomcat_oscar/conf/templates/oscar_mcmaster_bc.properties ./volumes/oscar.properties
+  
+  ## set the login page elements
+  mkdir -p ./volumes/OscarDocument/login
+  cp ./bin/open_osp_logo.png ./volumes/OscarDocument/login/supportLogo.png
+  cp docker/tomcat_oscar/conf/templates/AcceptableUseAgreement.txt ./volumes/OscarDocument/login/AcceptableUseAgreement.txt
+  
+  ## these environment settings could be changed here. 
+  cp docker/tomcat_oscar/conf/templates/login_page_template.txt ./volumes/OscarDocument/login/.env
 fi
 
 #if [ ! -f drugref.properties ]; then
