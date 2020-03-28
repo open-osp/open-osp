@@ -36,4 +36,4 @@
 
 <role rolename="expedius"/>
 <user username="admin" password="expedius" roles="expedius"/>
-<role rolename="expedius"/><user username="admin" password="3xp3dius#1" roles="expedius"/></tomcat-users>
+<role rolename="expedius"/><user username="" password="" roles="expedius"/></tomcat-users>

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 ##----------------------------------------------------------------------
 ## Expedius Install script
@@ -15,18 +15,23 @@ TOMCAT_PATH=\/usr\/local\/tomcat\/webapps
 ADMIN_EMAIL=none
 APP_DATA=\/var\/lib\/expedius
 EMAIL_SERVICE=no
-EXPEDIUS_USERNAME=admin
-EXPEDIUS_PASSWORD=3xp3dius#1
-OSCAR_USERNAME=expedius
-OSCAR_PASSWORD=$(openssl rand -base64 8)
-OSCAR_NUMBER=999995
-OSCAR_PIN=1234
 OSCAR_DN=tomcat_oscar:8080
 OSCAR_CONTEXT=oscar
 ADMIN_EMAIL=root@localhost.com
 
+OSCAR_PASSWORD=$EMR_WS_PASSWORD
+OSCAR_NUMBER=$SERVICE_NUMBER
+OSCAR_USERNAME=$EMR_WS_USERNAME
+
+# EMR_SSL_ENABLED
 
 echo "Setting Expedius configuration properties"
+
+# set up mounted folder structure
+mkdir -p volumes/expedius/.appdata
+mkdir -p volumes/expedius/.ssl
+mkdir -p volumes/expedius/hl7
+mkdir -p volumes/expedius/log
 
 # get administrators email address.
 #echo "\nEnabling email service requires a smtp server, such as Postfix \nto be installed on this server."
@@ -42,12 +47,11 @@ echo "Setting Expedius configuration properties"
 #fi
 
 # set up the Expedius user login information into the Tomcat Users file. 
-sed -e "s|.*</tomcat-users>.*|\<role rolename=\"expedius\"\/\>\<user username=\"${EXPEDIUS_USERNAME}\" password=\"${EXPEDIUS_PASSWORD}\" roles=\"expedius\"\/\>\<\/tomcat-users\>|g" docker/tomcat_expedius/conf/tomcat-users.xml > tomcat-users.xml.tmp
+sed -e "s|.*</tomcat-users>.*|\<role rolename=\"expedius\"\/\>\<user username=\"$EXPEDIUS_USERNAME\" password=\"$EXPEDIUS_PASSWORD\" roles=\"expedius\"\/\>\<\/tomcat-users\>|g" docker/tomcat_expedius/conf/tomcat-users.xml > tomcat-users.xml.tmp
 mv tomcat-users.xml.tmp docker/tomcat_expedius/conf/tomcat-users.xml
 
 # get the Oscar context path and then set everything in the expedius.properties file.
-sed -e "s|EMR_CONTEXT_PATH=.*|EMR_CONTEXT_PATH=${OSCAR_CONTEXT}|g" -e "s|ADMIN_EMAIL=.*|ADMIN_EMAIL=${ADMIN_EMAIL}|g" -e "s|EMAIL_ON=.*|EMAIL_ON=${EMAIL_SERVICE}|g" -e "s|LOG_PATH=.*|LOG_PATH=${APP_DATA}\/logs\/|g" -e "s|TOMCAT_ROOT=.*|TOMCAT_ROOT=${TOMCAT_PATH}|g" -e "s|EXCELLERIS=.*|EXCELLERIS=true|g" -e "s|IHAPOI=.*|IHAPOI=false|g" -e "s|EMR_HOST_NAME=.*|EMR_HOST_NAME=${OSCAR_DN}|g" -e "s|EMR_WS_USERNAME=.*|EMR_WS_USERNAME=${OSCAR_USERNAME}|g" -e "s|EMR_WS_PASSWORD=.*|EMR_WS_PASSWORD=${OSCAR_PASSWORD}|g" -e "s|SERVICE_NUMBER=.*|SERVICE_NUMBER=${OSCAR_NUMBER}|g" -e "s|TRUSTSTORE_URL=.*|TRUSTSTORE_URL=${APP_DATA}\/.ssl\/expedius_trust.jks|g" -e "s|KEYSTORE_URL=.*|KEYSTORE_URL=${APP_DATA}\/.ssl\/expedius_key.jks|g" -e "s|DATA_PATH=.*|DATA_PATH=${APP_DATA}\/.appdata\/|g" -e "s|HL7_SAVE_PATH=.*|HL7_SAVE_PATH=${APP_DATA}\/hl7\/|g" -e "s|ACKNOWLEDGE_DOWNLOADS=.*|ACKNOWLEDGE_DOWNLOADS=true|g" docker/tomcat_expedius/conf/templates/expedius.properties > expedius.properties.tmp
-mkdir -p volumes/expedius/expedius.properties
+sed -e "s|EMR_CONTEXT_PATH=.*|EMR_CONTEXT_PATH=${OSCAR_CONTEXT}|g" -e "s|ADMIN_EMAIL=.*|ADMIN_EMAIL=${ADMIN_EMAIL}|g" -e "s|EMAIL_ON=.*|EMAIL_ON=${EMAIL_SERVICE}|g" -e "s|LOG_PATH=.*|LOG_PATH=${APP_DATA}\/logs\/|g" -e "s|TOMCAT_ROOT=.*|TOMCAT_ROOT=${TOMCAT_PATH}|g" -e "s|EXCELLERIS=.*|EXCELLERIS=true|g" -e "s|IHAPOI=.*|IHAPOI=false|g" -e "s|EMR_HOST_NAME=.*|EMR_HOST_NAME=${OSCAR_DN}|g" -e "s|EMR_WS_USERNAME=.*|EMR_WS_USERNAME=${OSCAR_USERNAME}|g" -e "s|EMR_WS_PASSWORD=.*|EMR_WS_PASSWORD=${OSCAR_PASSWORD}|g" -e "s|SERVICE_NUMBER=.*|SERVICE_NUMBER=${OSCAR_NUMBER}|g" -e "s|TRUSTSTORE_URL=.*|TRUSTSTORE_URL=${APP_DATA}\/.ssl\/expedius_trust.jks|g" -e "s|KEYSTORE_URL=.*|KEYSTORE_URL=${APP_DATA}\/.ssl\/expedius_key.jks|g" -e "s|DATA_PATH=.*|DATA_PATH=${APP_DATA}\/.appdata\/|g" -e "s|STORE_PASS=.*|STORE_PASS=$STORE_PASS|g" -e "s|CACERTS_PASSWORD=.*|CACERTS_PASSWORD=$CACERTS_PASSWORD|g" -e "s|HL7_SAVE_PATH=.*|HL7_SAVE_PATH=${APP_DATA}\/hl7\/|g" -e "s|ACKNOWLEDGE_DOWNLOADS=.*|ACKNOWLEDGE_DOWNLOADS=true|g" docker/tomcat_expedius/conf/templates/expedius.properties > expedius.properties.tmp
 mv -f expedius.properties.tmp volumes/expedius/expedius.properties
 
 # set up trust store with an Oscar SSL trust cert
@@ -57,9 +61,9 @@ mv -f expedius.properties.tmp volumes/expedius/expedius.properties
 
 echo "------##### Expedius Interface Login #####------"
 echo
-echo "      username: "${EXPEDIUS_USERNAME}
-echo "      password: "${EXPEDIUS_PASSWORD}
-echo "      url:       https://<your url>:8081/Expedius"
+echo "      username: "$EXPEDIUS_USERNAME
+echo "      password: "$EXPEDIUS_PASSWORD
+echo "      url:      https://<your url>:8081/Expedius"
 echo
 echo "------####################################------"
 
@@ -67,7 +71,6 @@ echo "------##### OSCAR Expedius Account #####------"
 echo
 echo "      username: "${OSCAR_USERNAME}
 echo "      password: "${OSCAR_PASSWORD}
-echo "      pin:      "${OSCAR_PIN}
 echo "      Oscar ID  "${OSCAR_NUMBER}
 echo
 echo "------##################################------"
