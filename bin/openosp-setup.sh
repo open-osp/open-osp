@@ -12,7 +12,7 @@ if [ ! -f local.env ]; then
 fi
 
 # if this is a fresh install
-if [ ! -f oscar.properties ]; then
+if [ ! -f ./volumes/oscar.properties ]; then
   echo "copying oscar properties template"
   cp docker/tomcat_oscar/conf/templates/oscar_mcmaster_bc.properties ./volumes/oscar.properties
 fi
