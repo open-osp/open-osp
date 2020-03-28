@@ -74,6 +74,18 @@ Tag and push to DockerHub
 openosp publish
 ```
 
+## Using other Oscar Versions
+By default, we are using Oscar 15 when setting up the environment but you could also use other versions of Oscar.
+
+### Oscar 19
+To use Oscar 19, on your local.env file, add the following
+```
+OSCAR_TREEISH=oscar19.1
+OSCAR_REPO=git@bitbucket.org:oscaremr/oscar.git
+```
+
+Then run `./openosp setup`. This should copy Oscar version 19 to your oscar folder.
+
 ## Backups
 Backups will create backups for your OpenOsp database and OscarDocuments.
 
