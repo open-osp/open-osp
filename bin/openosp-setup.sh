@@ -9,6 +9,14 @@ DB_PASSWORD=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '')
 if [ ! -f local.env ]; then
   echo "copying oscar properties template"
   cp ./local.env.template ./local.env
+
+  echo "Removing existing DB passwords"
+  sed '/MYSQL_ROOT_PASSWORD/d' ./local.env
+  sed '/MYSQL_PASSWORD/d' ./local.env
+
+  echo "Generating new DB passwords"
+  echo "MYSQL_ROOT_PASSWORD=${DB_PASSWORD}" >> ./local.env
+  echo "MYSQL_PASSWORD=${DB_PASSWORD}" >> ./local.env
 fi
 
 # if this is a fresh install
