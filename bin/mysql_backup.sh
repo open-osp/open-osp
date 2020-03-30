@@ -1,3 +1,3 @@
 #!bin/bash
-
-mysqldump -uroot -pliyi oscar_mcmaster > dump
+mkdir -p dump
+mysqldump -uoscar -p oscar oscar > dump/

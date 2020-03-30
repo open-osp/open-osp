@@ -1,12 +1,29 @@
 version: "3.3"
 
 services:
-  nginx:
-    ports:
-      - '8095:80'
-      - '443:443'
+#  nginx:
+#    ports:
+#      - '8095:80'
+#      - '443:443'
   tomcat_oscar:
     ports:
       - '8443:443'
+  tomcat_expedius:
+    ports: 
+      - '8081:8081'
+  db:
+    ports:
+      - '3306:3306'
   backups:
-    image: ./backups
+    build: ./backups
+    environment:
+      - BACKUPS=1
+      - DUMP_LOCATION=/dump
+    env_file: 
+      - local.env
+    volumes:
+      - $HOME/.aws/credentials:/root/.aws/credentials
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - back-tier
+    command: /startup.sh

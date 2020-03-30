@@ -1,0 +1,19 @@
+version: "3.3"
+
+services:
+  nginx:
+    ports:
+      - '8000:80'
+    volumes:
+      - ./conf/ssl:/ssl
+      - ./nginx/conf.d/proxy.conf:/etc/nginx/conf.d/oscar.template
+  tomcat_oscar:
+    ports:
+      - '8443:443'
+      
+  tomcat_expedius:
+    ports:
+      - '8081:8081'
+  db:
+    ports:
+      - '3306:3306'

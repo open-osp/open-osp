@@ -3,6 +3,10 @@
 
 set -uxo
 
+if [ -f "./local.env" ]; then
+    source ./local.env
+fi
+
 branch=${OSCAR_TREEISH:-release/Oscar-BC-15}
 repo=${OSCAR_REPO:-https://countable@bitbucket.org/openoscar/oscar.git}
 
@@ -14,5 +18,3 @@ else
     cd oscar
     git checkout $branch
 fi
-
-

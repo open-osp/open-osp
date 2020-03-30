@@ -1,8 +1,12 @@
-conf/ssl.*
-conf/ssl
-OscarDocument
+volumes/*
+!volumes/.gitkeep
+expedius
+*.jar
+drugref2.properties
+oscar.properties
 docker-compose.override.yml
 oscar/
+docker/tomcat_oscar/*.war
 .vagrant
 .vagrant.v1.*
 .DS_Store
@@ -16,3 +20,4 @@ oscar/
 
 **pycache**
 *.pyc
+local.env

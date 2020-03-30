@@ -1,0 +1,118 @@
+#!/bin/bash
+
+set -a
+
+if [ ! -f "local.env" ]; then 
+    cp local.env.template local.env
+fi
+
+source local.env
+
+echo $BUILD_NUMBER
+
+# This script is intended to be a common entrypoint for managing this environment.
+export MSYS_NO_PATHCONV=1
+set -e
+
+# =================================================================================================================
+# Usage:
+# -----------------------------------------------------------------------------------------------------------------
+usage() {
+    cat <<-EOF
+
+        Usage: $0 [command] [options]
+
+        Commands:
+
+        setup - Copy properties files to volumes
+                Create Oscar instance
+                Boostrap the db with initial oscar db
+                
+                Examples:
+                - Setup OpenOSP environment.
+        
+                    $0 setup
+
+        bootstrap - Make a new, empty db
+
+        purge - Delete OSCAR related files
+                Drop current databse.
+
+        backup - Trigger Backups, by default, will run the auto backup container
+                Examples:
+                - Run automated backups.
+                    $0 backup
+                - Run manual backups.
+                    $0 backup -m
+
+        build - to build the oscar source WAR and docker image
+
+        publish - to push to dockerhub
+
+        update - to update the openosp docker image
+
+        start - to bring up containers if needed.
+
+EOF
+    exit 1
+}
+
+toLower() {
+    echo $(echo ${@} | tr '[:upper:]' '[:lower:]')
+}
+
+#=============================================================================
+
+
+COMMAND=$(toLower ${1})
+
+case "${COMMAND}" in
+    setup)
+        ./bin/openosp-setup.sh
+        ;;
+    purge)
+        ./bin/openosp-purge.sh
+        ;;
+    start)
+        container_count=0
+        for container_id in $(docker-compose ps -q); do 
+            container_count=$((container_count+1))
+        done
+
+        if [ "$container_count" -gt "0" ]; then
+            echo "Starting your OpenOSP instance."
+            ./bin/openosp-start.sh
+        else
+            echo "Setting up Oscar from scratch..."
+            sleep 2
+            ./openosp setup
+        fi
+
+        ;;
+    backup)
+        if  [[ $2 = "-m" ]]; then
+            echo "Manually Backing up files"
+            ./bin/openosp-backup.sh
+        else
+            echo "Running Auto backups"
+            ./bin/run-auto-backups.sh
+        fi
+        ;;
+    build)
+        ./bin/openosp-build.sh
+        ./openosp start
+        ;;
+    publish)
+        ./bin/openosp-publish.sh
+        ;;
+    bootstrap)
+        ./bin/openosp-bootstrap.sh
+        ;;
+    update)
+        echo "Updating OpenOsp docker image"
+        ./bin/openosp-update.sh
+        ;;
+    *)
+        usage
+        ;;
+esac
