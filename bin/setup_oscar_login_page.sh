@@ -6,11 +6,13 @@ echo SUPPORT_TEXT: $CLINIC_NAME
 mkdir -p ./volumes/OscarDocument/login
  
 # Logo for the OSP
+# TODO: these should use templates included in the repo.
 if [ -f ./supportLogo.png ]; then
   cp ./supportLogo.png ./volumes/OscarDocument/login/supportLogo.png
 fi
 
 # Logo for the user clinic
+# TODO: these should use templates included in the repo.
 if [ -f ./clinicLogo.png ]; then
   cp ./supportLogo.png ./volumes/OscarDocument/login/clinicLogo.png
 fi

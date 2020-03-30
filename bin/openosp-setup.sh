@@ -28,20 +28,12 @@ if [ ! -f ./volumes/oscar.properties ]; then
   sed '/db_password/d' ./volumes/oscar.properties
   echo "db_password=${DB_PASSWORD}" >> ./volumes/oscar.properties
 
-#if [ ! -f drugref.properties ]; then
-#  echo "copying drugref2 properties template"
-#  cp ./conf/drugref2.properties ./drugref2.properties
-#fi
-
 if [ ! -f docker-compose.override.yml ]; then
   echo "copying docker-compose dev template"
   cp dc.dev.yml docker-compose.override.yml
 fi
 
 echo "Cloning in order to bootstrap db."
-docker-compose -f docker-compose.admin.yml run builder ./bin/clone.sh
-./bin/openosp-build.sh
 ./bin/setup.sh
 ./bin/setup_oscar_login_page.sh
-./bin/run.sh
 

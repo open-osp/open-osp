@@ -12,9 +12,9 @@ then
   rm -f *.war
 
   echo "Removing local files (Properties, Docker settings, Environment variables)"
-  rm -f ./volumes/oscar.properties
-  rm -f ./drugref2.properties
-  rm -f ./docker-compose.override.yml
+  rm -fr ./oscar.properties
+  rm -fr ./drugref2.properties
+  rm -fr ./docker-compose.override.yml
   if [ ! -f ./local.env ]; then
     echo "local.env file already removed..."
   else
