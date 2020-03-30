@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source ./local.env
+
 echo SUPPORT_TEXT: $CLINIC_NAME
 
 ## set the login page elements
