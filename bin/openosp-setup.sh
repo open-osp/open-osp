@@ -28,6 +28,8 @@ if [ ! -f ./volumes/oscar.properties ]; then
   sed '/db_password/d' ./volumes/oscar.properties
   echo "db_password=${DB_PASSWORD}" >> ./volumes/oscar.properties
 
+fi
+
 if [ ! -f docker-compose.override.yml ]; then
   echo "copying docker-compose dev template"
   cp dc.dev.yml docker-compose.override.yml
