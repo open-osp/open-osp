@@ -42,6 +42,7 @@ services:
         - ./volumes/ssl.crt:/usr/local/tomcat/conf/ssl.crt
         - ./volumes/ssl.key:/usr/local/tomcat/conf/ssl.key
         - ./volumes/expedius:/var/lib/expedius
+        - ./volumes/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
       networks:
         - back-tier
       environment:
