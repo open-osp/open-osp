@@ -4,8 +4,6 @@ set -euxo
 
 DB_PASSWORD=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '')
 
-#TODO: use this db password in the instance
-
 if [ ! -f local.env ]; then
   echo "copying oscar properties template"
   cp ./local.env.template ./local.env

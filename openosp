@@ -68,7 +68,7 @@ COMMAND=$(toLower ${1})
 
 case "${COMMAND}" in
     setup)
-        ./bin/openosp-setup.sh
+        ./bin/openosp-setup.scratch
         ;;
     purge)
         ./bin/openosp-purge.sh
