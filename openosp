@@ -1,6 +1,11 @@
 #!/bin/bash
 
 set -a
+
+if [ ! -f "local.env" ]; then 
+    cp local.env.template local.env
+fi
+
 source local.env
 
 echo $BUILD_NUMBER

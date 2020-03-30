@@ -16,4 +16,8 @@ docker/tomcat_oscar/*.war
 *.war
 *.log
 
+*.env
+
+**pycache**
+*.pyc
 local.env

@@ -1,0 +1,4 @@
+flask
+markdown==3.1.1
+flask-pagedown==0.2.2
+flask-wtf

@@ -192,6 +192,14 @@ BUILD_NUMBER=12
 ### Custom CSS
 We have provided a sample CSS in ./static/css/oscar-custom.css. Feel free to play with this.
 
+### Customizing OpenOsp Properties
+1. After starting your container `./start.sh`
+2. You should be able to go to `/properties` and login. You can edit credentials on your`local.env` file:
+  * By default, it should be openosp and openosp
+  * `FLASK_USERNAME`
+  * `FLASK_PASSWORD`
+3. You should be redirected to a a textarea screen where you can edit your oscar properties file.
+
 ## Adding SSL
 After deploying, there will be auto-generated ssl keys that are provided but if you have one for that generated you can simply copy them to the `conf` folder and rename them as `ssl.crt` and `ssl.key`.
 
