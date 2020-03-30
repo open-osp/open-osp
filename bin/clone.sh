@@ -18,5 +18,3 @@ else
     cd oscar
     git checkout $branch
 fi
-
-
