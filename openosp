@@ -93,6 +93,7 @@ case "${COMMAND}" in
         ;;
     build)
         ./bin/openosp-build.sh
+        ./openosp start
         ;;
     publish)
         ./bin/openosp-publish.sh
