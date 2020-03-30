@@ -29,6 +29,7 @@ fi
 
 echo "Cloning in order to bootstrap db."
 docker-compose -f docker-compose.admin.yml run builder ./bin/clone.sh
+./bin/expedius-install.sh
 ./bin/setup.sh
 ./bin/run.sh
 
