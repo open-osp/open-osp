@@ -30,5 +30,6 @@ fi
 echo "Cloning in order to bootstrap db."
 docker-compose -f docker-compose.admin.yml run builder ./bin/clone.sh
 ./bin/setup.sh
+./bin/setup_oscar_login_page.sh
 ./bin/run.sh
 
