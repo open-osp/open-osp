@@ -34,6 +34,7 @@ if [ ! -f docker-compose.override.yml ]; then
 fi
 
 echo "Cloning in order to bootstrap db."
+./bin/expedius-install.sh
 ./bin/setup.sh
 ./bin/setup_oscar_login_page.sh
 

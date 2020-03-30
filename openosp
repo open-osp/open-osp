@@ -28,6 +28,8 @@ usage() {
         
                     $0 setup
 
+        bootstrap - Make a new, empty db
+
         purge - Delete OSCAR related files
                 Drop current databse.
 
@@ -97,6 +99,9 @@ case "${COMMAND}" in
         ;;
     publish)
         ./bin/openosp-publish.sh
+        ;;
+    bootstrap)
+        ./bin/openosp-bootstrap.sh
         ;;
     update)
         echo "Updating OpenOsp docker image"
