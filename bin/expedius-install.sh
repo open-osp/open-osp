@@ -10,6 +10,8 @@
 ## a server environment that supports Oscar EMR version 15*
 ##----------------------------------------------------------------------
 
+source local.env
+
 # init variables
 TOMCAT_PATH=\/usr\/local\/tomcat\/webapps
 ADMIN_EMAIL=none
