@@ -7,11 +7,13 @@ set -uxo
 
 cd oscar
 
-#mvn clean verify
-#mvn package
+# increase java perm and gen memory for build
+# other switches can be added here for debugging the build.
+export MAVEN_OPTS="-Xms640m -Xmx640m -Xss512k -XX:NewRatio=4"
 
-mvn -Dmaven.test.skip=true clean verify
-mvn package -Dmaven.test.skip=true
+# this repository should have passed unit testing and mvn verify 
+# on the cis before being built here.
+mvn -Dmaven.test.skip=true clean package
 
 chmod 777 -R ./target/
 
