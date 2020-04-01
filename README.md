@@ -10,6 +10,7 @@ This repo was originally based on [scoophealth (UVIC)](https://github.com/scooph
   * `cd open-osp`
   * `./openosp setup`
   * if you need a database, `./openosp bootstrap`
+  * `./openosp start`
   * Browse to Oscar on http://localhost!
   * Log in with the initial credentials. You will be prompted to change your password upon initial login.
       - Username: oscardoc
@@ -55,7 +56,6 @@ This should:
 1. Copy all the properties files and docker development yml file.
 1. Generate a new local.env file, with unique password for Oscar db, if not already done. (notify user of action taken)
 1. Copy all locally editable configs to the volumes/ folder (gitignored), if they dont exist already. Nothing should ever be mounted in a container except from inside this folder and those files are always gitignored copies from a templates/ folder. (notify user)
-1. Bootstrap the database if it's missing. (notify user)
 
 Start or Restart current OpenOsp instance
 ```
@@ -169,23 +169,6 @@ docker-compose exec oscar bash
 
 A Docker image built from the Dockerfile in this repo is published [here](https://hub.docker.com/repository/docker/openosp/open-osp).
 
-## Customize
-
-If you want to customize some pages, you might want to do these before starting your Oscar instance, or if you have already started an instance you can do
-```
-docker-compose up --build -d nginx
-```
-to restart both oscar and nginx.
-
-### Customizing Login Page
-You can customize the login page by adding environment variables to nginx. You can edit the file named 'local.env' and add variables;
-```
-LOGIN_TEXT=Html text that can <br> be added in the front page
-LOGIN_TITLE=Title you want
-BUILD_DATE=JAN-10-20
-BUILD_NAME=Oscar-build-v12
-BUILD_NUMBER=12
-```
 ### Adding Login page Logo
 1. You can add a logo by adding a file in the ./static/images directory named OSCAR-LOGO.png (Recommended)
 2. You can change CSS for 'login-logo' id
@@ -193,16 +176,16 @@ BUILD_NUMBER=12
 ### Custom CSS
 We have provided a sample CSS in ./static/css/oscar-custom.css. Feel free to play with this.
 
-### Customizing OpenOsp Properties
-1. After starting your container `./start.sh`
-2. You should be able to go to `/properties` and login. You can edit credentials on your`local.env` file:
+### Editing Oscar Properties
+1. There is an optional container to open an properties editor tool in the web UI. `docker-compose -f docker-compose.admin.yml up propertieseditor`
+2. You should be able to go to `localhost:5000/properties` and login. You can edit credentials on your`local.env` file:
   * By default, it should be openosp and openosp
   * `FLASK_USERNAME`
   * `FLASK_PASSWORD`
 3. You should be redirected to a a textarea screen where you can edit your oscar properties file.
 
 ## Adding SSL
-After deploying, there will be auto-generated ssl keys that are provided but if you have one for that generated you can simply copy them to the `conf` folder and rename them as `ssl.crt` and `ssl.key`.
+After deploying, there will be auto-generated ssl keys that are provided but if you have one for that generated you can simply copy them to the `volumes` folder and rename them as `ssl.crt` and `ssl.key`.
 
 You can now restart your OpenOsp by doing `./openosp start`
 
