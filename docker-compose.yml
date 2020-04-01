@@ -2,19 +2,6 @@ version: "3.3"
 
 services:
 
-    flask_oscar: 
-      build: ./flask-oscarproperties
-      ports:
-        - 5000:5000
-      volumes:
-        - ./flask-oscarproperties:/code
-        - ./oscar.properties:/code/oscar.properties
-      env_file: 
-        - local.env
-      restart: always
-      networks:
-        - back-tier
-
     db:
       restart: 'always'
       image: mariadb:10.4
@@ -33,6 +20,7 @@ services:
         - mariadb-files:/var/lib/mysql
       networks:
         - back-tier
+
     oscar:
       restart: 'always'
       image: openosp/open-osp:latest

@@ -1,6 +1,20 @@
 version: '3'
 
 services:
+
+    flask_oscar:
+      build: ./flask-oscarproperties
+      ports:
+        - 5000:5000
+      volumes:
+        - ./flask-oscarproperties:/code
+        - ./oscar.properties:/code/oscar.properties
+      env_file:
+        - local.env
+      restart: always
+      networks:
+        - back-tier
+
     builder:
       build: docker/builder
       volumes:
