@@ -63,7 +63,7 @@ Start or Restart current OpenOsp instance
 
 ## Oscar Environment Update
 
-Pull the latest dockerhub image and recreate `tomcat_oscar` container
+Pull the latest dockerhub image and recreate `oscar` container
 ```
 ./openosp update
 ```
@@ -156,12 +156,12 @@ Options may be passed in via environment variables on the host.
 
 To update
 ```
-docker cp oscar-14.0.0-SNAPSHOT.war tomcat_oscar:/usr/local/tomcat/webapps
+docker cp oscar-14.0.0-SNAPSHOT.war oscar:/usr/local/tomcat/webapps
 ```
 
 To shell into the tomcat container
 ```
-docker-compose exec tomcat_oscar bash
+docker-compose exec oscar bash
 ```
 
 ## Docker Image
@@ -174,7 +174,7 @@ If you want to customize some pages, you might want to do these before starting 
 ```
 docker-compose up --build -d nginx
 ```
-to restart both tomcat_oscar and nginx.
+to restart both oscar and nginx.
 
 ### Customizing Login Page
 You can customize the login page by adding environment variables to nginx. You can edit the file named 'local.env' and add variables;

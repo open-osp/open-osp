@@ -6,7 +6,7 @@ echo "This deploys a fresh oscar from source."
 
 echo "Compiling OSCAR. This may take some time...."
 docker-compose -f docker-compose.admin.yml run builder ./bin/build-oscar.sh
-OSCAR_OUTPUT=docker/tomcat_oscar
+OSCAR_OUTPUT=docker/oscar
 if [ ! -f $OSCAR_OUTPUT/oscar.war ]; then
   echo "Building oscar.war from cloned Oscar REPO"
   mv ./oscar/target/oscar-*-SNAPSHOT.war $OSCAR_OUTPUT/oscar.war
@@ -19,5 +19,5 @@ if [ ! -f drugref2.war ]; then
   docker run -v $(pwd):/code/ busybox sh -c "cd /code/ && wget $DRUGREF_WAR -O $OSCAR_OUTPUT/drugref2.war"
 fi
 
-docker-compose build tomcat_oscar
+docker-compose build oscar
 

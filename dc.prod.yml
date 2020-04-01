@@ -5,10 +5,10 @@ services:
 #    ports:
 #      - '8095:80'
 #      - '443:443'
-  tomcat_oscar:
+  oscar:
     ports:
       - '8443:443'
-  tomcat_expedius:
+  expedius:
     ports: 
       - '8081:8081'
   db:

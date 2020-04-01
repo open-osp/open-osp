@@ -33,10 +33,10 @@ services:
         - mariadb-files:/var/lib/mysql
       networks:
         - back-tier
-    tomcat_oscar:
+    oscar:
       restart: 'always'
       image: openosp/open-osp:latest
-      build: docker/tomcat_oscar
+      build: docker/oscar
       volumes:
         - ./volumes/oscar.properties:/root/oscar.properties
         - ./volumes/OscarDocument:/var/lib/OscarDocument
@@ -47,10 +47,10 @@ services:
         - back-tier
       environment:
         TZ: America/Vancouver  
-    tomcat_expedius:
+    expedius:
       restart: 'always'
       image: openosp/expedius:latest
-      build: docker/tomcat_expedius
+      build: docker/expedius
       volumes:
         - ./volumes/ssl.crt:/usr/local/tomcat/conf/ssl.crt
         - ./volumes/ssl.key:/usr/local/tomcat/conf/ssl.key

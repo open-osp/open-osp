@@ -55,10 +55,10 @@ then
     echo 'Manual backups, using OscarDocument volume'
 else
     echo 'Automated backups'
-    docker cp ${site}_tomcat_oscar_1:/var/lib/OscarDocument ./OscarDocument
+    docker cp ${site}_oscar_1:/var/lib/OscarDocument ./OscarDocument
 fi
-docker cp ${site}_tomcat_oscar_1:/root/oscar.properties $DUMP_LOCATION/oscar.properties
-docker cp ${site}_tomcat_oscar_1:/root/drugref2.properties $DUMP_LOCATION/drugref2.properties
+docker cp ${site}_oscar_1:/root/oscar.properties $DUMP_LOCATION/oscar.properties
+docker cp ${site}_oscar_1:/root/drugref2.properties $DUMP_LOCATION/drugref2.properties
 
 tar cvf $DUMP_LOCATION.tar $DUMP_LOCATION
 lrzip $DUMP_LOCATION.tar
