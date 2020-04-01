@@ -3,6 +3,7 @@
 source ./local.env
 
 echo SUPPORT_TEXT: $CLINIC_NAME
+TAB_NAME=Oscar EMR
 
 ## set the login page elements
 mkdir -p ./volumes/OscarDocument/login

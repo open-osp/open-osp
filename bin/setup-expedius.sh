@@ -24,7 +24,7 @@ ADMIN_EMAIL=root@localhost.com
 OSCAR_PASSWORD=$EMR_WS_PASSWORD
 OSCAR_NUMBER=$SERVICE_NUMBER
 OSCAR_USERNAME=$EMR_WS_USERNAME
-
+EXPEDIUS_USERNAME=expedius
 # EMR_SSL_ENABLED
 
 echo "Setting Expedius configuration properties"

@@ -7,30 +7,26 @@ read -p "Are you sure you want to wipe the DB and all local config? [ Type CONFI
 echo    # (optional) move to a new line
 if [[ $REPLY =~ "CONFIRM" ]]
 then
+
+  # Docker commands reference this file so it must exist for now. Delete it later.
+  touch local.env
+
   echo "Removing OSCAR files..."
   rm -f *.war.*
   rm -f *.war
 
-  echo "Removing local files (Properties, Docker settings, Environment variables)"
-  rm -fr ./oscar.properties
-  rm -fr ./drugref2.properties
+  echo "Removing volumes"
+  rm -fr volumes/*
+
+  echo "Removing local files (Docker settings, Environment variables)"
   rm -fr ./docker-compose.override.yml
-  if [ ! -f ./local.env ]; then
-    echo "local.env file already removed..."
-  else
-    echo "Removing docker containers"
-    docker-compose down -v
+  docker-compose -f docker-compose.admin.yml run builder rm -fr oscar
+  docker-compose down -v
+  rm -f local.env
 
-    docker-compose -f docker-compose.admin.yml run builder rm -fr oscar
+  #dcid=$(pwd | grep -oh "[^/]*$" | sed "s/[^a-z\d_\-]//g")
+  #docker volume rm ${dcid}_mariadb-files &> /dev/null
 
-    rm -f ./local.env
-  fi
-
-
-  dcid=$(pwd | grep -oh "[^/]*$" | sed "s/[^a-z\d_\-]//g")
-  docker volume rm ${dcid}_mariadb-files &> /dev/null
-
-  rm docker-compose.override.yml
   echo "Done"
 else
   echo "Not confirmed"

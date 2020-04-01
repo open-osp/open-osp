@@ -9,6 +9,7 @@ This repo was originally based on [scoophealth (UVIC)](https://github.com/scooph
   * `git clone https://github.com/open-osp/open-osp.git`
   * `cd open-osp`
   * `./openosp setup`
+  * if you need a database, `./openosp bootstrap`
   * Browse to Oscar on http://localhost!
   * Log in with the initial credentials. You will be prompted to change your password upon initial login.
       - Username: oscardoc

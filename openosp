@@ -2,13 +2,9 @@
 
 set -a
 
-if [ ! -f "local.env" ]; then 
-    cp local.env.template local.env
+if [ -f "local.env" ]; then 
+    source local.env
 fi
-
-source local.env
-
-echo $BUILD_NUMBER
 
 # This script is intended to be a common entrypoint for managing this environment.
 export MSYS_NO_PATHCONV=1
@@ -74,20 +70,7 @@ case "${COMMAND}" in
         ./bin/openosp-purge.sh
         ;;
     start)
-        container_count=0
-        for container_id in $(docker-compose ps -q); do 
-            container_count=$((container_count+1))
-        done
-
-        if [ "$container_count" -gt "0" ]; then
-            echo "Starting your OpenOSP instance."
-            ./bin/openosp-start.sh
-        else
-            echo "Setting up Oscar from scratch..."
-            sleep 2
-            ./openosp setup
-        fi
-
+       ./bin/openosp-start.sh
         ;;
     backup)
         if  [[ $2 = "-m" ]]; then
@@ -100,7 +83,6 @@ case "${COMMAND}" in
         ;;
     build)
         ./bin/openosp-build.sh
-        ./openosp start
         ;;
     publish)
         ./bin/openosp-publish.sh
@@ -109,7 +91,6 @@ case "${COMMAND}" in
         ./bin/openosp-bootstrap.sh
         ;;
     update)
-        echo "Updating OpenOsp docker image"
         ./bin/openosp-update.sh
         ;;
     *)
