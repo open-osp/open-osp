@@ -1,12 +1,6 @@
 #!/bin/bash
 
-set -e
-
-if [ -z "$BACKUPS" ]
-then
-    echo 'Manual Backups, using local.env variables'
-    source ./local.env
-fi
+set -x
 
 if [ -z "$BACKUP_BUCKET" ]
 then
@@ -16,7 +10,7 @@ fi
 
 if [ -z "$BACKUP_CMD" ]
 then
-    BACKUP_CMD="mysqldump -uroot -${MYSQL_ROOT_PASSWORD} oscar --result-file=/dump/db.sql"
+    BACKUP_CMD="mysqldump -uroot -p${MYSQL_ROOT_PASSWORD} oscar --result-file=/dump/db.sql"
     echo "BACKUP_CMD env var not specified, defaulting to '${BACKUP_CMD}'."
 fi
 
@@ -34,10 +28,9 @@ then
     echo "DUMP location not specified, using $DUMP_LOCATION"
 fi
 
-site=$(docker ps --format '{{.Names}}' | grep _db_ | cut -d'_' -f1) 
+site=$(pwd | grep -oh "[^/]*$")
 filename=$site.$(date +%Y%m%d-%H%M%S)
 folder=$(date +%Y%m)
-clinicname="openosp-${CLINIC_NAME//\"}"
 
 rm -rf $DUMP_LOCATION
 rm -f $DUMP_LOCATION.tar.lrz
@@ -50,22 +43,14 @@ docker exec -t ${site}_db_1 mkdir /dump
 docker exec -t ${site}_db_1 $BACKUP_CMD
 docker cp ${site}_db_1:/dump/db.sql $DUMP_LOCATION/db.sql
 
-if [ -z "$BACKUPS" ]
-then
-    echo 'Manual backups, using OscarDocument volume'
-else
-    echo 'Automated backups'
-    docker cp ${site}_oscar_1:/var/lib/OscarDocument ./OscarDocument
-fi
-docker cp ${site}_oscar_1:/root/oscar.properties $DUMP_LOCATION/oscar.properties
-docker cp ${site}_oscar_1:/root/drugref2.properties $DUMP_LOCATION/drugref2.properties
-
 tar cvf $DUMP_LOCATION.tar $DUMP_LOCATION
 lrzip $DUMP_LOCATION.tar
+rm $DUMP_LOCATION.tar
 
+clinicname="openosp-${CLINIC_NAME:-$site}"
 echo "done backups"
 
 # Remove double quotes, user might input value enclosed in "" in local.env
 BACKUP_BUCKET="${BACKUP_BUCKET//\"}"
-aws s3 sync ./OscarDocument s3://$BACKUP_BUCKET/$clinicname/OscarDocument --storage-class STANDARD_IA --exclude ".sync/*"
+aws s3 sync ./volumes s3://$BACKUP_BUCKET/$clinicname/volumes --storage-class STANDARD_IA --exclude ".sync/*"
 aws s3 mv $DUMP_LOCATION.tar.lrz s3://$BACKUP_BUCKET/$clinicname/$folder/$filename.tar.lrz

@@ -1,3 +1,4 @@
+./oscar
 volumes/*
 !volumes/.gitkeep
 *.jar
