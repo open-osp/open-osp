@@ -1,5 +1,7 @@
 #!/bin/bash
 
+./bin/clone.sh
+
 echo "Setting up database..."
 docker-compose up -d db
 sleep 10

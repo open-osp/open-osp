@@ -1,20 +1,27 @@
 #!/bin/bash
 
-set -euxo
+# uncomment for debugging
+#set -euxo
+set -eu
 
 DB_PASSWORD=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '')
+EXPEDIUS_SECRET=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '')
 
 if [ ! -f local.env ]; then
-  echo "copying oscar properties template"
+  echo "copying ENV template"
   cp ./local.env.template ./local.env
-
-  echo "Removing existing DB passwords"
-  sed '/MYSQL_ROOT_PASSWORD/d' ./local.env
-  sed '/MYSQL_PASSWORD/d' ./local.env
 
   echo "Generating new DB passwords"
   echo "MYSQL_ROOT_PASSWORD=${DB_PASSWORD}" >> ./local.env
   echo "MYSQL_PASSWORD=${DB_PASSWORD}" >> ./local.env
+
+  echo "Generating expedius secrets"
+  echo "CACERTS_PASSWORD=${EXPEDIUS_SECRET}" >> ./local.env
+  echo "STORE_PASS=${EXPEDIUS_SECRET}" >> ./local.env
+  echo "EXPEDIUS_PASSWORD=${EXPEDIUS_SECRET}" >> ./local.env
+
+else
+  echo "local.env exists, not configuring."
 fi
 
 # if this is a fresh install
@@ -34,7 +41,7 @@ if [ ! -f docker-compose.override.yml ]; then
 fi
 
 echo "Cloning in order to bootstrap db."
-./bin/expedius-install.sh
-./bin/setup.sh
-./bin/setup_oscar_login_page.sh
+./bin/setup-expedius.sh
+./bin/setup-keys.sh
+./bin/setup-oscar-login-page.sh
 

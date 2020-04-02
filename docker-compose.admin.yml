@@ -2,13 +2,13 @@ version: '3'
 
 services:
 
-    flask_oscar:
-      build: ./flask-oscarproperties
+    propertieseditor:
+      build: ./docker/propertieseditor
       ports:
         - 5000:5000
       volumes:
-        - ./flask-oscarproperties:/code
-        - ./oscar.properties:/code/oscar.properties
+        - ./docker/propertieseditor:/code
+        - ./volumes/oscar.properties:/code/oscar.properties
       env_file:
         - local.env
       restart: always
