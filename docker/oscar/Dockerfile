@@ -10,6 +10,8 @@ ADD ./conf/tomcat-users.xml /usr/local/tomcat/conf/tomcat-users.xml
 ADD ./conf/drugref2.properties /root/drugref2.properties
 ADD ./conf/server.xml /usr/local/tomcat/conf/server.xml
 
+ADD ./oscar/database/mysql/ /oscar-mysql-scripts/
+
 # Integrator directory
 RUN mkdir -p /var/lib/bc-integrator/export
 

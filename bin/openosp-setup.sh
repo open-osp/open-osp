@@ -20,6 +20,18 @@ if [ ! -f local.env ]; then
   echo "STORE_PASS=${EXPEDIUS_SECRET}" >> ./local.env
   echo "EXPEDIUS_PASSWORD=${EXPEDIUS_SECRET}" >> ./local.env
 
+  read -p "Enter clinic text (address, phone): " CLINIC_TEXT
+  echo "## clinic subtext such as address phone etc." >> ./local.env
+  echo "CLINIC_TEXT=${CLINIC_TEXT}" >> ./local.env
+  
+  read -p "Enter clinic website link, including HTTP(S): " CLINIC_LINK
+  echo "## clinic HTML link to a clinic website if one is supplied." >> ./local.env
+  echo "CLINIC_LINK=${CLINIC_LINK}" >> ./local.env
+
+  read -p "Name of the clinic: " CLINIC_NAME
+  echo "## Name or title of the clinic" >> ./local.env
+  echo "CLINIC_NAME=${CLINIC_NAME}" >> ./local.env
+
 else
   echo "local.env exists, not configuring."
 fi
@@ -33,6 +45,14 @@ if [ ! -f ./volumes/oscar.properties ]; then
   sed '/db_password/d' ./volumes/oscar.properties
   echo "db_password=${DB_PASSWORD}" >> ./volumes/oscar.properties
 
+fi
+
+if [ ! -f ./volumes/drugref2.properties ]; then
+  echo "copying drugref properties template"
+  cp docker/oscar/conf/templates/drugref2.properties ./volumes/drugref2.properties
+
+  echo "Using generated password in Drugref properties file"
+  echo "db_password=${DB_PASSWORD}" >> ./volumes/drugref2.properties
 fi
 
 if [ ! -f docker-compose.override.yml ]; then
