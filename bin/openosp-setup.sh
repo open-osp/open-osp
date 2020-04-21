@@ -4,8 +4,9 @@
 #set -euxo
 set -eu
 
-DB_PASSWORD=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '')
-EXPEDIUS_SECRET=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '')
+# tr command does not work in UNIX environments. OpenSSL is common in every environment.
+DB_PASSWORD=$(openssl rand -base64 8)
+EXPEDIUS_SECRET=$(openssl rand -base64 8)
 
 if [ ! -f local.env ]; then
   echo "copying ENV template"
