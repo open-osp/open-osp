@@ -6,7 +6,7 @@ This repo was originally based on [scoophealth (UVIC)](https://github.com/scooph
 
 ## Quickstart
   * Install Docker and docker-compose
-  * `git clone https://github.com/open-osp/open-osp.git`
+  * `git clone https://github.com/open-osp/open-osp.git` (master is the stable branch to use)
   * `cd open-osp`
   * `./openosp setup`
   * if you need a database, `./openosp bootstrap`
@@ -193,7 +193,9 @@ You can now restart your OpenOsp by doing `./openosp start`
 
 [host architecture pdf](!./host-architecture.pdf)
 
-## TODO
+## Contributing
+
+Merge general work to `develop`, and bugfixes into `master`. We will occasionally "release" `develop` into `master` by testing and merging it in.
 
 For backlog, see the [GitHub issues tab](https://github.com/open-osp/open-osp/issues).
 
