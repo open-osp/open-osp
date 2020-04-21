@@ -20,18 +20,21 @@ if [ ! -f local.env ]; then
   echo "CACERTS_PASSWORD=${EXPEDIUS_SECRET}" >> ./local.env
   echo "STORE_PASS=${EXPEDIUS_SECRET}" >> ./local.env
   echo "EXPEDIUS_PASSWORD=${EXPEDIUS_SECRET}" >> ./local.env
-
-  read -p "Enter clinic text (address, phone): " CLINIC_TEXT
-  echo "## clinic subtext such as address phone etc." >> ./local.env
-  echo "CLINIC_TEXT=${CLINIC_TEXT}" >> ./local.env
   
-  read -p "Enter clinic website link, including HTTP(S): " CLINIC_LINK
-  echo "## clinic HTML link to a clinic website if one is supplied." >> ./local.env
-  echo "CLINIC_LINK=${CLINIC_LINK}" >> ./local.env
-
-  read -p "Name of the clinic: " CLINIC_NAME
+  echo "Setting up landing page"
+  read -p "Clinic name: " CLINIC_NAME
   echo "## Name or title of the clinic" >> ./local.env
-  echo "CLINIC_NAME=${CLINIC_NAME}" >> ./local.env
+  echo "CLINIC_NAME=\"${CLINIC_NAME}\"" >> ./local.env
+
+  read -p "Clinic sub text (address, phone): " CLINIC_TEXT
+  echo "## clinic subtext such as address phone etc." >> ./local.env
+  echo "CLINIC_TEXT=\"${CLINIC_TEXT}\"" >> ./local.env
+  
+  read -p "Clinic website link, including HTTP(S): " CLINIC_LINK
+  echo "## clinic HTML link to a clinic website if one is supplied." >> ./local.env
+  echo "CLINIC_LINK=\"${CLINIC_LINK}\"" >> ./local.env
+
+
 
 else
   echo "local.env exists, not configuring."
