@@ -34,8 +34,15 @@ if [ ! -f local.env ]; then
   echo "## clinic HTML link to a clinic website if one is supplied." >> ./local.env
   echo "CLINIC_LINK=\"${CLINIC_LINK}\"" >> ./local.env
 
-
-
+  read -p "Title name in browser tabs (default: OSCAR EMR): " TAB_NAME
+  echo "## Title name in browser tabs (default: OSCAR EMR)" >> ./local.env
+  if [ ${TAB_NAME} = "" ];
+    then
+    	echo "TAB_NAME=\"OSCAR EMR\"" >> ./local.env
+	else
+		echo "TAB_NAME=\"${TAB_NAME}\"" >> ./local.env
+  fi
+ 
 else
   echo "local.env exists, not configuring."
 fi
