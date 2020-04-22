@@ -36,7 +36,7 @@ if [ ! -f local.env ]; then
 
   read -p "Title name in browser tabs (default: OSCAR EMR): " TAB_NAME
   echo "## Title name in browser tabs (default: OSCAR EMR)" >> ./local.env
-  if [ ${TAB_NAME} = "" ];
+  if [ -z ${TAB_NAME} ];
     then
     	echo "TAB_NAME=\"OSCAR EMR\"" >> ./local.env
 	else
@@ -50,7 +50,7 @@ fi
 # if this is a fresh install
 if [ ! -f ./volumes/oscar.properties ]; then
   echo "copying oscar properties template"
-  cp docker/oscar/conf/templates/oscar_mcmaster_bc.properties ./volumes/oscar.properties
+  cp docker/oscar/conf/oscar_mcmaster_bc.properties ./volumes/oscar.properties
 
   echo "Using generated password in Oscar properties file"
   sed '/db_password/d' ./volumes/oscar.properties
@@ -60,7 +60,7 @@ fi
 
 if [ ! -f ./volumes/drugref2.properties ]; then
   echo "copying drugref properties template"
-  cp docker/oscar/conf/templates/drugref2.properties ./volumes/drugref2.properties
+  cp docker/oscar/conf/drugref2.properties ./volumes/drugref2.properties
 
   echo "Using generated password in Drugref properties file"
   echo "db_password=${DB_PASSWORD}" >> ./volumes/drugref2.properties
