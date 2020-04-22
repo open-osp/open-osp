@@ -36,6 +36,7 @@ services:
         - back-tier
       environment:
         TZ: America/Vancouver  
+        
     expedius:
       restart: 'always'
       image: openosp/expedius:latest
@@ -49,6 +50,18 @@ services:
         - back-tier
       environment:
         TZ: America/Vancouver
+        
+    faxws:
+      restart: 'always'
+      image: openosp/faxws:latest
+      build: docker/faxws
+      volumes:
+        - ./volumes/OscarDocument:/var/lib/OscarDocument
+      networks:
+        - back-tier
+      environment:
+        TZ: America/Vancouver
+        
 volumes:
   mariadb-files:
     driver: local
