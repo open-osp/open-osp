@@ -20,7 +20,6 @@ services:
       volumes:
         - .:/code
         - $HOME/.m2:/root/.m2
-        - $HOME/.ssh/id_rsa:/root/.ssh/id_rsa
       working_dir: /code
       command: ./build-release.sh
       environment:

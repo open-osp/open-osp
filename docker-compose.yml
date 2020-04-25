@@ -27,6 +27,7 @@ services:
       build: docker/oscar
       volumes:
         - ./volumes/oscar.properties:/root/oscar.properties
+        - ./volumes/drugref2.properties:/root/drugref2.properties
         - ./volumes/OscarDocument:/var/lib/OscarDocument
         - ./volumes/ssl.crt:/usr/local/tomcat/conf/ssl.crt
         - ./volumes/ssl.key:/usr/local/tomcat/conf/ssl.key
