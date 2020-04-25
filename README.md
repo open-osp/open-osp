@@ -199,7 +199,7 @@ Merge general work to `develop`, and bugfixes into `master`. We will occasionall
 
 For backlog, see the [GitHub issues tab](https://github.com/open-osp/open-osp/issues).
 
-## Design Principles
+## Design Patterns / Guidelines
 
 1. Run pre-made docker images in production.
 1. Define as few dynamic configs as possible at runtime.
