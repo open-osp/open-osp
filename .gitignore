@@ -5,7 +5,9 @@ volumes/*
 drugref2.properties
 oscar.properties
 docker-compose.override.yml
-docker/tomcat_oscar/*.war
+
+docker/oscar/oscar
+
 .vagrant
 .vagrant.v1.*
 .DS_Store
