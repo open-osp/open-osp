@@ -199,6 +199,14 @@ Merge general work to `develop`, and bugfixes into `master`. We will occasionall
 
 For backlog, see the [GitHub issues tab](https://github.com/open-osp/open-osp/issues).
 
+## Design Patterns / Guidelines
+
+1. Run pre-made docker images in production.
+1. Define as few dynamic configs as possible at runtime.
+1. Minimize the amount of setup/automation/scripting required to deploy a new environment.
+1. Conversely, do as much as possible at build time (in docker images pre-baked).
+1. For a new environment, set dynamic secrets automatically, once at setup.
+
 ## License
 
 This repository is licensed under the GPL V3
