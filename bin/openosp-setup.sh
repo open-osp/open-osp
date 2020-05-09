@@ -7,6 +7,7 @@ set -eu
 # tr command does not work in UNIX environments. OpenSSL is common in every environment.
 DB_PASSWORD=$(openssl rand -base64 8)
 EXPEDIUS_SECRET=$(openssl rand -base64 8)
+FAXWS_SECRET=$(openssl rand -base64 8)
 
 if [ ! -f local.env ]; then
   echo "copying ENV template"
@@ -15,6 +16,7 @@ if [ ! -f local.env ]; then
   echo "Generating new DB passwords"
   echo "MYSQL_ROOT_PASSWORD=${DB_PASSWORD}" >> ./local.env
   echo "MYSQL_PASSWORD=${DB_PASSWORD}" >> ./local.env
+  echo "FAXWS_TOMCAT_PASSWORD=${FAXWS_SECRET}" >> ./local.env
 
   echo "Generating expedius secrets"
   echo "CACERTS_PASSWORD=${EXPEDIUS_SECRET}" >> ./local.env
@@ -75,4 +77,6 @@ echo "Cloning in order to bootstrap db."
 ./bin/setup-expedius.sh
 ./bin/setup-keys.sh
 ./bin/setup-oscar-login-page.sh
+
+docker pull openosp/open-osp
 

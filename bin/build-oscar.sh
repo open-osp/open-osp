@@ -3,9 +3,10 @@
 
 set -uxo
 
-./bin/clone.sh
-
+cd docker/oscar
+git clone https://countable@bitbucket.org/openoscar/oscar.git
 cd oscar
+git checkout release/Oscar-BC-15
 
 # increase java perm and gen memory for build
 # other switches can be added here for debugging the build.
