@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path="/faxWs">
+
+
+		<Realm className="org.apache.catalina.realm.JDBCRealm"
+                driverName="com.mysql.jdbc.Driver"
+		connectionURL="jdbc:mysql://db/OscarFax?user=root&amp;password=abc123"
+                userTable="users" userNameCol="user_name" userCredCol="user_pass"
+                userRoleTable="user_roles" roleNameCol="role_name"/> 
+
+
+        <Valve className="org.apache.catalina.valves.AccessLogValve"
+                prefix="oscarFax_access_log." suffix=".txt"
+                pattern="common"/>
+
+</Context>
