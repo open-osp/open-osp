@@ -59,8 +59,6 @@ services:
         - ./volumes/OscarDocument:/var/lib/OscarDocument
         - ./volumes/ssl.crt:/usr/local/tomcat/conf/ssl.crt
         - ./volumes/ssl.key:/usr/local/tomcat/conf/ssl.key
-        - ./volumes/faxws.properties:/root/faxws.properties
-        - ./volumes/faxws-context.xml:/usr/local/tomcat/Catalina/faxWs/context.xml
       networks:
         - back-tier
       env_file:

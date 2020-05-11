@@ -35,3 +35,5 @@ rm _bootstrap.sql
 echo "Setting authentication database..."
 docker-compose exec db mysql -h localhost -uroot -p$MYSQL_ROOT_PASSWORD OscarFax -e "insert into users Values('$tomcatUser','$tomcatPassword')"
 docker-compose exec db mysql -h localhost -uroot -p$MYSQL_ROOT_PASSWORD OscarFax -e "insert into user_roles Values('$tomcatUser','user')"
+
+
