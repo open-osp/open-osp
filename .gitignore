@@ -7,6 +7,7 @@ oscar.properties
 docker-compose.override.yml
 docker/oscar/*.war
 docker/oscar/oscar
+docker/faxws/faxws
 
 .vagrant
 .vagrant.v1.*
