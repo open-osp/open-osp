@@ -2,14 +2,14 @@
 
 set -euxo
 
-echo "This deploys a fresh oscar from source."
+echo "This builds a fresh oscar from source."
 
 echo "Compiling OSCAR. This may take some time...."
 docker-compose -f docker-compose.admin.yml run builder ./bin/build-oscar.sh
 OSCAR_OUTPUT=docker/oscar
 if [ ! -f $OSCAR_OUTPUT/oscar.war ]; then
   echo "Building oscar.war from cloned Oscar REPO"
-  mv ./oscar/target/oscar-*-SNAPSHOT.war $OSCAR_OUTPUT/oscar.war
+  mv ./docker/oscar/oscar/target/oscar-*-SNAPSHOT.war $OSCAR_OUTPUT/oscar.war
 fi
 
 export DRUGREF_WAR=${DRUGREF_WAR:-"http://bool.countable.ca/drugref2.war"}

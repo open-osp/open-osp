@@ -5,7 +5,7 @@ set -uxo
 
 ./bin/clone.sh
 
-cd oscar
+cd docker/oscar/oscar
 
 # increase java perm and gen memory for build
 # other switches can be added here for debugging the build.

@@ -6,6 +6,7 @@ drugref2.properties
 oscar.properties
 docker-compose.override.yml
 docker/oscar/*.war
+docker/oscar/oscar
 
 .vagrant
 .vagrant.v1.*
