@@ -93,6 +93,9 @@ case "${COMMAND}" in
     update)
         ./bin/openosp-update.sh
         ;;
+    health)
+        ./bin/openosp-health.sh
+        ;;
     *)
         usage
         ;;

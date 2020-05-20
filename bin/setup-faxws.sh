@@ -20,7 +20,7 @@ docker-compose up -d faxws
 
 sleep 3
 
-#docker-compose exec db mysql -h localhost -uroot -p$MYSQL_ROOT_PASSWORD -e "drop database OscarFax"
+docker-compose exec db mysql -h localhost -uroot -p$MYSQL_ROOT_PASSWORD -e "drop database if exists OscarFax"
 docker-compose exec db mysql -h localhost -uroot -p$MYSQL_ROOT_PASSWORD -e "create database OscarFax"
 
 # Run migrations
