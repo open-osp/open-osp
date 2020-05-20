@@ -23,6 +23,11 @@ ADD ./conf/server.xml /usr/local/tomcat/conf/server.xml
 
 ADD ./oscar/database/mysql/ /oscar-mysql-scripts/
 
+#Identify the timezone you want to configure and create a symlink:
+RUN rm -f /etc/localtime \
+    && ln -s /usr/share/zoneinfo/America/Vancouver /etc/localtime
+
+
 # Integrator directory
 RUN mkdir -p /var/lib/bc-integrator/export
 
