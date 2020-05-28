@@ -31,6 +31,7 @@ services:
         - ./volumes/OscarDocument:/var/lib/OscarDocument
         - ./volumes/ssl.crt:/usr/local/tomcat/conf/ssl.crt
         - ./volumes/ssl.key:/usr/local/tomcat/conf/ssl.key
+        - ./docker/oscar/index.jsp:/usr/local/tomcat/webapps/ROOT/index.jsp
         # Add other volumes to the volumes/ folder, and mount them via docker-compose.override.yml
       networks:
         - back-tier
