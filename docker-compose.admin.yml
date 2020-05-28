@@ -15,16 +15,6 @@ services:
       networks:
         - back-tier
 
-    builder:
-      build: docker/builder
-      volumes:
-        - .:/code
-        - $HOME/.m2:/root/.m2
-      working_dir: /code
-      command: ./build-release.sh
-      environment:
-        - OSCAR_TREEISH
-        - OSCAR_REPO
     nginx:
       restart: 'always'
       image: nginx:latest
