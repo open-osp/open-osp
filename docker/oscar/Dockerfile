@@ -1,5 +1,17 @@
 FROM tomcat:7-jre8
 
+# Set the locale
+RUN apt-get update && apt-get install -y locales curl iputils-ping
+
+RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+    locale-gen
+ENV LANG en_US.UTF-8  
+ENV LANGUAGE en_US:en  
+ENV LC_ALL en_US.UTF-8 
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends gettext \
+    && apt-get clean
+
 ADD oscar.war /usr/local/tomcat/webapps/oscar.war
 ADD drugref2.war /usr/local/tomcat/webapps/drugref2.war
 
@@ -11,6 +23,11 @@ ADD ./conf/drugref2.properties /root/drugref2.properties
 ADD ./conf/server.xml /usr/local/tomcat/conf/server.xml
 
 ADD ./oscar/database/mysql/ /oscar-mysql-scripts/
+
+#Identify the timezone you want to configure and create a symlink:
+RUN rm -f /etc/localtime \
+    && ln -s /usr/share/zoneinfo/America/Vancouver /etc/localtime
+
 
 # Integrator directory
 RUN mkdir -p /var/lib/bc-integrator/export

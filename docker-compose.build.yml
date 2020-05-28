@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+
+    builder:
+      build: docker/builder
+      volumes:
+        - .:/code
+        - $HOME/.m2:/root/.m2
+      working_dir: /code
+      command: ./build-release.sh
+      environment:
+        - OSCAR_TREEISH
+        - OSCAR_REPO
+      
+networks:
+  back-tier:
+    driver: bridge
+

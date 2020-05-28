@@ -82,7 +82,7 @@ case "${COMMAND}" in
         fi
         ;;
     build)
-        ./bin/openosp-build.sh
+        ./bin/openosp-build.sh $2
         ;;
     publish)
         ./bin/openosp-publish.sh
@@ -92,6 +92,9 @@ case "${COMMAND}" in
         ;;
     update)
         ./bin/openosp-update.sh
+        ;;
+    health)
+        ./bin/openosp-health.sh
         ;;
     *)
         usage
