@@ -1,7 +1,0 @@
-#!/bin/bash
-
-d stop
-
-./openosp build oscar
-
-./openosp start
