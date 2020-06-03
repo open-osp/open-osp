@@ -12,7 +12,7 @@ services:
       environment:
         MYSQL_DATABASE: drugref2
         MYSQL_USER: oscar
-        TZ: America/New_York
+        TZ: America/Vancouver
       volumes:
         # TODO: build this in to the image.
         - ./docker/db/my.cnf:/etc/mysql/my.cnf
