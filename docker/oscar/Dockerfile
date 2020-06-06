@@ -22,6 +22,7 @@ ADD ./conf/tomcat-users.xml /usr/local/tomcat/conf/tomcat-users.xml
 ADD ./conf/drugref2.properties /root/drugref2.properties
 ADD ./conf/server.xml /usr/local/tomcat/conf/server.xml
 ADD ./index.jsp /usr/local/tomcat/ROOT/index.jsp
+ADD ./drugref2 /usr/local/tomcat/bin/drugref2
 
 ADD ./oscar/database/mysql/ /oscar-mysql-scripts/
 ADD ./bin/startup.sh /startup.sh
