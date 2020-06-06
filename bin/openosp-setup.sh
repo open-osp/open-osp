@@ -58,6 +58,9 @@ if [ ! -f ./volumes/oscar.properties ]; then
   sed '/db_password/d' ./volumes/oscar.properties
   echo "db_password=${DB_PASSWORD}" >> ./volumes/oscar.properties
 
+  sed '/db_username/d' ./volumes/oscar.properties
+  echo "db_username=root" >> ./volumes/oscar.properties
+
 fi
 
 if [ ! -f ./volumes/drugref2.properties ]; then
