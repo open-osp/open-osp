@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-set -euo
+set -euxo
 
 read -p "Are you sure you want to wipe the DB and all local config? [ Type CONFIRM to delete then ENTER ]:" -n 8 -r -e
 echo    # (optional) move to a new line
@@ -20,9 +20,9 @@ then
 
   echo "Removing local files (Docker settings, Environment variables)"
   rm -fr ./docker-compose.override.yml
-  docker-compose -f docker-compose.admin.yml run builder rm -fr oscar
-  docker-compose -f docker-compose.admin.yml run builder rm -fr docker/oscar/oscar
-  docker-compose -f docker-compose.admin.yml run builder rm -fr docker/faxws/faxws
+  docker-compose -f docker-compose.build.yml run builder rm -fr oscar
+  docker-compose -f docker-compose.build.yml run builder rm -fr docker/oscar/oscar
+  docker-compose -f docker-compose.build.yml run builder rm -fr docker/faxws/faxws
   docker-compose down -v
   rm -f local.env
 

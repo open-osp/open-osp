@@ -19,7 +19,7 @@ done
 
 #./wait-for-it.sh localhost 3306
 echo "Populating oscar database"
-cd oscar/database/mysql
+cd docker/oscar/oscar/database/mysql
 ./createdatabase_bc.sh root "${MYSQL_ROOT_PASSWORD}" oscar
 
 echo "Disabling default user expiry..."

@@ -21,6 +21,7 @@ ADD ./conf/oscar_mcmaster_bc.properties /root/oscar.properties
 ADD ./conf/tomcat-users.xml /usr/local/tomcat/conf/tomcat-users.xml
 ADD ./conf/drugref2.properties /root/drugref2.properties
 ADD ./conf/server.xml /usr/local/tomcat/conf/server.xml
+ADD ./index.jsp /usr/local/tomcat/ROOT/index.jsp
 
 ADD ./oscar/database/mysql/ /oscar-mysql-scripts/
 
@@ -32,4 +33,7 @@ RUN rm -f /etc/localtime \
 # Integrator directory
 RUN mkdir -p /var/lib/bc-integrator/export
 
+ADD ./entrypoint.sh /entrypoint.sh
+
+ENTRYPOINT [ "/entrypoint.sh" ]
 CMD ["catalina.sh", "run"]
