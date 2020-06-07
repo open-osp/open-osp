@@ -94,7 +94,7 @@ case "${COMMAND}" in
         ./bin/openosp-update.sh
         ;;
     health)
-        ./bin/openosp-health.sh
+        docker-compose -f docker-compose.admin.yml run health
         ;;
     *)
         usage

@@ -32,6 +32,7 @@ services:
       build: docker/health
       volumes:
         - ./docker/health/health.sh:/health.sh
+        - ./docker/health/health-checker.sh:/health-checker.sh
       networks:
         - back-tier
       env_file:
