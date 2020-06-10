@@ -12,6 +12,9 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends gettext \
     && apt-get clean
 
+RUN rm -f /etc/localtime \
+    && ln -s /usr/share/zoneinfo/America/Vancouver /etc/localtime
+
 ADD oscar.war /usr/local/tomcat/webapps/oscar.war
 ADD drugref2.war /usr/local/tomcat/webapps/drugref2.war
 
