@@ -93,6 +93,9 @@ case "${COMMAND}" in
     update)
         ./bin/openosp-update.sh
         ;;
+    health)
+        docker-compose -f docker-compose.admin.yml run health
+        ;;
     *)
         usage
         ;;

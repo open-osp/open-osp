@@ -15,16 +15,6 @@ services:
       networks:
         - back-tier
 
-    builder:
-      build: docker/builder
-      volumes:
-        - .:/code
-        - $HOME/.m2:/root/.m2
-      working_dir: /code
-      command: ./build-release.sh
-      environment:
-        - OSCAR_TREEISH
-        - OSCAR_REPO
     nginx:
       restart: 'always'
       image: nginx:latest
@@ -38,7 +28,16 @@ services:
       env_file:
         - local.env
       command: sh -c "envsubst \"`env | awk -F = '{printf \" $$%s\", $$1}'`\" < /etc/nginx/conf.d/oscar.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
-
+    health:
+      build: docker/health
+      volumes:
+        - ./docker/health/health.sh:/health.sh
+        - ./docker/health/health-checker.sh:/health-checker.sh
+      networks:
+        - back-tier
+      env_file:
+        - local.env
+      
 networks:
   back-tier:
     driver: bridge
