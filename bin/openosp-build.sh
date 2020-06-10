@@ -2,7 +2,7 @@
 
 # Builds all the docker images.
 
-set -euxo
+set -exo
 
 COMMAND=$1
 WARFILE=$2
