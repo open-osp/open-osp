@@ -91,8 +91,6 @@ OSCAR_TREEISH=oscar19.1
 OSCAR_REPO=git@bitbucket.org:oscaremr/oscar.git
 ```
 
-Then run `./openosp setup`. This should copy Oscar version 19 to your oscar folder.
-
 We have not fully tested using other versions yet but if you want to use other versions, you can change the `OSCAR_TREEISH` value from any branch in `https://bitbucket.org/oscaremr/oscar/branches/`
 
 ## Backups
