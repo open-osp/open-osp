@@ -81,5 +81,17 @@ echo "Cloning in order to bootstrap db."
 ./bin/setup-keys.sh
 ./bin/setup-oscar-login-page.sh
 
+if [ ! -d "./volumes/OscarDocument/oscar" ]; then
+  echo "Creating dummy test billing file"
+  mkdir ./volumes/OscarDocument/oscar
+  mkdir ./volumes/OscarDocument/oscar/billing
+  date > ./volumes/OscarDocument/oscar/billing/H_testfile
+  date > ./volumes/OscarDocument/teleplanremit_testfile
+fi
+
+if [ ! -f "./volumes/OscarDocument/teleplanremit_testfile" ]; then
+  date > ./volumes/OscarDocument/teleplanremit_testfile
+fi
+
 docker pull openosp/open-osp
 
