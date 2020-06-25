@@ -12,6 +12,7 @@ case "${COMMAND}" in
         OSCAR_OUTPUT=docker/oscar
         if [ -z "$WARFILE" ]
         then
+            docker-compose up -d db
             echo "Compiling OSCAR. This may take some time...."
             docker-compose -f docker-compose.build.yml run builder ./bin/build-oscar.sh
             mv $OSCAR_OUTPUT/oscar/target/oscar-*-SNAPSHOT.war $OSCAR_OUTPUT/oscar.war

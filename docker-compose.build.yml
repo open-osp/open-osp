@@ -12,6 +12,8 @@ services:
       environment:
         - OSCAR_TREEISH
         - OSCAR_REPO
+      networks:
+        - back-tier
       
 networks:
   back-tier:
