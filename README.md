@@ -73,12 +73,7 @@ Pull the latest dockerhub image and recreate `oscar` container
 
 Build war file and tomcat image only. (in the future, .deb)
 ```
-./openosp build
-```
-
-Tag and push to DockerHub
-```
-openosp publish
+./openosp build oscar
 ```
 
 ## Using other Oscar Versions
@@ -91,8 +86,6 @@ OSCAR_TREEISH=oscar19.1
 OSCAR_REPO=git@bitbucket.org:oscaremr/oscar.git
 ```
 
-Then run `./openosp setup`. This should copy Oscar version 19 to your oscar folder.
-
 We have not fully tested using other versions yet but if you want to use other versions, you can change the `OSCAR_TREEISH` value from any branch in `https://bitbucket.org/oscaremr/oscar/branches/`
 
 ## Backups
@@ -104,30 +97,22 @@ You can modify your aws bucket location by changing BACKUP_BUCKET in your `local
 ```
 BACKUP_BUCKET=your/aws/bucket
 ```
-Please also specify your clinic's name with CLINIC_NAME in `local.env`
+Please also specify your clinic's name (as a slug) with CLINIC_NAME in `local.env`
 ```
 CLINIC_NAME=your_clinic_name
 ```
-
-You will also need the backups container to exist in your docker-override file. By default it uses the dc.dev.yml file but you can do `cp dc.prod.yml docker-compose.override.yml` to add a backup container.
 
 ### Manual Backups
 1. Go to your openosp repo, `cd openosp`
 2. Run the script `./openosp backup -m`
 
 ### Automated Backups
-This will run the backup job every midnight unless specified
-1. `./openosp backup `
-
-If you want a custom time for your backups, you can add a variable in your local.env
-
-```
-CRON_SCHEDULE="*  *  *  *  *"
-# this will run every minute. Read about cron scheduling if you are planning to use this.
-```
+(not supported yet, but you can call manual backups from a cronjob on your host)
 
 
 ## Clean Up Environment
+
+WARNING: This will delete your database.
 
 This is only intended for development purposes.
 
@@ -142,52 +127,17 @@ openosp purge
 * Docker
 * docker-compose
 
-## Options
-
-Options may be passed in via environment variables on the host.
-
-* Deploy an Oscar fork - `OSCAR_REPO=https://bitbucket.org/dennis_warren/release-ubcpc-15.10.git ./deploy-source.sh` (when you change this variable, delete the `oscar` directory created in the repo root.
-* Deploy a specific commit - `OSCAR_TREEISH=<commit, branch or tag id>`
-* Deploy a specific WAR (build) you have downloaded in the same folder - `OSCAR_WARFILE`
-
-## Steps
-* Builds the lastest Oscar from source (no development environment setup needed).
-* Create Docker containers for Tomcat and MariaDB.
-* Bootstraps the database using default BC fixtures (easy to change to ON).
-
-To update
-```
-docker cp oscar-14.0.0-SNAPSHOT.war oscar:/usr/local/tomcat/webapps
-```
-
-To shell into the tomcat container
-```
-docker-compose exec oscar bash
-```
-
 ## Docker Image
 
 A Docker image built from the Dockerfile in this repo is published [here](https://hub.docker.com/repository/docker/openosp/open-osp).
 
-### Adding Login page Logo
-1. You can add a logo by adding a file in the ./static/images directory named OSCAR-LOGO.png (Recommended)
-2. You can change CSS for 'login-logo' id
-
-### Custom CSS
-We have provided a sample CSS in ./static/css/oscar-custom.css. Feel free to play with this.
-
-### Editing Oscar Properties
+### Editing Oscar Properties (Deprecated)
 1. There is an optional container to open an properties editor tool in the web UI. `docker-compose -f docker-compose.admin.yml up propertieseditor`
 2. You should be able to go to `localhost:5000/properties` and login. You can edit credentials on your`local.env` file:
   * By default, it should be openosp and openosp
   * `FLASK_USERNAME`
   * `FLASK_PASSWORD`
 3. You should be redirected to a a textarea screen where you can edit your oscar properties file.
-
-## Adding SSL
-After deploying, there will be auto-generated ssl keys that are provided but if you have one for that generated you can simply copy them to the `volumes` folder and rename them as `ssl.crt` and `ssl.key`.
-
-You can now restart your OpenOsp by doing `./openosp start`
 
 ## Host Architecture
 
@@ -212,5 +162,5 @@ For backlog, see the [GitHub issues tab](https://github.com/open-osp/open-osp/is
 This repository is licensed under the GPL V3
 
 ## Thanks (References)
-* [Bell Eapen (McMaster U)](http://nuchange.ca) for [Oscar in a Box](https://github.com/dermatologist/oscar-latest-docker)
+* [Bell Eapen (McMaster U)](http://nuchange.ca) for [Oscar in a Box](https://github.com/dermatologist/oscar-latest-docker), which this repository was originally forked from.
 
