@@ -117,6 +117,19 @@ Delete/reset everything, returning to a fresh clone of openosp. Confirm before d
 openosp purge
 ```
 
+## Custom MySQL Config
+
+```
+cp docker/db/my.cnf volumes/my.cnf
+```
+
+In your environment, override the volume in the `db:` service in `docker-compose.override.yml`
+```
+  db:
+    volumes:
+      - volumes/my.cnf:/root/my.cnf
+```
+
 ## Prerequisites
 * GIT
 * Docker
