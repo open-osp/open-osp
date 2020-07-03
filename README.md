@@ -39,18 +39,14 @@ What does this repo do?
 * Bootstraps a MariaDB database from the same source code as you built from.
 * Runs a new containerized Oscar environment including database, in one command (from source or from a tested image).
 * Runs drugref locally.
-
-## Design Change
-
-We intend OpenOSP to essentially have 3 operations.
+* Runs "expedius"
+* Runs faxWs
 
 ## Oscar Environment Setup and Run
 ```
 ./openosp setup
 ```
-ALL configuration options other than specific config files in section 1 below should be set in this ENV file.
-
-If you want a custom Oscar WAR file, you can put it in yout open-osp directory and save it as `oscar.war` and `drugref2.war` for Drugref
+ALL configuration options other than specific config files in section 1 below should be set in this ENV file, `local.env`
 
 This should:
 1. Copy all the properties files and docker development yml file.
@@ -109,7 +105,6 @@ CLINIC_NAME=your_clinic_name
 ### Automated Backups
 (not supported yet, but you can call manual backups from a cronjob on your host)
 
-
 ## Clean Up Environment
 
 WARNING: This will delete your database.
@@ -130,14 +125,6 @@ openosp purge
 ## Docker Image
 
 A Docker image built from the Dockerfile in this repo is published [here](https://hub.docker.com/repository/docker/openosp/open-osp).
-
-### Editing Oscar Properties (Deprecated)
-1. There is an optional container to open an properties editor tool in the web UI. `docker-compose -f docker-compose.admin.yml up propertieseditor`
-2. You should be able to go to `localhost:5000/properties` and login. You can edit credentials on your`local.env` file:
-  * By default, it should be openosp and openosp
-  * `FLASK_USERNAME`
-  * `FLASK_PASSWORD`
-3. You should be redirected to a a textarea screen where you can edit your oscar properties file.
 
 ## Host Architecture
 
