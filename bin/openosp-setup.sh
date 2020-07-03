@@ -58,6 +58,9 @@ if [ ! -f ./volumes/oscar.properties ]; then
   sed '/db_password/d' ./volumes/oscar.properties
   echo "db_password=${DB_PASSWORD}" >> ./volumes/oscar.properties
 
+  sed '/db_username/d' ./volumes/oscar.properties
+  echo "db_username=root" >> ./volumes/oscar.properties
+
 fi
 
 if [ ! -f ./volumes/drugref2.properties ]; then
@@ -77,6 +80,18 @@ echo "Cloning in order to bootstrap db."
 ./bin/setup-expedius.sh
 ./bin/setup-keys.sh
 ./bin/setup-oscar-login-page.sh
+
+if [ ! -d "./volumes/OscarDocument/oscar" ]; then
+  echo "Creating dummy test billing file"
+  mkdir ./volumes/OscarDocument/oscar
+  mkdir ./volumes/OscarDocument/oscar/billing
+  date > ./volumes/OscarDocument/oscar/billing/H_testfile
+  date > ./volumes/OscarDocument/teleplanremit_testfile
+fi
+
+if [ ! -f "./volumes/OscarDocument/teleplanremit_testfile" ]; then
+  date > ./volumes/OscarDocument/teleplanremit_testfile
+fi
 
 docker pull openosp/open-osp
 

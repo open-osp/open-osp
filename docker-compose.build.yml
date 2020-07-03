@@ -12,6 +12,10 @@ services:
       environment:
         - OSCAR_TREEISH
         - OSCAR_REPO
+        - JOB_NAME
+        - BUILD_NUMBER
+      networks:
+        - back-tier
       
 networks:
   back-tier:
