@@ -20,9 +20,9 @@ then
 
   echo "Removing local files (Docker settings, Environment variables)"
   rm -fr ./docker-compose.override.yml
-  docker-compose -f docker-compose.build.yml run builder rm -fr oscar
-  docker-compose -f docker-compose.build.yml run builder rm -fr docker/oscar/oscar
-  docker-compose -f docker-compose.build.yml run builder rm -fr docker/faxws/faxws
+  docker-compose -f docker-compose.build.yml run --rm builder rm -fr oscar
+  docker-compose -f docker-compose.build.yml run --rm builder rm -fr docker/oscar/oscar
+  docker-compose -f docker-compose.build.yml run --rm builder rm -fr docker/faxws/faxws
   docker-compose down -v
   rm -f local.env
 
