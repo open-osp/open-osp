@@ -13,8 +13,12 @@ export MAVEN_OPTS="-Xms640m -Xmx640m -Xss512k -XX:NewRatio=4"
 
 # this repository should have passed unit testing and mvn verify 
 # on the cis before being built here.
-mvn clean package
-#mvn -Dmaven.test.skip=true clean package
+if [[ -z "${TEST_DURING_BUILD:-}" ]]
+then
+    mvn -Dmaven.test.skip=true clean package
+else
+    mvn clean package
+fi
 
 chmod 777 -R ./target/
 

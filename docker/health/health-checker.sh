@@ -4,6 +4,6 @@ if [ $1 == $2 ]
 then
     echo "CORRECT"
 else
-    echo "Failed connection on $1... Existing"
+    echo "Failed on http code $1... expected $2"
     exit 1
 fi

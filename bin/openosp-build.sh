@@ -10,9 +10,13 @@ WARFILE=$2
 case "${COMMAND}" in
     oscar)
         OSCAR_OUTPUT=docker/oscar
-        if [ -z "$WARFILE" ]
+        if [[ $* == *--test* ]]
         then
             docker-compose up -d db
+        fi
+
+        if [ -z "$WARFILE" ]
+        then
             echo "Compiling OSCAR. This may take some time...."
             docker-compose -f docker-compose.build.yml run builder ./bin/build-oscar.sh
             mv $OSCAR_OUTPUT/oscar/target/oscar-*-SNAPSHOT.war $OSCAR_OUTPUT/oscar.war
@@ -30,7 +34,12 @@ case "${COMMAND}" in
         fi
 
         echo "Building Oscar Docker Image"
-        docker-compose build oscar
+        if [[ $* == *--test* ]]
+        then
+            TEST_DURING_BUILD=1 docker-compose build oscar
+        else
+            docker-compose build oscar
+        fi
         ;;
     expedius)
 
