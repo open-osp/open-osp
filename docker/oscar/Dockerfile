@@ -16,7 +16,7 @@ RUN rm -f /etc/localtime \
     && ln -s /usr/share/zoneinfo/America/Vancouver /etc/localtime
 
 ADD oscar.war /usr/local/tomcat/webapps/oscar.war
-ADD drugref2.war /usr/local/tomcat/webapps/drugref2.war
+#ADD drugref2.war /usr/local/tomcat/webapps/drugref2.war
 
 ADD ./conf/logging.properties /usr/local/tomcat/conf/logging.properties
 ADD ./conf/logging-servlet.properties /usr/local/tomcat/conf/logging-servlet.properties
@@ -24,9 +24,15 @@ ADD ./conf/oscar_mcmaster_bc.properties /root/oscar.properties
 ADD ./conf/tomcat-users.xml /usr/local/tomcat/conf/tomcat-users.xml
 ADD ./conf/drugref2.properties /root/drugref2.properties
 ADD ./conf/server.xml /usr/local/tomcat/conf/server.xml
-ADD ./index.jsp /usr/local/tomcat/ROOT/index.jsp
-ADD ./drugref2 /usr/local/tomcat/bin/drugref2
 
+#clean out Tomcat garbage from the ROOT folder
+RUN rm -rf /usr/local/tomcat/webapps/ROOT/*.*
+
+#Add a proper favicon and the index redirect for OSCAR
+ADD ./index.jsp /usr/local/tomcat/webapps/ROOT/index.jsp
+ADD ./openosp_favicon.ico /usr/local/tomcat/webapps/ROOT/favicon.ico
+
+ADD ./drugref2 /usr/local/tomcat/bin/drugref2
 ADD ./oscar/database/mysql/ /oscar-mysql-scripts/
 ADD ./bin/startup.sh /startup.sh
 
