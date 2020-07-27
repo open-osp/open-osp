@@ -1,4 +1,5 @@
-FROM tomcat:9-jre8
+#FROM tomcat:9-jre8
+FROM tomcat:7-jre8
 
 # Set the locale
 RUN apt-get update && apt-get install -y locales curl iputils-ping
@@ -24,9 +25,15 @@ ADD ./conf/oscar_mcmaster_bc.properties /root/oscar.properties
 ADD ./conf/tomcat-users.xml /usr/local/tomcat/conf/tomcat-users.xml
 ADD ./conf/drugref2.properties /root/drugref2.properties
 ADD ./conf/server.xml /usr/local/tomcat/conf/server.xml
-ADD ./index.jsp /usr/local/tomcat/ROOT/index.jsp
-ADD ./drugref2 /usr/local/tomcat/bin/drugref2
 
+#clean out Tomcat garbage from the ROOT folder
+RUN rm -rf /usr/local/tomcat/webapps/ROOT/*.*
+
+#Add a proper favicon and the index redirect for OSCAR
+ADD ./index.jsp /usr/local/tomcat/webapps/ROOT/index.jsp
+ADD ./openosp_favicon.ico /usr/local/tomcat/webapps/ROOT/favicon.ico
+
+ADD ./drugref2 /usr/local/tomcat/bin/drugref2
 ADD ./oscar/database/mysql/ /oscar-mysql-scripts/
 ADD ./bin/startup.sh /startup.sh
 
