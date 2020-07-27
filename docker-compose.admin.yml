@@ -33,6 +33,8 @@ services:
       volumes:
         - ./docker/health/health.sh:/health.sh
         - ./docker/health/health-checker.sh:/health-checker.sh
+        - ./volumes/ssl.crt:/usr/local/tomcat/conf/ssl.crt
+        - ./volumes/ssl.key:/usr/local/tomcat/conf/ssl.key
       networks:
         - back-tier
       env_file:
