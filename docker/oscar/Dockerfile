@@ -1,4 +1,5 @@
-FROM tomcat:9-jre8
+#FROM tomcat:9-jre8
+FROM tomcat:7-jre8
 
 # Set the locale
 RUN apt-get update && apt-get install -y locales curl iputils-ping
@@ -16,7 +17,7 @@ RUN rm -f /etc/localtime \
     && ln -s /usr/share/zoneinfo/America/Vancouver /etc/localtime
 
 ADD oscar.war /usr/local/tomcat/webapps/oscar.war
-#ADD drugref2.war /usr/local/tomcat/webapps/drugref2.war
+ADD drugref2.war /usr/local/tomcat/webapps/drugref2.war
 
 ADD ./conf/logging.properties /usr/local/tomcat/conf/logging.properties
 ADD ./conf/logging-servlet.properties /usr/local/tomcat/conf/logging-servlet.properties
