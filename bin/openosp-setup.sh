@@ -24,8 +24,7 @@ if [ ! -f local.env ]; then
   echo "EXPEDIUS_PASSWORD=${EXPEDIUS_SECRET}" >> ./local.env
   
   echo "Setting up landing page"
-  if [[ $* == *--noinput* ]]
-  then
+  if [[ $* == *--noinput* ]]; then
     CLINIC_NAME=TEST
   else
     read -p "Clinic name: " CLINIC_NAME
@@ -41,7 +40,8 @@ if [ ! -f local.env ]; then
   echo "## clinic subtext such as address phone etc." >> ./local.env
   echo "CLINIC_TEXT=\"${CLINIC_TEXT}\"" >> ./local.env
 
-  if [[ $* == *--nonput* ]]; then
+  if [[ $* == *--noinput* ]]
+  then
     CLINIC_LINK=https://test.com
   else
     read -p "Clinic website link, including HTTP(S): " CLINIC_LINK
