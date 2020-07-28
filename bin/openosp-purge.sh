@@ -16,7 +16,7 @@ then
   rm -f *.war
 
   echo "Removing volumes"
-  rm -fr volumes/*
+  docker-compose -f docker-compose.build.yml run --rm builder rm -fr volumes/*
 
   echo "Removing local files (Docker settings, Environment variables)"
   rm -fr ./docker-compose.override.yml

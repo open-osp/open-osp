@@ -120,14 +120,15 @@ openosp purge
 ## Custom MySQL Config
 
 ```
-cp docker/db/my.cnf volumes/my.cnf
+touch volumes/my.cnf
 ```
 
 In your environment, override the volume in the `db:` service in `docker-compose.override.yml`
 ```
   db:
     volumes:
-      - volumes/my.cnf:/root/my.cnf
+      - ./volumes/my.cnf:/etc/mysql/conf.d/my.cnf
+
 ```
 
 ## Prerequisites
