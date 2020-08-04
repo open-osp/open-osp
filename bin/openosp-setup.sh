@@ -24,19 +24,39 @@ if [ ! -f local.env ]; then
   echo "EXPEDIUS_PASSWORD=${EXPEDIUS_SECRET}" >> ./local.env
   
   echo "Setting up landing page"
-  read -p "Clinic name: " CLINIC_NAME
+  if [[ $* == *--noinput* ]]; then
+    CLINIC_NAME=TEST
+  else
+    read -p "Clinic name: " CLINIC_NAME
+  fi
+
   echo "## Name or title of the clinic" >> ./local.env
   echo "CLINIC_NAME=\"${CLINIC_NAME}\"" >> ./local.env
-
-  read -p "Clinic sub text (address, phone): " CLINIC_TEXT
+  if [[ $* == *--noinput* ]]; then
+    CLINIC_TEXT=TEST
+  else
+    read -p "Clinic sub text (address, phone): " CLINIC_TEXT
+  fi
   echo "## clinic subtext such as address phone etc." >> ./local.env
   echo "CLINIC_TEXT=\"${CLINIC_TEXT}\"" >> ./local.env
-  
-  read -p "Clinic website link, including HTTP(S): " CLINIC_LINK
+
+  if [[ $* == *--noinput* ]]
+  then
+    CLINIC_LINK=https://test.com
+  else
+    read -p "Clinic website link, including HTTP(S): " CLINIC_LINK
+  fi
+
   echo "## clinic HTML link to a clinic website if one is supplied." >> ./local.env
   echo "CLINIC_LINK=\"${CLINIC_LINK}\"" >> ./local.env
 
-  read -p "Title name in browser tabs (default: OSCAR EMR): " TAB_NAME
+  if [[ $* == *--noinput* ]]
+  then
+    TAB_NAME=TEST
+  else
+    read -p "Title name in browser tabs (default: OSCAR EMR): " TAB_NAME
+  fi
+
   echo "## Title name in browser tabs (default: OSCAR EMR)" >> ./local.env
   if [ -z ${TAB_NAME} ];
     then
