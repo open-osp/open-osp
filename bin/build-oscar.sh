@@ -3,7 +3,12 @@
 
 set -uxo
 
-./bin/clone.sh
+if [ -f "./local.env" ]
+then
+    source ./local.env
+fi
+
+./bin/clone.sh ${OSCAR_REPO:-""} ${OSCAR_TREEISH:-""}
 
 cd docker/oscar/oscar
 
