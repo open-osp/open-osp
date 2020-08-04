@@ -15,7 +15,7 @@ services:
         TZ: America/Vancouver
       volumes:
         # TODO: build this in to the image.
-        - ./docker/db/my-custom.cnf:/root/my.cnf
+        - ./docker/db/my.cnf:/etc/mysql/my.cnf
         # TODO: build some scripts in so we need not mount everything.
         - .:/code
         - mariadb-files:/var/lib/mysql
