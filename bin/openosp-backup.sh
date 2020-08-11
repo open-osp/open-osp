@@ -34,18 +34,15 @@ folder=$(date +%Y%m)
 
 mkdir -p $DUMP_LOCATION
 
-docker exec -t ${site}_db_1 $BACKUP_CMD
-
-tar jcvf $DUMP_LOCATION.tar.bz2 $DUMP_LOCATION
-rm -fr $DUMP_LOCATION/db.sql
-rmdir $DUMP_LOCATION
+docker exec -t ${site}_db_1 $BACKUP_CMD | bzip2 > $DUMP_LOCATION/db.sql.bz2
 
 clinicname="openosp-${CLINIC_NAME:-$site}"
 echo "done backups"
 
-aws="docker run --rm -ti -v $HOME/.aws:/root/.aws -v $(pwd):/open-osp amazon/aws-cli"
+aws="docker run --rm -t -v $HOME/.aws:/root/.aws -v $(pwd):/open-osp amazon/aws-cli"
 
 # Remove double quotes, user might input value enclosed in "" in local.env
 BACKUP_BUCKET="${BACKUP_BUCKET//\"}"
 $aws s3 sync /open-osp/volumes s3://$BACKUP_BUCKET/$clinicname/volumes --storage-class STANDARD_IA --exclude ".sync/*"
-$aws s3 mv /open-osp/$DUMP_LOCATION.tar.bz2 s3://$BACKUP_BUCKET/$clinicname/$folder/$filename.tar.bz2
+$aws s3 mv /open-osp/$DUMP_LOCATION/db.sql.bz2 s3://$BACKUP_BUCKET/$clinicname/$folder/$filename.sql.bz2
+
