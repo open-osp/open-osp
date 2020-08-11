@@ -10,7 +10,7 @@ fi
 
 if [ -z "$BACKUP_CMD" ]
 then
-    BACKUP_CMD="mysqldump -uroot -p${MYSQL_ROOT_PASSWORD} oscar --result-file=/code/dump/db.sql"
+    BACKUP_CMD="mysqldump -uroot -p${MYSQL_ROOT_PASSWORD} oscar"
     echo "BACKUP_CMD env var not specified, defaulting to '${BACKUP_CMD}'."
 fi
 
