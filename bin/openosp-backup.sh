@@ -46,3 +46,6 @@ BACKUP_BUCKET="${BACKUP_BUCKET//\"}"
 $aws s3 sync /open-osp/volumes s3://$BACKUP_BUCKET/$clinicname/volumes --storage-class STANDARD_IA --exclude ".sync/*"
 $aws s3 mv /open-osp/$DUMP_LOCATION/db.sql.gz s3://$BACKUP_BUCKET/$clinicname/$folder/$filename.sql.gz
 
+docker-compose restart oscar
+
+
