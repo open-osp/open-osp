@@ -129,6 +129,10 @@ In your environment, override the volume in the `db:` service in `docker-compose
       - ./volumes/my.cnf:/etc/mysql/conf.d/my.cnf
 
 ```
+Reload the database container
+```
+docker-compose up -d db
+```
 ## Log Access
 Logs are no longer found in the usual OSCAR server locations: /var/lib/logs/catalina.out, /var/log/mysql.error, etc... Logs are managed and redirected through each Docker container's stdout. Up to 3 days of history is available. 
 
