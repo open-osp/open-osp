@@ -1,4 +1,4 @@
 #!/bin/bash
 
-docker-compose -f docker-compose.admin.yml run health
+docker-compose -f docker-compose.admin.yml run -t health
 
