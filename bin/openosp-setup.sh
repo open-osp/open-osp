@@ -104,8 +104,12 @@ echo "Cloning in order to bootstrap db."
 if [ ! -d "./volumes/OscarDocument/oscar" ]; then
   mkdir ./volumes/OscarDocument/oscar
   mkdir ./volumes/OscarDocument/oscar/billing
-
+  mkdir ./volumes/OscarDocument/oscar/billing/download
+  mkdir ./volumes/OscarDocument/oscar/eform
+  mkdir ./volumes/OscarDocument/oscar/eform/images
+  mkdir ./volumes/OscarDocument/oscar/document
 fi
+
 
 docker pull openosp/open-osp
 

@@ -10,7 +10,7 @@ fi
 
 if [ -z "$BACKUP_CMD" ]
 then
-    BACKUP_CMD="mysqldump -uroot -p${MYSQL_ROOT_PASSWORD} oscar --result-file=/dump/db.sql"
+    BACKUP_CMD="mysqldump -uroot -p${MYSQL_ROOT_PASSWORD} oscar"
     echo "BACKUP_CMD env var not specified, defaulting to '${BACKUP_CMD}'."
 fi
 
@@ -32,27 +32,20 @@ site=$(pwd | grep -oh "[^/]*$")
 filename=$site.$(date +%Y%m%d-%H%M%S)
 folder=$(date +%Y%m)
 
-rm -rf "$DUMP_LOCATION"
-rm -f $DUMP_LOCATION.tar.lrz
-rm -f $DUMP_LOCATION.tar
+mkdir -p $DUMP_LOCATION
 
-mkdir $DUMP_LOCATION
-
-docker exec -t ${site}_db_1 rm -fr /dump
-docker exec -t ${site}_db_1 mkdir /dump
-docker exec -t ${site}_db_1 $BACKUP_CMD
-docker cp ${site}_db_1:/dump/db.sql $DUMP_LOCATION/db.sql
-
-tar cvf $DUMP_LOCATION.tar $DUMP_LOCATION
-lrzip $DUMP_LOCATION.tar
-rm $DUMP_LOCATION.tar
+docker exec -t ${site}_db_1 $BACKUP_CMD | gzip > $DUMP_LOCATION/db.sql.gz
 
 clinicname="openosp-${CLINIC_NAME:-$site}"
 echo "done backups"
 
-aws="docker run --rm -ti -v ~/.aws:/root/.aws -v $(pwd):/open-osp amazon/aws-cli"
+aws="docker run --rm -t -v $HOME/.aws:/root/.aws -v $(pwd):/open-osp amazon/aws-cli"
 
 # Remove double quotes, user might input value enclosed in "" in local.env
 BACKUP_BUCKET="${BACKUP_BUCKET//\"}"
 $aws s3 sync /open-osp/volumes s3://$BACKUP_BUCKET/$clinicname/volumes --storage-class STANDARD_IA --exclude ".sync/*"
-$aws s3 mv /open-osp/$DUMP_LOCATION.tar.lrz s3://$BACKUP_BUCKET/$clinicname/$folder/$filename.tar.lrz
+$aws s3 mv /open-osp/$DUMP_LOCATION/db.sql.gz s3://$BACKUP_BUCKET/$clinicname/$folder/$filename.sql.gz
+
+docker-compose restart oscar
+
+

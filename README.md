@@ -1,6 +1,6 @@
-# Open Oscar Service Provider
+# Open OSP
 
-This project was developed during the formation of the [OpenOSP](https://openosp.ca) service cooperative. It is a set of open source tools for deploying and running [OSCAR EMR/EHR](https://oscar-emr.com/), an open-source Electronic Medical Record (EMR) for the Canadian family physicians.
+This project was developed during the formation of the [Open OSP](https://openosp.ca) Service Cooperative. It is a set of open source software tools for deploying and running the Open Source Electronic Medical Record (OSCAR EMR) for Canadian family physicians.
 
 This repo was originally based on [scoophealth (UVIC)](https://github.com/scoophealth/oscar-latest-docker)'s fork of [Bell Eapen's](http://nuchange.ca) [Oscar in a Box](https://github.com/dermatologist/oscar-latest-docker).
 
@@ -11,20 +11,20 @@ This repo was originally based on [scoophealth (UVIC)](https://github.com/scooph
   * `./openosp setup`
   * if you need a database, `./openosp bootstrap`
   * `./openosp start`
-  * Browse to Oscar on http://localhost:8080/ocsar!
+  * Browse to OSCAR EMR on http://localhost:8080/ocsar!
   * Log in with the initial credentials. You will be prompted to change your password upon initial login.
       - Username: oscardoc
       - Password: mac2002
       - 2nd Level Passcode: 1117
 
 ## Purpose
-The goal of this repo is to provide a hosting-agnostic (Dockerized) toolkit for automated Oscar EMR deployment. We want to centralize Oscar configurations for modern DevOps tools and share [best practices](https://12factor.net/) for modern web application deployment for Oscar. This may help Service Providers who need to automate deployments, Oscar integrators/vendors/developers who need to do testing, and self-hosted users. ie)
+The goal of this repo is to provide a hosting-agnostic (Dockerized) toolkit for automated OSCAR EMR deployment. We want to centralize OSCAR configurations for modern DevOps tools and share [best practices](https://12factor.net/) for modern web application deployment for OSCAR. This may help potential service providers who need to automate deployments, OSCAR integrators/vendors/developers who need to do testing, and self-hosted users. ie)
 
 * Training (use ./openosp setup)
 * Continuous integration of Oscar integrations (use ./openosp setup)
 * Testing
-* Oscar build toolchains (use openosp build)
-* Oscar develpment environments with high [dev/prod parity](https://12factor.net/dev-prod-parity)
+* OSCAR build toolchains (use openosp build)
+* OSCAR develpment environments with high [dev/prod parity](https://12factor.net/dev-prod-parity)
 
 ## File Layout
 
@@ -35,14 +35,14 @@ The goal of this repo is to provide a hosting-agnostic (Dockerized) toolkit for 
 ## Scope
 What does this repo do?
 
-* Builds Oscar from source, for usage locally or to published to DockerHub for use by others.
+* Builds OSCAR from source, for usage locally or to published to DockerHub for use by others.
 * Bootstraps a MariaDB database from the same source code as you built from.
-* Runs a new containerized Oscar environment including database, in one command (from source or from a tested image).
-* Runs drugref locally.
-* Runs "expedius"
-* Runs faxWs
+* Runs a new containerized OSCAR environment including database, in one command (from source or from a tested image).
+* Runs DrugRef locally.
+* Runs Expedius
+* Runs FaxWS
 
-## Oscar Environment Setup and Run
+## OSCAR Environment Setup and Run
 ```
 ./openosp setup
 ```
@@ -50,7 +50,7 @@ ALL configuration options other than specific config files in section 1 below sh
 
 This should:
 1. Copy all the properties files and docker development yml file.
-1. Generate a new local.env file, with unique password for Oscar db, if not already done. (notify user of action taken)
+1. Generate a new local.env file, with unique password for OSCAR db, if not already done. (notify user of action taken)
 1. Copy all locally editable configs to the volumes/ folder (gitignored), if they dont exist already. Nothing should ever be mounted in a container except from inside this folder and those files are always gitignored copies from a templates/ folder. (notify user)
 
 Start or Restart current OpenOsp instance
@@ -58,36 +58,38 @@ Start or Restart current OpenOsp instance
 ./openosp start
 ```
 
-## Oscar Environment Update
+## OSCAR Environment Update
 
 Pull the latest dockerhub image and recreate `oscar` container
 ```
 ./openosp update
 ```
 
-## Oscar and Local Development
+## OSCAR and Local Development
 
 Build war file and tomcat image only. (in the future, .deb)
 ```
 ./openosp build oscar
 ```
 
-## Using other Oscar Versions
-By default, we are using Oscar 15 when setting up the environment but you could also use other versions of Oscar.
+## Using other OSCAR Versions
+By default, the most current release version of Open OSCAR is used when setting up the environment. It is possible to use other versions of Oscar.
 
-### Oscar 19
-To use Oscar 19, on your local.env file, add the following
+If you want to use other versions, you can change the `OSCAR_TREEISH` value from any branch in 
+`https://bitbucket.org/oscaremr/oscar/branches/`
+
+## OSCAR Devlopment Branch
+To use the OSCAR Development branch, on your local.env file, add the following
 ```
-OSCAR_TREEISH=oscar19.1
+OSCAR_TREEISH=oscarDev
 OSCAR_REPO=git@bitbucket.org:oscaremr/oscar.git
 ```
 
-We have not fully tested using other versions yet but if you want to use other versions, you can change the `OSCAR_TREEISH` value from any branch in `https://bitbucket.org/oscaremr/oscar/branches/`
+## OSCAR Backups
+Backup methods will create backups for the OSCAR EMR database and OscarDocuments.
 
-## Backups
-Backups will create backups for your OpenOsp database and OscarDocuments.
-
-Our backups use AWS so you must install AWS with `apt-get install awscli` then run `aws config`.
+### Off Site Backups
+Off Site backups use AWS so you must install AWS with `apt-get install awscli` then run `aws config`.
 
 You can modify your aws bucket location by changing BACKUP_BUCKET in your `local.env`
 ```
@@ -105,11 +107,8 @@ CLINIC_NAME=your_clinic_name
 ### Automated Backups
 (not supported yet, but you can call manual backups from a cronjob on your host)
 
-## Clean Up Environment
-
-WARNING: This will delete your database.
-
-This is only intended for development purposes.
+## Truncate and Purge Environment
+WARNING: This will delete ALL data permanently!
 
 Delete/reset everything, returning to a fresh clone of openosp. Confirm before deleting configs. Confirm before deleting database. Do not allow this command to run unless the environment variable DEVELOPMENT=1 is set in the local.env file.
 
@@ -117,7 +116,7 @@ Delete/reset everything, returning to a fresh clone of openosp. Confirm before d
 openosp purge
 ```
 
-## Custom MySQL Config
+## MariaDB Configuration
 
 ```
 touch volumes/my.cnf
@@ -130,6 +129,57 @@ In your environment, override the volume in the `db:` service in `docker-compose
       - ./volumes/my.cnf:/etc/mysql/conf.d/my.cnf
 
 ```
+Reload the database container
+```
+docker-compose up -d db
+```
+## Log Access
+Logs are no longer found in the usual OSCAR server locations: /var/lib/logs/catalina.out, /var/log/mysql.error, etc... Logs are managed and redirected through each Docker container's stdout. Up to 3 days of history is available. 
+
+### OSCAR (catalina.out) Logs
+To tail OSCAR logs
+
+```
+docker-compose ps
+```
+note the Docker container name for the OSCAR container then
+
+```
+docker logs --tail=3000 -f oscar-docker-containername
+```
+### MariaDB Error Logs
+To tail MariaDB logs
+
+```
+docker-compose ps
+```
+note the Docker container name for the DB container then
+
+```
+docker logs --tail=3000 -f db-docker-containername
+```
+### Dump All Log History
+To dump all the log history for any container: 
+
+```
+docker-compose ps
+```
+note the Docker container name for the logs to be dumped
+
+```
+docker logs docker-containername > allhistory.log
+```
+
+or to dump a continuous log
+
+```
+docker logs --tail -f docker-containername &> continuoushistory.log
+```
+
+### Change Log Verbosity
+The log properties override files are found in ./volumes  Log properties for MariaDB are overriden in the my.sql file (see above section about MariaDB Configuration)
+
+Caution: it is unknown at this time if these properties files actualy override.
 
 ## Prerequisites
 * GIT
