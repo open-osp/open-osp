@@ -32,6 +32,7 @@ services:
         - ./volumes/OscarDocument:/var/lib/OscarDocument
         - ./volumes/ssl.crt:/usr/local/tomcat/conf/ssl.crt
         - ./volumes/ssl.key:/usr/local/tomcat/conf/ssl.key
+        - ./volumes/chain.pem:/usr/local/tomcat/conf/chain.pem
         # Add other volumes to the volumes/ folder, and mount them via docker-compose.override.yml
       networks:
         - back-tier
