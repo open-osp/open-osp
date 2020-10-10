@@ -95,15 +95,15 @@ Off Site backups can be configured to use AWS S3 Buckets. First set up a AWS S3 
 ```
 apt-get install awscli
 ```
-1. Then run the AWS configuration script
+2. Then run the AWS configuration script
 ```
 aws configure
 ```
-1. Set the BACKUP_BUCKET variable in the Docker `local.env` file to the name of the AWS bucket. Example:
+3. Set the BACKUP_BUCKET variable in the Docker `local.env` file to the name of the AWS bucket. Example:
 ```
 BACKUP_BUCKET="clinic-backupname"
 ```
-1. Also specify your clinic's name (as a slug) with CLINIC_NAME in the Docker `local.env`
+4. Also specify your clinic's name (as a slug) with CLINIC_NAME in the Docker `local.env`
 ```
 CLINIC_NAME=your_clinic_name
 ```
