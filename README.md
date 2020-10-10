@@ -107,8 +107,15 @@ BACKUP_BUCKET="clinic-backupname"
 ```
 CLINIC_NAME=your_clinic_name
 ```
+5. Run the backup process 
+```
+./openosp backup -m
+```
+October 2020: This process is not Dockerized and automated at this time. However the manual script `./openosp backup -m` could be set to run on a chron job.
 
 ### Manual Backups
+To run a manual backup for both local and remote (if avaialble)
+
 1. Go to your openosp repo, `cd openosp`
 2. Run the script `./openosp backup -m`
 
