@@ -89,13 +89,21 @@ OSCAR_REPO=git@bitbucket.org:oscaremr/oscar.git
 Backup methods will create backups for the OSCAR EMR database and OscarDocuments.
 
 ### Off Site Backups
-Off Site backups use AWS so you must install AWS with `apt-get install awscli` then run `aws config`.
+Off Site backups can be configured to use AWS S3 Buckets. First set up a AWS S3 bucket and an IAM user to authenticate. Be sure to write down the IAM access key, secret key, and bucket name information.
 
-You can modify your aws bucket location by changing BACKUP_BUCKET in your `local.env`
+1. Install AWS on the OSCAR Docker server
 ```
-BACKUP_BUCKET=your/aws/bucket
+apt-get install awscli
 ```
-Please also specify your clinic's name (as a slug) with CLINIC_NAME in `local.env`
+1. Then run the AWS configuration script
+```
+aws configure
+```
+1. Set the BACKUP_BUCKET variable in the Docker `local.env` file to the name of the AWS bucket. Example:
+```
+BACKUP_BUCKET="clinic-backupname"
+```
+1. Also specify your clinic's name (as a slug) with CLINIC_NAME in the Docker `local.env`
 ```
 CLINIC_NAME=your_clinic_name
 ```
