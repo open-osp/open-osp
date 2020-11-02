@@ -1,5 +1,5 @@
 #FROM tomcat:9-jre8
-FROM tomcat:7-jre8
+FROM tomcat:8-jre8-slim
 
 # Set the locale
 RUN apt-get update && apt-get install -y locales curl iputils-ping
