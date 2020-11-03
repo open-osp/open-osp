@@ -21,6 +21,11 @@ services:
         - mariadb-files:/var/lib/mysql
       networks:
         - back-tier
+      deploy:
+        resources:
+          limits:
+            cpus: '2'
+            memory: 15G
 
     oscar:
       restart: 'always'
@@ -32,11 +37,17 @@ services:
         - ./volumes/OscarDocument:/var/lib/OscarDocument
         - ./volumes/ssl.crt:/usr/local/tomcat/conf/ssl.crt
         - ./volumes/ssl.key:/usr/local/tomcat/conf/ssl.key
+        - ./volumes/chain.pem:/usr/local/tomcat/conf/chain.pem
         # Add other volumes to the volumes/ folder, and mount them via docker-compose.override.yml
       networks:
         - back-tier
       environment:
         TZ: America/Vancouver
+      deploy:
+        resources:
+          limits:
+            cpus: '2'
+            memory: 15G
 
     expedius:
       restart: 'always'
@@ -51,6 +62,11 @@ services:
         - back-tier
       environment:
         TZ: America/Vancouver
+      deploy:
+        resources:
+          limits:
+            cpus: '2'
+            memory: 4G
 
     faxws:
       restart: 'always'
@@ -67,6 +83,11 @@ services:
       environment:
         TZ: America/Vancouver
         MYSQL_HOST: db
+      deploy:
+        resources:
+          limits:
+            cpus: '2'
+            memory: 4G
 
 volumes:
   mariadb-files:
