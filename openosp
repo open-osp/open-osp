@@ -88,7 +88,7 @@ case "${COMMAND}" in
         ./bin/openosp-publish.sh
         ;;
     bootstrap)
-        ./bin/openosp-bootstrap.sh
+        ./bin/openosp-bootstrap.sh $2
         ;;
     update)
         ./bin/openosp-update.sh
