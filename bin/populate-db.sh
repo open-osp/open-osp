@@ -1,5 +1,7 @@
 #!/bin/bash
 
+DB=$1
+
 if [ -f "./local.env" ]
 then
     source ./local.env
@@ -20,7 +22,12 @@ done
 #./wait-for-it.sh localhost 3306
 echo "Populating oscar database"
 cd docker/oscar/oscar/database/mysql
-./createdatabase_bc.sh root "${MYSQL_ROOT_PASSWORD}" oscar
+
+if [[ $DB == "on" ]]; then
+    ./createdatabase_on.sh root "${MYSQL_ROOT_PASSWORD}" oscar
+else
+    ./createdatabase_bc.sh root "${MYSQL_ROOT_PASSWORD}" oscar
+fi
 
 echo "Disabling default user expiry..."
 mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" oscar << QUERY
