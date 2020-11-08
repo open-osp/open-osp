@@ -23,7 +23,7 @@ done
 echo "Populating oscar database"
 cd docker/oscar/oscar/database/mysql
 
-if [[ $DB == "on" ]]; then
+if [[ $DB == "ontario" ]]; then
     ./createdatabase_on.sh root "${MYSQL_ROOT_PASSWORD}" oscar
 else
     ./createdatabase_bc.sh root "${MYSQL_ROOT_PASSWORD}" oscar
