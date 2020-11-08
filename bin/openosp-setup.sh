@@ -72,7 +72,14 @@ fi
 # if this is a fresh install
 if [ ! -f ./volumes/oscar.properties ]; then
   echo "copying oscar properties template"
-  cp docker/oscar/conf/oscar_mcmaster_bc.properties ./volumes/oscar.properties
+  if [ $1 == 'ontario' ]
+  then
+    echo "Using Ontario properties"
+    cp docker/oscar/conf/oscar_mcmaster_on.properties ./volumes/oscar.properties
+  else
+    echo "Using default BC properties"
+    cp docker/oscar/conf/oscar_mcmaster_bc.properties ./volumes/oscar.properties
+  fi
 
   echo "Using generated password in Oscar properties file"
   sed '/db_password/d' ./volumes/oscar.properties
