@@ -60,10 +60,24 @@ Start or Restart current OpenOsp instance
 
 ## OSCAR Environment Update
 
-Pull the latest dockerhub image and recreate `oscar` container
+The steps to update a clinic:
+
+
+Suppose the image tag you want to update to is `2020.11.06`
+
+1. Once per host, do `docker pull 2020.11.06`
+1. Change directory to the clinic in question.
+1. Set the image version tag in docker-compose.override.yml , in the oscar service to the desired version. Do not use latest in production for this, if you want to prioritize stability, because it is difficult to track what version is actually being referred to.
+
+ie.
 ```
-./openosp update
+services:
+  oscar:
+    image: openosp/open-osp:2020.11.06
 ```
+
+1. Run `git pull origin master` to ensure environment scripts are up to date.
+1. Run `openosp start`
 
 ## OSCAR and Local Development
 

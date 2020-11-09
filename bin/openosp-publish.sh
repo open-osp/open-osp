@@ -2,10 +2,10 @@
 
 set -exo
 
-if [[ -z "$3" ]]; then
+if [[ -z $1 ]]; then
   VER=$(date +"%Y.%m.%d")
 else
-  VER=$3
+  VER=$1
 fi
 docker tag openosp/open-osp:latest openosp/open-osp:$VER
 docker login --username=$DOCKERHUB_USERNAME --password=$DOCKERHUB_PASSWORD
