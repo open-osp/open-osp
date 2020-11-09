@@ -11,7 +11,7 @@ This repo was originally based on [scoophealth (UVIC)](https://github.com/scooph
   * `./openosp setup`
   * if you need a database, `./openosp bootstrap`
   * `./openosp start`
-  * Browse to OSCAR EMR on http://localhost:8080/ocsar!
+  * Browse to OSCAR EMR on http://localhost:8080/oscar!
   * Log in with the initial credentials. You will be prompted to change your password upon initial login.
       - Username: oscardoc
       - Password: mac2002
