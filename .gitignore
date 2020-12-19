@@ -14,6 +14,7 @@ docker/faxws/faxws
 .DS_Store
 *~
 ._*
+*.gz
 *.sql
 *.war
 *.log
