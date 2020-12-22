@@ -36,7 +36,7 @@ mkdir -p $DUMP_LOCATION
 
 docker exec -t ${site}_db_1 $BACKUP_CMD | gzip > $DUMP_LOCATION/db.sql.gz
 
-clinicname="openosp-${CLINIC_NAME:-$site}"
+clinicname="openosp-$site"
 echo "done backups"
 
 aws="docker run --rm -t -v $HOME/.aws:/root/.aws -v $(pwd):/open-osp amazon/aws-cli"
