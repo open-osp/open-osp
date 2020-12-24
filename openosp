@@ -75,7 +75,7 @@ case "${COMMAND}" in
     backup)
         if  [[ $2 = "-m" ]]; then
             echo "Manually Backing up files"
-            ./bin/openosp-backup.sh
+            ./bin/openosp-backup.sh $2 $3
         else
             echo "Running Auto backups"
             ./bin/run-auto-backups.sh
