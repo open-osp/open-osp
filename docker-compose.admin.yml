@@ -39,7 +39,17 @@ services:
         - back-tier
       env_file:
         - local.env
-      
+
+    cpcssn:
+      image: osp-extract-linux-container
+      environment:
+        - CPCSSN_DRY_RUN=
+        - CPCSSN_SITE=
+        - MYSQL_USER=
+        - MYSQL_PASSWORD=
+      networks:
+        - back-tier
+
 networks:
   back-tier:
     driver: bridge
