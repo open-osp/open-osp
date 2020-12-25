@@ -1,4 +1,3 @@
-#FROM tomcat:9-jre8
 FROM tomcat:8.5-jre8
 
 # Set the locale
