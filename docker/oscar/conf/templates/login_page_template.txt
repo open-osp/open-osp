@@ -6,11 +6,11 @@
 
 ## HTML link to the support provider website.
 
-supportLink=
+supportLink=https://openosp.ca
 
 ## Sub text for the support provider. such as telephone or email.
 
-supportText=
+supportText=techsupport@openosp.ca <br /> +1 (604) 428-0105 <br /> +1 (800) 511-6778
 
 ## Full name or title of the support provider.
 
@@ -29,9 +29,9 @@ clinicLink=
 
 ## Name or title of the clinic
 
-clinicName=
+clinicName=Home-ViVE Program
 
 ## Name or title that goes in the browser window tab
 ## This is set to Oscar by default
 
-tabName=Oscar EMR
+tabName=OSCAR EMR
