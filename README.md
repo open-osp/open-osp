@@ -131,6 +131,8 @@ CLINIC_NAME=your_clinic_name
 ```
 October 2020: This process is not Dockerized and automated at this time. However the manual script `./openosp backup -m` could be set to run on a chron job.
 
+HDC exporting can be done as: import the encryption key `gpg --import key.pgp`, then run `openosp backup -m --hdc`
+
 ### Manual Backups
 To run a manual backup for both local and remote (if avaialble)
 
