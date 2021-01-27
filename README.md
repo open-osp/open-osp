@@ -11,7 +11,7 @@ This repo was originally based on [scoophealth (UVIC)](https://github.com/scooph
   * `./openosp setup`
   * if you need a database, `./openosp bootstrap`
   * `./openosp start`
-  * Browse to OSCAR EMR on http://localhost:8080/ocsar!
+  * Browse to OSCAR EMR on http://localhost:8080/oscar!
   * Log in with the initial credentials. You will be prompted to change your password upon initial login.
       - Username: oscardoc
       - Password: mac2002
@@ -53,6 +53,10 @@ This should:
 1. Generate a new local.env file, with unique password for OSCAR db, if not already done. (notify user of action taken)
 1. Copy all locally editable configs to the volumes/ folder (gitignored), if they dont exist already. Nothing should ever be mounted in a container except from inside this folder and those files are always gitignored copies from a templates/ folder. (notify user)
 
+To create a database: ```
+./openosp bootstrap
+```
+
 Start or Restart current OpenOsp instance
 ```
 ./openosp start
@@ -60,10 +64,24 @@ Start or Restart current OpenOsp instance
 
 ## OSCAR Environment Update
 
-Pull the latest dockerhub image and recreate `oscar` container
+The steps to update a clinic:
+
+
+Suppose the image tag you want to update to is `2020.11.06`
+
+1. Once per host, do `docker pull 2020.11.06`
+1. Change directory to the clinic in question.
+1. Set the image version tag in docker-compose.override.yml , in the oscar service to the desired version. Do not use latest in production for this, if you want to prioritize stability, because it is difficult to track what version is actually being referred to.
+
+ie.
 ```
-./openosp update
+services:
+  oscar:
+    image: openosp/open-osp:2020.11.06
 ```
+
+1. Run `git pull origin master` to ensure environment scripts are up to date.
+1. Run `openosp start`
 
 ## OSCAR and Local Development
 
@@ -112,6 +130,8 @@ CLINIC_NAME=your_clinic_name
 ./openosp backup -m
 ```
 October 2020: This process is not Dockerized and automated at this time. However the manual script `./openosp backup -m` could be set to run on a chron job.
+
+HDC exporting can be done as: import the encryption key `gpg --import key.pgp`, then run `openosp backup -m --hdc`
 
 ### Manual Backups
 To run a manual backup for both local and remote (if avaialble)

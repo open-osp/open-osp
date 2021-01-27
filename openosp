@@ -67,15 +67,15 @@ case "${COMMAND}" in
         ./bin/openosp-setup.sh $2 $3
         ;;
     purge)
-        ./bin/openosp-purge.sh
+        ./bin/openosp-purge.sh $2 $3
         ;;
     start)
-       ./bin/openosp-start.sh
+       ./bin/openosp-start.sh $2 $3
         ;;
     backup)
         if  [[ $2 = "-m" ]]; then
             echo "Manually Backing up files"
-            ./bin/openosp-backup.sh
+            ./bin/openosp-backup.sh $2 $3
         else
             echo "Running Auto backups"
             ./bin/run-auto-backups.sh
@@ -85,13 +85,13 @@ case "${COMMAND}" in
         ./bin/openosp-build.sh $2 $3
         ;;
     publish)
-        ./bin/openosp-publish.sh
+        ./bin/openosp-publish.sh $2 $3
         ;;
     bootstrap)
-        ./bin/openosp-bootstrap.sh $2
+        ./bin/openosp-bootstrap.sh $2 $3
         ;;
     update)
-        ./bin/openosp-update.sh
+        ./bin/openosp-update.sh $2 $3
         ;;
     health)
         docker-compose -f docker-compose.admin.yml run health

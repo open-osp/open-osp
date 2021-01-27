@@ -1,4 +1,4 @@
-FROM tomcat:7
+FROM tomcat:8.5-jre
 
 # Fetch Expedius binary
 RUN wget https://bitbucket.org/colcamexdev/expediusbinary/downloads/Expedius-4.12.19.war

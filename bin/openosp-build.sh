@@ -10,7 +10,7 @@ WARFILE=$2
 case "${COMMAND}" in
     oscar)
         OSCAR_OUTPUT=docker/oscar
-        if [[ $* == *--test* ]]
+        if [[ "$*" == *--test* ]]
         then
             docker-compose up -d db
         fi
@@ -34,7 +34,7 @@ case "${COMMAND}" in
         fi
 
         echo "Building Oscar Docker Image"
-        if [[ $* == *--test* ]]
+        if [[ "$*" == *--test* ]]
         then
             TEST_DURING_BUILD=1 docker-compose build oscar
         else
