@@ -40,4 +40,5 @@
 
 <role rolename="expedius"/>
 <user username="admin" password="expedius" roles="expedius"/>
+<user username="oscar" password="oscar" roles="monitoring"/>
 </tomcat-users>
