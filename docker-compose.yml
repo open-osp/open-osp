@@ -43,6 +43,7 @@ services:
         - back-tier
       environment:
         TZ: America/Vancouver
+        CATALINA_OPTS: -Djava.awt.headless=true
       deploy:
         resources:
           limits:
