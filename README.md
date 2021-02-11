@@ -12,10 +12,7 @@ This repo was originally based on [scoophealth (UVIC)](https://github.com/scooph
   * if you need a database, `./openosp bootstrap`
   * `./openosp start`
   * Browse to OSCAR EMR on http://localhost:8080/oscar!
-  * Log in with the initial credentials. You will be prompted to change your password upon initial login.
-      - Username: oscardoc
-      - Password: mac2002
-      - 2nd Level Passcode: 1117
+  * Log in with the initial credentials provided at the command line. You will be prompted to change your password upon initial login.
 
 ## Purpose
 The goal of this repo is to provide a hosting-agnostic (Dockerized) toolkit for automated OSCAR EMR deployment. We want to centralize OSCAR configurations for modern DevOps tools and share [best practices](https://12factor.net/) for modern web application deployment for OSCAR. This may help potential service providers who need to automate deployments, OSCAR integrators/vendors/developers who need to do testing, and self-hosted users. ie)
