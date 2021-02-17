@@ -13,3 +13,4 @@ docker-compose -f docker-compose.build.yml run -T builder ./bin/clone.sh ${OSCAR
 docker-compose exec -T db ./bin/populate-db.sh ${LOCATION:-""}
 ./bin/setup-faxws.sh
 
+exit 0

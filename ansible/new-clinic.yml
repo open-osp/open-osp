@@ -1,0 +1,154 @@
+
+#extra vars
+# host - the target host we want to deploy to
+# name - the name of the clinic
+# slug - website/folder slug
+# subtext - subtext, separate by line using </br>
+# port_identifier - numbers between port 8NN6 (both NN)
+#(optional) province - ontario or bc for now
+#(optional) website - clinic website
+#(optional) docker_image - open-osp docker image to use
+
+# Future Stuff
+# timezone option
+# cronjob option
+
+- hosts: "{{ host }}.openosp.ca"
+  vars:
+    ### Hardcoded, replace with host workspace dir
+    workspace: /home/jenkins/workspace
+    clinic_dir: "{{ workspace }}/{{ slug }}"
+    default_website: https://{{ slug }}.openosp.ca
+    docker_modified: true
+  tasks:
+    # Install requirements for setup
+    - name: Copy scripts
+      copy:
+        src: bin/
+        dest: /tmp/openosp-deploy/
+        mode: u+rwx
+        force: yes
+
+    - name: install requirements for pyexpect
+      command: /tmp/openosp-deploy/requirements.sh
+
+    - name: Clone or update OpenOsp repo
+      git:
+        repo: 'https://github.com/open-osp/open-osp.git'
+        dest: '{{ clinic_dir }}'
+        version: 'master'
+        force: yes
+
+    - name: Check clinic local.env
+      stat:
+        path: "{{ clinic_dir }}/local.env"
+      register: local_env_result
+    - debug:
+        msg: "{{ local_env_result }}"
+
+    # SETUP NEW CLINIC
+    - name: Setup {{ name }}
+      expect:
+        command: "./openosp setup {{ province | default('') }}"
+        responses: 
+          "Clinic name": "{{ name }}"
+          "Clinic sub text": "{{ subtext }}"
+          "Clinic website link": "{{ website | default(default_website) }}"
+          "Title name in browser tabs": "{{ name }}"
+        chdir: "{{ clinic_dir }}"
+        echo: yes
+      when: not local_env_result.stat.exists
+
+    - name: Check docker override
+      stat:
+        path: "{{ clinic_dir }}/docker-compose.override.yml"
+      register: docker_override_file
+    - debug:
+        msg: "{{ docker_override_file }}"
+
+    - name: check docker override contents
+      command: cat {{ clinic_dir }}/docker-compose.override.yml
+      register: docker_contents
+      when: 
+        - docker_override_file.stat.exists
+    - debug:
+        msg: "{{ docker_contents }}"
+
+    - set_fact:
+        docker_modified: false
+      when:
+        - docker_override_file.stat.exists 
+        - docker_contents.stdout.find('#  db:') != -1
+    - debug:
+        msg: "{{ docker_modified }}"
+
+    - name: Remove default oscar docker yml ports
+      replace:
+        path: "{{ clinic_dir }}/docker-compose.override.yml"
+        regexp: '\w*[^(version: "3.3")][^[]+'
+        replace: ''
+      when: not docker_modified
+
+    - name: Add {{ port_identifier }} to docker yml
+      blockinfile:
+        path: "{{ clinic_dir }}/docker-compose.override.yml"
+        block: |
+          services:
+            oscar:
+              ports:
+                - '8{{ port_identifier }}3:443'
+              image: {{ docker_image | default('openosp/open-osp:release') }}
+            expedius:
+              ports: 
+                - '8{{ port_identifier }}1:8081'
+            db:
+              ports:
+                - '3{{ port_identifier }}2:3306'
+      when: not docker_modified
+
+    - set_fact:
+        docker_modified: true
+
+    - name: Bootstrap initial db
+      command: ./openosp bootstrap
+      args:
+        chdir: "{{ clinic_dir }}"
+      ignore_errors: yes
+    
+    - name: Pull docker containers
+      command: docker-compose pull
+      args:
+        chdir: "{{ clinic_dir }}"
+      
+    - name: Start OpenOsp
+      command: ./openosp start
+      args:
+        chdir: "{{ clinic_dir }}"
+      async: 45
+      poll: 0
+    
+
+    # HAPROXY UPDATE BLOCK
+    - name: Frontend config line
+      lineinfile:
+        path: /opt/haproxy/haproxy.cfg
+        insertafter: ^.*\b(use_backend)\b.*$
+        line: "    use_backend {{ slug }} if { hdr_beg(host) {{ slug }}.openosp.ca }"
+      async: 45
+      poll: 0
+
+    - name: Backend config line
+      blockinfile:
+        path: /opt/haproxy/haproxy.cfg
+        block: |
+          backend {{ slug }}
+              mode http
+              option forwardfor
+              http-request set-header X-Forwarded-Port %[dst_port]
+              http-request add-header X-Forwarded-Proto https if { ssl_fc }
+              server site {{ host }}.openosp.ca:8{{ port_identifier }}3 check ssl verify none
+
+
+
+
+
