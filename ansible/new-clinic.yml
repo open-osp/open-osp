@@ -149,7 +149,7 @@
               server site {{ host }}.openosp.ca:8{{ port_identifier }}3 check ssl verify none
     
     - name: Reload haproxy
-      command: /reload.sh
+      command: ./reload.sh
       args:
         chdir: "/opt/haproxy"
 
