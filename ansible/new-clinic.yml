@@ -147,6 +147,11 @@
               http-request set-header X-Forwarded-Port %[dst_port]
               http-request add-header X-Forwarded-Proto https if { ssl_fc }
               server site {{ host }}.openosp.ca:8{{ port_identifier }}3 check ssl verify none
+    
+    - name: Reload haproxy
+      command: /reload.sh
+      args:
+        chdir: "/opt/haproxy"
 
 
 
