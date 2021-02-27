@@ -4,6 +4,8 @@
 #set -euxo
 set -eu
 
+LOCATION=${1:-bc}
+
 # tr command does not work in UNIX environments. OpenSSL is common in every environment.
 DB_PASSWORD=$(openssl rand -base64 8)
 EXPEDIUS_SECRET=$(openssl rand -base64 8)
@@ -64,7 +66,8 @@ if [ ! -f local.env ]; then
 	else
 		echo "TAB_NAME=\"${TAB_NAME}\"" >> ./local.env
   fi
- 
+
+  echo "LOCATION=${LOCATION}" >> ./local.env
 else
   echo "local.env exists, not configuring."
 fi
@@ -72,7 +75,18 @@ fi
 # if this is a fresh install
 if [ ! -f ./volumes/oscar.properties ]; then
   echo "copying oscar properties template"
-  cp docker/oscar/conf/oscar_mcmaster_bc.properties ./volumes/oscar.properties
+  if [ $LOCATION == 'ontario' ]
+  then
+    echo "Using Ontario properties"
+    cp docker/oscar/conf/oscar_mcmaster_on.properties ./volumes/oscar.properties
+
+    # We also might want to use Oscar19 for Ontario builds
+    echo "OSCAR_TREEISH=oscar19.1" >> ./local.env
+    echo "OSCAR_REPO=https://countable@bitbucket.com/oscaremr/oscar.git" >> ./local.env
+  else
+    echo "Using default BC properties"
+    cp docker/oscar/conf/oscar_mcmaster_bc.properties ./volumes/oscar.properties
+  fi
 
   echo "Using generated password in Oscar properties file"
   sed '/db_password/d' ./volumes/oscar.properties
