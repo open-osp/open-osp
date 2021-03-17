@@ -140,6 +140,8 @@
     - name: Backend config line
       blockinfile:
         path: /opt/haproxy/haproxy.cfg
+        marker_begin: "START {{ slug }}"
+        marker_end: "END {{ slug }}"
         block: |
           backend {{ slug }}
               mode http

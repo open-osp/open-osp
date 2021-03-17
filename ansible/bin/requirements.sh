@@ -6,4 +6,4 @@ python3 get-pip.py
 
 export PATH=$PATH:$HOME/.local/bin
 
-pip install pexpect
+pip install pandas
