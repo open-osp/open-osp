@@ -56,7 +56,7 @@ if [[ $* == *--efs* ]]; then
 fi
 
 if [[ $* == *--hdc* ]]; then
-    docker-compose exec db mysqldump -uoscar -p${MYSQL_PASSWORD} oscar \
+    docker-compose exec -T db mysqldump -uoscar -p${MYSQL_PASSWORD} oscar \
     allergies \
     appointment \
     appointmentType \
@@ -91,8 +91,9 @@ if [[ $* == *--hdc* ]]; then
     #rm hdc-$filename
     
     aws s3 cp hdc-$filename.sql.gpg s3://openosp-hdc-transit/$clinicname/$folder/hdc-$filename.sql.gpg
+    rm hdc-$filename.sql.gpg hdc-$filename.sql
 fi
 
-docker-compose restart oscar
+# docker-compose restart oscar
 
 

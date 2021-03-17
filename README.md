@@ -213,6 +213,16 @@ The log properties override files are found in ./volumes  Log properties for Mar
 
 Caution: it is unknown at this time if these properties files actualy override.
 
+## Performance Profiling
+
+To enable melody performance profiling, run the following script.
+
+```
+./bin/setup-melody.sh
+```
+
+and visit http://localhost:8080
+
 ## Prerequisites
 * GIT
 * Docker
@@ -246,4 +256,5 @@ This repository is licensed under the GPL V3
 
 ## Thanks (References)
 * [Bell Eapen (McMaster U)](http://nuchange.ca) for [Oscar in a Box](https://github.com/dermatologist/oscar-latest-docker), which this repository was originally forked from.
+
 
