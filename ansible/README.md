@@ -23,5 +23,5 @@ cp hosts /etc/ansible/hosts
 # (optional) website - Your clinic website, defaults to https://slug.openosp.ca
 # (optional) docker_image - defaults to openosp/open-osp:release 
 
-ansible-playbook new-clinic.yml --extra-vars "host=HOST name='CLINIC_NAME' slug=CLINIC_SLUG subtext='CLINIC SUBTEXT' port_identifier=67" -become -become_user=jenkins -K
+ansible-playbook new-clinic.yml --extra-vars "host=HOST name='CLINIC_NAME' slug=CLINIC_SLUG subtext='CLINIC SUBTEXT' port_identifier=67 backup_cron" -become_user=jenkins -K
 ```

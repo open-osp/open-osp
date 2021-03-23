@@ -5,6 +5,7 @@
 # slug - website/folder slug
 # subtext - subtext, separate by line using </br>
 # port_identifier - numbers between port 8NN6 (both NN)
+# backup_cron - cron time for backup
 #(optional) province - ontario or bc for now
 #(optional) website - clinic website
 #(optional) docker_image - open-osp docker image to use
@@ -21,7 +22,7 @@
     default_website: https://{{ slug }}.openosp.ca
     docker_modified: true
   tasks:
-    # Install requirements for setup
+    Install requirements for setup
     - name: Copy scripts
       copy:
         src: bin/
@@ -154,6 +155,11 @@
       command: ./reload.sh
       args:
         chdir: "/opt/haproxy"
+    
+    - name: Add backups
+      shell: "echo '{{ backup_cron }} jenkins cd /home/jenkins/workspace/{{ slug }} && ./openosp backup -m >> /home/jenkins/cron.log 2>&1' >> /etc/crontab"
+      become: yes
+      become_user: root
 
 
 
