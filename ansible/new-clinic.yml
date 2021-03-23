@@ -22,7 +22,7 @@
     default_website: https://{{ slug }}.openosp.ca
     docker_modified: true
   tasks:
-    Install requirements for setup
+    # Install requirements for setup
     - name: Copy scripts
       copy:
         src: bin/
