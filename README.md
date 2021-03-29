@@ -55,7 +55,8 @@ This should:
 1. Generate a new local.env file, with unique password for OSCAR db, if not already done. (notify user of action taken)
 1. Copy all locally editable configs to the volumes/ folder (gitignored), if they dont exist already. Nothing should ever be mounted in a container except from inside this folder and those files are always gitignored copies from a templates/ folder. (notify user)
 
-To create a database: ```
+To create a database: 
+```
 ./openosp bootstrap
 ```
 
