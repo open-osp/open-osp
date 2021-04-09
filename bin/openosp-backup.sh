@@ -94,6 +94,6 @@ if [[ $* == *--hdc* ]]; then
     rm hdc-$filename.sql.gpg hdc-$filename.sql
 fi
 
-# docker-compose restart oscar
+docker-compose restart oscar
 
 
