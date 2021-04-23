@@ -2,6 +2,11 @@
 
 set -x
 
+# Do not execute this script during production hours.
+
+# stop Expedius to avoid connection timeouts with OSCAR during the backup process.
+docker-compose stop expedius
+
 if [ -z "$BACKUP_BUCKET" ]
 then
     BACKUP_BUCKET=backups
@@ -94,6 +99,9 @@ if [[ $* == *--hdc* ]]; then
     rm hdc-$filename.sql.gpg hdc-$filename.sql
 fi
 
+# restart OSCAR.
 docker-compose restart oscar
 
+# start up Expedius again.
+docker-compose start expedius
 
