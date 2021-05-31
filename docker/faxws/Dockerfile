@@ -1,4 +1,4 @@
-FROM tomcat:8.5-jre
+FROM tomcat:8.5-jre8
 
 RUN apt-get update \
 #    && apt-get install -y maven \
