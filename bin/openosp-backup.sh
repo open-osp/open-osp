@@ -61,7 +61,7 @@ if [[ $* == *--efs* ]]; then
 fi
 
 if [[ $* == *--hdc* ]]; then
-    docker-compose exec -T db mysqldump -uoscar -p${MYSQL_PASSWORD} oscar \
+    docker-compose exec -T db mysqldump -uroot -p${MYSQL_PASSWORD} oscar \
     allergies \
     appointment \
     appointmentType \
