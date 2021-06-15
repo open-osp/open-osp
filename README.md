@@ -86,11 +86,14 @@ services:
 1. Run `git pull origin master` to ensure environment scripts are up to date.
 1. Run `openosp start`
 
-## OSCAR and Local Development
+## Deployment
 
-Build war file and tomcat image only. (in the future, .deb)
+If delete the local Oscar source code, with `openosp purge`. WARNING: never run openosp purge in production. It deletes ALL local data.
+
 ```
 ./openosp build oscar
+./openosp publish release
+./openosp publish vYYYY.MM.DD
 ```
 
 ## Using other OSCAR Versions
