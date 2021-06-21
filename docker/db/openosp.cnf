@@ -1,0 +1,24 @@
+
+[mysqld]
+core-file
+rocksdb
+skip-innodb
+default-storage-engine=rocksdb
+default-tmp-storage-engine=MyISAM
+collation-server=latin1_bin
+
+# config for bulk load
+
+rocksdb_max_open_files=-1
+#rocksdb_base_background_compactions=1
+rocksdb_max_total_wal_size=4G
+rocksdb_block_size=16384
+rocksdb_block_cache_size=16G
+rocksdb_table_cache_numshardbits=6
+rocksdb_default_cf_options=write_buffer_size=128m;target_file_size_base=64m;max_bytes_for_level_base=512m;level0_file_num_compaction_trigger=4;level0_slowdown_writes_trigger=256;level0_stop_writes_trigger=256;max_write_buffer_number=16;compression_per_level=kNoCompression:kNoCompression:kNoCompression:kZlibCompression:kZlibCompression:kZlibCompression;bottommost_compression=kZlibCompression;compression_opts=-14:1:0;block_based_table_factory={cache_index_and_filter_blocks=1;filter_policy=bloomfilter:10:false;whole_key_filtering=1};level_compaction_dynamic_level_bytes=true;optimize_filters_for_hits=true
+rocksdb_override_cf_options=system={memtable=skip_list:16}
+rocksdb_skip_unique_check=1
+rocksdb_commit_in_the_middle=1
+rocksdb_write_disable_wal=1
+#rocksdb_max_background_flushes=40
+#rocksdb_max_background_compactions=40

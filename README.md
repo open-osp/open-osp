@@ -88,7 +88,7 @@ services:
 
 ## Deployment
 
-If delete the local Oscar source code, with `openosp purge`. WARNING: never run openosp purge in production. It deletes ALL local data.
+If delete the local Oscar source code, with `openosp purge` and `openosp setup` again. WARNING: never run openosp purge in production. It deletes ALL local data.
 
 ```
 ./openosp build oscar
