@@ -1,0 +1,39 @@
+# Managed by Puppet
+[mysqld]
+log-bin                                   = master-bin.log
+server-id                                 = 10
+binlog-format                             = MIXED
+expire_logs_days                          = 31
+sync_binlog                               = 0
+innodb_flush_log_at_trx_commit            = 2
+innodb_support_xa                         = 1
+bind-address                              = 127.0.0.1
+log_warnings                              = 2
+# intended to decrease likelihood of idle object errors
+interactive_timeout                       = 3600
+wait_timeout                              = 3600
+# max_connections=32 recommended by McM documentation git branch
+max_connections                           = 40
+# max_allowed_packet = 32M recommended by McM documentation git branch
+max_allowed_packet                        = 32M
+
+default-storage-engine                    = innodb
+innodb_file_per_table                     = 1
+innodb_buffer_pool_size                   = 12G
+# might need to remove /var/lib/mysql/ib_data[01] before log file size can be increased
+innodb_log_file_size                      = 128M
+innodb_log_buffer_size                    = 8M
+#innodb_buffer_pool_instances Valid for mysqld >= version 5.4
+innodb_buffer_pool_instances              = 12
+innodb_fast_shutdown                      = 0
+table_cache                               = 1000
+query_cache_size                          = 128M
+query_cache_limit                         = 2M
+join_buffer_size                          = 2M
+key_buffer_size                           = 64M
+sort_buffer_size                          = 8M
+
+long_query_time                           = 3
+log-queries-not-using-indexes             = OFF
+general-log                               = OFF
+
