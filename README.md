@@ -135,9 +135,15 @@ CLINIC_NAME=your_clinic_name
 ```
 ./openosp backup -m
 ```
-October 2020: This process is not Dockerized and automated at this time. However the manual script `./openosp backup -m` could be set to run on a chron job.
+October 2020: This process is not Dockerized and automated at this time. However the manual script `./openosp backup -m` could be set to run on a cron job.
 
-HDC exporting can be done as: import the encryption key `gpg --import key.pgp`, then run `openosp backup -m --hdc`
+### HDC exporting can be done as:
+
+get the encryption key with `gpg --list-keys` and `gpg --output key.pgp --armor --export pki-prod@hdcbc.ca` from an existing installation.
+
+import the encryption key `gpg --import key.pgp`, then run `openosp backup -m --hdc`
+
+Add a cronjob for the export to /etc/crontab. ie `55 9    * * *   jenkins cd /home/jenkins/workspace/<clinicname> && ./openosp backup -m --hdc >> /home/jenkins/hdc.log 2>&1`
 
 ### Manual Backups
 To run a manual backup for both local and remote (if avaialble)
@@ -241,9 +247,58 @@ and visit http://localhost:8080
 
 A Docker image built from the Dockerfile in this repo is published [here](https://hub.docker.com/repository/docker/openosp/open-osp).
 
+## Migrating
+
+To migrate an environment across servers, these are the stateful items to move
+
+1. files in ./volumes, including ./volumes/OscarDocument
+1. `docker-compose.override.yml` and `local.env`
+1. the database (mysqldump)
+
+To package up an installation
+```
+cd /home/jenkins
+tar -I 
+```
+
 ## Host Architecture
 
 [host architecture pdf](!./host-architecture.pdf)
+
+## Migrating
+
+To migrate an environment across servers, these are the stateful items to move
+
+1. files in ./volumes, including ./volumes/OscarDocument
+1. `docker-compose.override.yml` and `local.env`
+1. the database (mysqldump)
+
+To package up an installation, use lz4
+
+```
+sudo su
+cd /home/jenkins
+tar -I lz4 -cvf clinicname.tar.lz4 clinicname
+exit
+scp clinicname.tar.lz4 awsN.openosp.ca:/home/username/
+openosp backup -m --s3
+```
+
+on the new machine
+
+```
+sudo su
+cd /home/jenkins/workspace
+tar -I lz4 -xe clinicname.tar.lz4
+cd clinicname
+aws s3 cp s3://openosp/clincname... ./
+openosp start
+dx db
+> mysql -u root -p${MYSQL_ROOT_PASSWORD}
+>> create database oscar;
+>> exit;
+> pv *.sql.gz | gunzip | mysql -u root -p${MYSQL_ROOT_PASSWORD} oscar
+```
 
 ## Contributing
 
