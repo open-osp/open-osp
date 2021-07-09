@@ -273,6 +273,13 @@ To migrate an environment across servers, these are the stateful items to move
 1. `docker-compose.override.yml` and `local.env`
 1. the database (mysqldump)
 
+Shut down Oscar
+
+```
+cd /home/jenkins/workspace/clinicname
+docker-compose stop oscar
+```
+
 To package up an installation, use lz4
 
 ```
