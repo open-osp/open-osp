@@ -14,7 +14,6 @@ services:
         - OSCAR_REPO
         - JOB_NAME
         - BUILD_NUMBER
-        - MAVEN_OPTS="-Djava.net.preferIPv4Stack=true"
       networks:
         - back-tier
       

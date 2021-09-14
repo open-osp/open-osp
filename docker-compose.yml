@@ -18,7 +18,7 @@ services:
         - ./docker/db/my.cnf:/etc/mysql/my.cnf
         # TODO: build some scripts in so we need not mount everything.
         - .:/code
-        - mariadb-files:/var/lib/mysql
+        - mariadb-files1:/var/lib/mysql
       networks:
         - back-tier
       deploy:
@@ -91,7 +91,7 @@ services:
             memory: 4G
 
 volumes:
-  mariadb-files:
+  mariadb-files1:
     driver: local
 
 networks:
