@@ -99,6 +99,13 @@ if [[ $* == *--hdc* ]]; then
     rm hdc-$filename.sql.gpg hdc-$filename.sql
 fi
 
+if [[ $* == *--archive-logs* ]]; then
+    ARCHIVE_NAME=log_archive_$(date +"%d-%m-%y").sql
+    docker-compose exec -T db mysqldump -uroot -p${MYSQL_ROOT_PASSWORD} oscar log > $ARCHIVE_NAME
+    mv $ARCHIVE_NAME volumes/OscarDocument/oscar/
+    docker-compose exec -T db mysql -uroot -p${MYSQL_ROOT_PASSWORD} oscar < bin/archive-logs.sql
+fi
+
 # restart OSCAR.
 docker-compose restart oscar
 

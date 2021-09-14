@@ -1,0 +1,2 @@
+
+DELETE FROM log WHERE dateTime < DATE_SUB(NOW(), INTERVAL 3 MONTH );
