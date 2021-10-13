@@ -307,6 +307,25 @@ dx db
 > pv *.sql.gz | gunzip | mysql -u root -p${MYSQL_ROOT_PASSWORD} oscar
 ```
 
+### Updating existing database data
+If you have issues when using Oscar, updating the database might help resolve the issues
+```
+# Open your openosp directory
+cd openosp
+
+# Check if you have the latest database updates in docker/oscar/oscar/database/mysql/updates
+# The usual updates start from update-2020-11-05.sql
+
+# If you don't have the update files, you might need to update your open-oscar branch to the latest release
+cd docker/oscar/oscar
+git pull
+
+docker-compose exec db bash
+# This will open the database container and inside
+> mysql -uroot -p{PASSWORD} oscar < docker/oscar/oscar/database/mysql/updates/{UPDATE_FILE_NAME}
+# Repeat the above step for the other latest updates
+```
+
 ## Contributing
 
 Merge general work to `develop`, and bugfixes into `master`. We will occasionally "release" `develop` into `master` by testing and merging it in.
