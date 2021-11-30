@@ -145,6 +145,12 @@ import the encryption key `gpg --import key.pgp`, then run `openosp backup -m --
 
 Add a cronjob for the export to /etc/crontab. ie `55 9    * * *   jenkins cd /home/jenkins/workspace/<clinicname> && ./openosp backup -m --hdc >> /home/jenkins/hdc.log 2>&1`
 
+### CPC
+
+For CPCSSN, follow the instructions here (private repo) https://github.com/cpcssn-mt/osp-extract.git, update env vars in docker-compose.override.yml, and run
+
+`docker-compose run docker-compose.admin.yml cpcssn`
+
 ### Manual Backups
 To run a manual backup for both local and remote (if avaialble)
 
