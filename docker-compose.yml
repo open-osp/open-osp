@@ -44,7 +44,7 @@ services:
       environment:
         TZ: America/Vancouver
         CATALINA_OPTS: -Djava.awt.headless=true
-        JAVA_OPTS: -Dlog4j2.formatMsgNoLookups=true
+        JAVA_OPTS: -Dlog4j2.formatMsgNoLookups=true -XX:+UseCMSInitiatingOccupancyOnly -XX:+UseConcMarkSweepGC -Xmx2G -Xms2G -XX:MaxPermSize=1G -XX:CMSInitiatingOccupancyFraction=68 -Xincgc -Dorg.apache.el.parser.COERCE_TO_ZERO=true
       deploy:
         resources:
           limits:
@@ -64,6 +64,7 @@ services:
         - back-tier
       environment:
         TZ: America/Vancouver
+        JAVA_OPTS: -Dlog4j2.formatMsgNoLookups=true
       deploy:
         resources:
           limits:
@@ -85,6 +86,7 @@ services:
       environment:
         TZ: America/Vancouver
         MYSQL_HOST: db
+        JAVA_OPTS: -Dlog4j2.formatMsgNoLookups=true
       deploy:
         resources:
           limits:
