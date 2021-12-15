@@ -30,7 +30,8 @@ case "${COMMAND}" in
         # Download drugref if we need it.
         if [ ! -f $OSCAR_OUTPUT/drugref2.war ]; then
           # Latest OscarBC as of Nov 13 2019.
-          docker run -v $(pwd):/code/ busybox sh -c "cd /code/ && wget $DRUGREF_WAR -O $OSCAR_OUTPUT/drugref2.war"
+          # To avoid an externally hosted file, drugref.war is now checked in to the openosp repo directly.
+          #docker run -v $(pwd):/code/ busybox sh -c "cd /code/ && wget $DRUGREF_WAR -O $OSCAR_OUTPUT/drugref2.war"
         fi
 
         echo "Building Oscar Docker Image"
