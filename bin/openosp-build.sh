@@ -32,6 +32,7 @@ case "${COMMAND}" in
           # Latest OscarBC as of Nov 13 2019.
           # To avoid an externally hosted file, drugref.war is now checked in to the openosp repo directly.
           #docker run -v $(pwd):/code/ busybox sh -c "cd /code/ && wget $DRUGREF_WAR -O $OSCAR_OUTPUT/drugref2.war"
+          echo "skipping war download for drugref, it's stored locally for now."
         fi
 
         echo "Building Oscar Docker Image"
