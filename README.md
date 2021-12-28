@@ -4,6 +4,8 @@ This project was developed during the formation of the [Open OSP](https://openos
 
 This repo was originally based on [scoophealth (UVIC)](https://github.com/scoophealth/oscar-latest-docker)'s fork of [Bell Eapen's](http://nuchange.ca) [Oscar in a Box](https://github.com/dermatologist/oscar-latest-docker).
 
+Both the more recent [OpenOscar](https://bitbucket.org/openoscar/oscar) which is also maintained by OpenOSP, and original [Oscar Community Edition](https://bitbucket.org/oscaremr) can be built.
+
 ## Quickstart
   * Install Docker and docker-compose
   * `git clone https://github.com/open-osp/open-osp.git` (master is the stable branch to use)
