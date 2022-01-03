@@ -25,14 +25,14 @@ case "${COMMAND}" in
             cp $WARFILE $OSCAR_OUTPUT/oscar.war
         fi
 
-        export DRUGREF_WAR=${DRUGREF_WAR:-"http://bool.countable.ca/drugref2.war"}
+        # download most current binary release of DrugRef2 from the Open OSP repository.
+        # current version released December 30, 2021
+        export DRUGREF_WAR=${DRUGREF_WAR:-"https://api.bitbucket.org/2.0/repositories/openoscar/drugref/downloads/drugref2.war"}
 
         # Download drugref if we need it.
         if [ ! -f $OSCAR_OUTPUT/drugref2.war ]; then
-          # Latest OscarBC as of Nov 13 2019.
-          # To avoid an externally hosted file, drugref.war is now checked in to the openosp repo directly.
-          #docker run -v $(pwd):/code/ busybox sh -c "cd /code/ && wget $DRUGREF_WAR -O $OSCAR_OUTPUT/drugref2.war"
-          echo "skipping war download for drugref, it's stored locally for now."
+          echo "Retrieving current DrugRef2 binary"
+          docker run -v $(pwd):/code/ busybox sh -c "cd /code/ && wget $DRUGREF_WAR -O $OSCAR_OUTPUT/drugref2.war"
         fi
 
         echo "Building Oscar Docker Image"
@@ -47,7 +47,7 @@ case "${COMMAND}" in
 
         ;;
     faxws)
-        echo "Compilnig FaxWS"
+        echo "Compiling FaxWS"
         docker-compose -f docker-compose.build.yml run builder ./bin/build-faxws.sh
 
         echo "Building FaxWs Docker Image"
