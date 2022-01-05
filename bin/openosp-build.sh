@@ -35,7 +35,7 @@ case "${COMMAND}" in
         # Download drugref if we need it.
         if [ ! -f $OSCAR_OUTPUT/drugref2.war ]; then
           echo "Retrieving current DrugRef2 binary"
-          docker run -v $(pwd):/code/ alpine sh -c "cd /code/ && curl -o $OSCAR_OUTPUT/drugref2.war $DRUGREF_WAR"
+          docker run -v $(pwd):/code/ alpine sh -c "apk add curl && cd /code/ && curl -o $OSCAR_OUTPUT/drugref2.war $DRUGREF_WAR"
         fi
 
         echo "Building Oscar Docker Image"
