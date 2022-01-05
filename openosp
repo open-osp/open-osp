@@ -82,7 +82,7 @@ case "${COMMAND}" in
         fi
         ;;
     build)
-        ./bin/openosp-build.sh $2 $3
+        ./bin/openosp-build.sh $2 $3 $4
         ;;
     publish)
         ./bin/openosp-publish.sh $2 $3
