@@ -5,7 +5,10 @@
 set -exo
 
 COMMAND=$1
-WARFILE=$2
+if [[ $2 != *--* ]]
+then
+  WARFILE=$2
+fi
 
 case "${COMMAND}" in
     oscar)
@@ -32,16 +35,18 @@ case "${COMMAND}" in
         # Download drugref if we need it.
         if [ ! -f $OSCAR_OUTPUT/drugref2.war ]; then
           echo "Retrieving current DrugRef2 binary"
-          docker run -v $(pwd):/code/ busybox sh -c "cd /code/ && wget $DRUGREF_WAR -O $OSCAR_OUTPUT/drugref2.war"
+          docker run -v $(pwd):/code/ alpine sh -c "cd /code/ && -o $OSCAR_OUTPUT/drugref2.war $DRUGREF_WAR"
         fi
 
         echo "Building Oscar Docker Image"
         if [[ "$*" == *--test* ]]
         then
-            TEST_DURING_BUILD=1 docker-compose build oscar
-        else
-            docker-compose build oscar
+            export TEST_DURING_BUILD=1
+        elif [[ "$*" == *--dev* ]]
+        then
+            export DEVELOPMENT_MODE=1
         fi
+        docker-compose build oscar
         ;;
     expedius)
 
