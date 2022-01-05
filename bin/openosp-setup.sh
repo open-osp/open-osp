@@ -125,5 +125,4 @@ if [ ! -d "./volumes/OscarDocument/oscar" ]; then
 fi
 
 
-docker pull openosp/open-osp
 
