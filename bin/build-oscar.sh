@@ -23,8 +23,7 @@ then
     mvn -Dcheckstyle.skip -Dmaven.test.skip=true clean package
 elif [[ -z "{DEVELOPMENT_MODE:-}" ]]
 then
-    mvn dependency:tree | grep maven-dependency-plugin | awk '{ print $(NF-1) }'
-#    mvn -T 1C install --offline
+    mvn -T 1C install --offline
 else
     mvn clean package
 fi
