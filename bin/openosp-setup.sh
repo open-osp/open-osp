@@ -124,5 +124,8 @@ if [ ! -d "./volumes/OscarDocument/oscar" ]; then
   mkdir ./volumes/OscarDocument/oscar/document
 fi
 
+docker pull openosp/open-osp
+docker pull openosp/faxws
+
 
 

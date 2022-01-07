@@ -5,10 +5,10 @@
 set -euxo
 
 ./openosp setup --noinput
-./openosp bootstrap
 ./openosp build oscar --test
 # TODO: faxws build currently fails.
 #./openosp build faxws
+./openosp bootstrap
 ./openosp start
 #./openosp health
 

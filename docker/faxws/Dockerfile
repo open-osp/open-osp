@@ -23,7 +23,7 @@ ADD ./faxws/target/FaxWs*SNAPSHOT.war /usr/local/tomcat/webapps/faxWs.war
 
 ADD ./faxws/database/mysql/V1.0__create_database.sql /create_database.sql
 # move the JDBC Jar
-ADD ./faxws/target/FaxWs-1.0.0-SNAPSHOT/WEB-INF/lib/mysql-connector-java*.jar /usr/local/tomcat/lib/
+ADD ./faxws/target/FaxWs-*-SNAPSHOT/WEB-INF/lib/mysql-connector-java*.jar /usr/local/tomcat/lib/
 
 # Add environment variables for creds
 ENV ENVSUBST_CONFIG_FILES /usr/local/tomcat/conf/context.xml
