@@ -30,7 +30,7 @@ case "${COMMAND}" in
 
         # download most current binary release of DrugRef2 from the Open OSP repository.
         # current version released December 30, 2021
-        export DRUGREF_WAR=${DRUGREF_WAR:-"https://api.bitbucket.org/2.0/repositories/openoscar/drugref/downloads/drugref2.war"}
+        export DRUGREF_WAR=${DRUGREF_WAR:-"https://bitbucket.org/openoscar/drugref/downloads/drugref2.war"}
 
         # Download drugref if we need it.
         if [ ! -f $OSCAR_OUTPUT/drugref2.war ]; then

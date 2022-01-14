@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context path="/faxWs">
         <Realm className="org.apache.catalina.realm.JDBCRealm"
-                driverName="com.mysql.jdbc.Driver"
+                driverName="com.mysql.cj.jdbc.Driver"
                 connectionName="root"
                 connectionPassword="$MYSQL_PASSWORD"
                 connectionURL="jdbc:mysql://db/OscarFax"

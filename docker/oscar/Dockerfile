@@ -34,7 +34,6 @@ RUN rm -rf /usr/local/tomcat/webapps/ROOT/*.*
 ADD ./index.jsp /usr/local/tomcat/webapps/ROOT/index.jsp
 ADD ./openosp_favicon.ico /usr/local/tomcat/webapps/ROOT/favicon.ico
 
-ADD ./drugref2 /usr/local/tomcat/bin/drugref2
 ADD ./oscar/database/mysql/ /oscar-mysql-scripts/
 ADD ./bin/startup.sh /startup.sh
 
