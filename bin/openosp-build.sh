@@ -49,7 +49,7 @@ case "${COMMAND}" in
         docker-compose build oscar
         ;;
     expedius)
-
+        docker-compose build expedius
         ;;
     faxws)
         echo "Compiling FaxWS"
