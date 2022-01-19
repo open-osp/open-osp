@@ -32,11 +32,6 @@ case "${COMMAND}" in
         # current version released December 30, 2021
         export DRUGREF_WAR=${DRUGREF_WAR:-"https://bitbucket.org/openoscar/drugref/downloads/drugref2.war"}
 
-        # Download drugref if we need it.
-        if [ ! -f $OSCAR_OUTPUT/drugref2.war ]; then
-          echo "Retrieving current DrugRef2 binary"
-          docker run -v $(pwd):/code/ alpine sh -c "apk add curl && cd /code/ && curl -Lo $OSCAR_OUTPUT/drugref2.war $DRUGREF_WAR"
-        fi
 
         echo "Building Oscar Docker Image"
         if [[ "$*" == *--test* ]]
@@ -45,6 +40,10 @@ case "${COMMAND}" in
         elif [[ "$*" == *--dev* ]]
         then
             export DEVELOPMENT_MODE=1
+        else
+          # Download drugref if we need it.
+          echo "Retrieving current DrugRef2 binary"
+          docker run -v $(pwd):/code/ alpine sh -c "apk add curl && cd /code/ && curl -Lo $OSCAR_OUTPUT/drugref2.war $DRUGREF_WAR"
         fi
         docker-compose build oscar
         ;;
