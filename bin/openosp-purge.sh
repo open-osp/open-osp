@@ -14,6 +14,7 @@ then
   echo "Removing OSCAR files..."
   rm -f *.war.*
   rm -f *.war
+  rm -f docker/oscar/*.war
 
   echo "Removing volumes"
   docker-compose -f docker-compose.build.yml run --rm builder rm -fr volumes/*
