@@ -2,6 +2,9 @@
 
 set -x
 
+# start up Expedius again on any exit of this script.
+trap 'docker-compose start expedius' EXIT
+
 # Do not execute this script during production hours.
 
 # stop Expedius to avoid connection timeouts with OSCAR during the backup process.
@@ -109,6 +112,4 @@ fi
 # restart OSCAR.
 docker-compose restart oscar
 
-# start up Expedius again.
-docker-compose start expedius
 
