@@ -21,7 +21,7 @@ case "${COMMAND}" in
         if [ -z "$WARFILE" ]
         then
             echo "Compiling OSCAR. This may take some time...."
-            docker-compose -f docker-compose.build.yml run builder ./bin/build-oscar.sh
+            docker-compose -f docker-compose.build.yml run --rm builder ./bin/build-oscar.sh
             mv $OSCAR_OUTPUT/oscar/target/oscar-*-SNAPSHOT.war $OSCAR_OUTPUT/oscar.war
         else
             mkdir -p $OSCAR_OUTPUT
@@ -52,7 +52,7 @@ case "${COMMAND}" in
         ;;
     faxws)
         echo "Compiling FaxWS"
-        docker-compose -f docker-compose.build.yml run builder ./bin/build-faxws.sh
+        docker-compose -f docker-compose.build.yml run --rm builder ./bin/build-faxws.sh
 
         echo "Building FaxWs Docker Image"
         docker-compose build faxws
