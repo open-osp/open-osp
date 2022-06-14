@@ -27,6 +27,9 @@ then
   docker-compose down -v
   rm -f local.env
 
+  # TODO: Use docker-compose instead of hacking together the name,
+  # or use 'docker volume prune'
+  # https://stackoverflow.com/a/46822373
   #dcid=$(pwd | grep -oh "[^/]*$" | sed "s/[^a-z\d_\-]//g")
   #docker volume rm ${dcid}_mariadb-files &> /dev/null
 
