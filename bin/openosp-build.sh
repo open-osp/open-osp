@@ -43,7 +43,7 @@ case "${COMMAND}" in
         else
           # Download drugref if we need it.
           echo "Retrieving current DrugRef2 binary"
-          docker run -v $(pwd):/code/ alpine sh -c "apk add curl && cd /code/ && curl -Lo $OSCAR_OUTPUT/drugref2.war $DRUGREF_WAR"
+          docker run --rm -v $(pwd):/code/ alpine sh -c "apk add curl && cd /code/ && curl -Lo $OSCAR_OUTPUT/drugref2.war $DRUGREF_WAR"
         fi
         docker-compose build oscar
         ;;
