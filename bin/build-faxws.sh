@@ -12,6 +12,8 @@ rm src/main/webapp/META-INF/context.xml
 
 echo "Build FaxWs with Maven..."
 
-mvn clean
-mvn package
-
+if [[ "${TEST_DURING_BUILD:-}" ]]; then
+  mvn clean package
+else
+  mvn -Dcheckstyle.skip -Dmaven.test.skip=true clean package
+fi
