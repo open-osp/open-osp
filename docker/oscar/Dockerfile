@@ -8,6 +8,7 @@ RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
 ENV LANG en_US.UTF-8  
 ENV LANGUAGE en_US:en  
 ENV LC_ALL en_US.UTF-8 
+
 RUN apt-get update \
     && apt-get install -y --no-install-recommends gettext \
     && apt-get clean
@@ -15,6 +16,10 @@ RUN apt-get update \
 # Use the TZ env var instead
 #RUN rm -f /etc/localtime \
 #    && ln -s /usr/share/zoneinfo/America/Vancouver /etc/localtime
+
+# Install required packages for wkhtmltopdf
+ADD ./bin/install_wkhtmltopdf_prereqs.sh /install_wkhtmltopdf_prereqs.sh
+RUN /install_wkhtmltopdf_prereqs.sh
 
 ADD oscar.war /usr/local/tomcat/webapps/oscar.war
 ADD drugref2.war /usr/local/tomcat/webapps/drugref2.war
