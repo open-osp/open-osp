@@ -22,6 +22,7 @@ gpg -k > /dev/null 2>&1
 # Workaround "The following signatures couldn't be verified because the public key is not available: NO_PUBKEY 8B48AD6246925553"
 # https://www.linuxfixes.com/2022/03/solved-repository-jessie-release-is-not.html
 # https://unix.stackexchange.com/questions/399027/gpg-keyserver-receive-failed-server-indicated-a-failure
+# https://raspberrypi.stackexchange.com/questions/12258/where-is-the-archive-key-for-backports-debian-org
 # Workaround "apt-key is deprecated"
 # https://askubuntu.com/questions/1295102/how-do-i-add-repo-gpg-keys-as-apt-key-is-deprecated
 # https://askubuntu.com/questions/1286545/what-commands-exactly-should-replace-the-deprecated-apt-key
@@ -71,7 +72,7 @@ apt-get -qq -y --no-install-recommends install libjpeg8 multiarch-support > /dev
 apt-get autoremove > /dev/null
 rm -f /tmp/gpgvnoexpkeysig
 rm -f $wheezy_key
-rm -f "$wheezy_key~" # gpg appears to generate a backup key of zero length for some reason
+rm -f $wheezy_key~ # gpg appears to generate a backup key of zero length for some reason
 rm -f /etc/apt/sources.list.d/snapshot.list
 rm -f /etc/apt/preferences.d/snapshot
 
