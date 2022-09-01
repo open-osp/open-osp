@@ -1,7 +1,7 @@
 #!/bin/sh
 
 ARCH=`uname -m`
-if [[ $ARCH == 'amd64' || $ARCH == 'aarch64' ]]; then
+if [[ $ARCH == 'arm64' || $ARCH == 'aarch64' ]]; then
   echo "Not pulling pre-built docker images as you are on an ARM machine; you'll need to build them yourself."
 else
   echo "Updating OpenOSP image and restarting. This only works if you are set to the release tag."
