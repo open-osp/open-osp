@@ -2,8 +2,8 @@
 
 set -uxo
 
-if [ -f "./local.env" ]; then
-    source ./local.env
+if [ -f './local.env' ]; then
+  source ./local.env
 fi
 
 ./bin/clone.sh ${OSCAR_REPO:-""} ${OSCAR_TREEISH:-""}
@@ -17,11 +17,11 @@ export MAVEN_OPTS="-Xms640m -Xmx640m -Xss512k -XX:NewRatio=4 -Djava.net.preferIP
 # this repository should have passed unit testing and mvn verify 
 # on the cis before being built here.
 if [[ "${TEST_DURING_BUILD:-}" ]]; then
-    mvn clean package
+  mvn clean package
 elif [[ "${DEVELOPMENT_MODE:-}" ]]; then
-    mvn -T 1C install --offline
+  mvn -T 1C install --offline
 else
-    mvn -Dcheckstyle.skip -Dmaven.test.skip=true clean package
+  mvn -Dcheckstyle.skip -Dmaven.test.skip=true clean package
 fi
 
 chmod 777 -R ./target/
