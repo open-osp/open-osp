@@ -45,7 +45,7 @@ case $COMPONENT in
         docker-compose build expedius
         ;;
     faxws)
-        echo "Compiling FaxWS"
+        echo "Compiling FaxWS warfile"
         docker-compose -f docker-compose.build.yml run --rm builder ./bin/build-faxws.sh
 
         echo "Building FaxWs Docker Image"
