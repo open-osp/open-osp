@@ -1,8 +1,10 @@
-version: '3'
+version: '3.3'
 
 services:
 
     builder:
+      pull_policy: never
+      image: openosp/builder
       build: docker/builder
       volumes:
         - .:/code
