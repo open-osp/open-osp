@@ -70,6 +70,8 @@
     -->
     <Connector port="8080" protocol="HTTP/1.1"
                connectionTimeout="20000"
+               relaxedPathChars="[]"
+               relaxedQueryChars="[]"
                redirectPort="8443" />
     <!-- A "Connector" using the shared thread pool-->
     <!--
@@ -98,6 +100,8 @@
        scheme="https"
        secure="true"
        SSLEnabled="true"
+       relaxedPathChars="[]"
+       relaxedQueryChars="[]"
        SSLCertificateFile="${catalina.base}/conf/ssl.crt"
        SSLCertificateChainFile="${catalina.base}/conf/chain.pem"
        SSLCertificateKeyFile="${catalina.base}/conf/ssl.key" 
