@@ -11,6 +11,7 @@ docker/oscar/*.war
 docker/oscar/oscar
 docker/faxws/faxws
 
+tmp/
 .vagrant
 .vagrant.v1.*
 .DS_Store

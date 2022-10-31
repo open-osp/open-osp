@@ -1,16 +1,15 @@
 #!/bin/bash
 
-
 set -uxo
 
-repo=${1:-https://countable@bitbucket.org/openoscar/oscar.git}
-branch=${2:-release/Oscar-BC-15}
+repo_name='oscar'
+repo_url=${1:-https://bitbucket.org/openoscar/oscar.git}
+repo_branch=${2:-release/Oscar-BC-15}
+repo_path='docker/oscar/oscar'
 
-echo "Cloning oscar from bitbucket"
-if [ -d "./docker/oscar/oscar" ]; then
-    echo "already cloned"
+echo "Cloning ${repo_name} from ${repo_url} to ${repo_path}"
+if [ -d $repo_path ]; then
+  echo "$repo_path already exists. Delete the directory if you want to recompile from scratch."
 else
-    git clone $repo docker/oscar/oscar
-    cd docker/oscar/oscar
-    git checkout $branch
+  git clone $repo_url $repo_path --branch $repo_branch
 fi

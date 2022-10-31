@@ -4,11 +4,13 @@ echo "Setting up database..."
 docker-compose up -d db
 sleep 10
 
-echo "Bringing up tomcat"
-docker-compose up -d oscar
+echo "Starting FaxWS..."
+docker-compose up -d faxws
 
-echo "expediting Expedius"
+echo "Expediting Expedius..."
 docker-compose up -d expedius
 
-echo "OSCAR is set up at http://<this host>/oscar"
+echo "Bringing up Oscar..."
+docker-compose up -d oscar
 
+echo "OSCAR is set up at http://<this host>/oscar"
