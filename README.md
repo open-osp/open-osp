@@ -127,27 +127,23 @@ Backup methods will create backups for the OSCAR EMR database and OscarDocuments
 ### Off Site Backups
 Off Site backups can be configured to use AWS S3 Buckets. First set up a AWS S3 bucket and an IAM user to authenticate. Be sure to write down the IAM access key, secret key, and bucket name information.
 
-1. Install AWS on the OSCAR Docker server
-```
-apt-get install awscli
-```
-2. Then run the AWS configuration script
+1. Run the AWS configuration script
 ```
 aws configure
 ```
-3. Set the BACKUP_BUCKET variable in the Docker `local.env` file to the name of the AWS bucket. Example:
+2. Set the BACKUP_BUCKET variable in the Docker `local.env` file to the name of the AWS bucket. Example:
 ```
 BACKUP_BUCKET="clinic-backupname"
 ```
-4. Also specify your clinic's name (as a slug) with CLINIC_NAME in the Docker `local.env`
+3. Also specify your clinic's name (as a slug) with CLINIC_NAME in the Docker `local.env`
 ```
 CLINIC_NAME=your_clinic_name
 ```
-5. Run the backup process 
+4. Run the backup process 
 ```
-./openosp backup -m
+./openosp backup -m --s3
 ```
-October 2020: This process is not Dockerized and automated at this time. However the manual script `./openosp backup -m` could be set to run on a cron job.
+October 2020: This process is not Dockerized and automated at this time. However the manual script `./openosp backup -m --s3` could be set to run on a cron job.
 
 ### HDC exporting can be done as:
 
