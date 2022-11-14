@@ -87,6 +87,14 @@ services:
     image: openosp/open-osp:2020.11.06
 ```
 
+OR to always use the latet release
+
+```
+services:
+  oscar:
+    image: openosp/open-osp:release
+```
+
 1. Run `git pull origin master` to ensure environment scripts are up to date.
 1. Run `openosp start`
 
