@@ -17,9 +17,11 @@ RUN apt-get update \
 #RUN rm -f /etc/localtime \
 #    && ln -s /usr/share/zoneinfo/America/Vancouver /etc/localtime
 
-# Install required packages for wkhtmltopdf
-ADD ./bin/install_wkhtmltopdf_prereqs.sh /install_wkhtmltopdf_prereqs.sh
-RUN /install_wkhtmltopdf_prereqs.sh
+# Install requirements for wkhtmltopdf
+# These were reverse engineered from the .deb package for Debian
+RUN apt-get update \
+    && apt-get -qq -y --no-install-recommends install ca-certificates fontconfig libc6 libfreetype6 libjpeg62-turbo libpng16-16 libssl1.1 libstdc++6 libx11-6 libxcb1 libxext6 libxrender1 xfonts-75dpi xfonts-base zlib1g \
+    && apt-get clean
 
 ADD oscar.war /usr/local/tomcat/webapps/oscar.war
 ADD drugref2.war /usr/local/tomcat/webapps/drugref2.war
