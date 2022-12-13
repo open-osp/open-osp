@@ -81,8 +81,8 @@ if [ ! -f ./volumes/oscar.properties ]; then
     cp docker/oscar/conf/oscar_mcmaster_on.properties ./volumes/oscar.properties
 
     # We also might want to use Oscar19 for Ontario builds
-    echo "OSCAR_TREEISH=oscar19.1" >> ./local.env
-    echo "OSCAR_REPO=https://countable@bitbucket.com/oscaremr/oscar.git" >> ./local.env
+    echo "OSCAR_TREEISH=stable" >> ./local.env
+    echo "OSCAR_REPO=https://bitbucket.com/oscaremr/oscar.git" >> ./local.env
   else
     echo "Using default BC properties"
     cp docker/oscar/conf/oscar_mcmaster_bc.properties ./volumes/oscar.properties
