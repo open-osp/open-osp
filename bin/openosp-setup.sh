@@ -128,7 +128,17 @@ ARCH=`uname -m`
 if [[ $ARCH == 'arm64' || $ARCH == 'aarch64' ]]; then
   echo "Not pulling pre-built docker images as you are on an ARM machine; you'll need to build them yourself."
 else
-  docker pull openosp/open-osp
-  docker pull openosp/expedius
-  docker pull openosp/faxws
+  if [[ $* == *--noinput* ]]; then
+    PULL=Y
+  else
+    read -p "Pull images? (Y or N)" PULL
+  fi
+  if [[ $PULL == Y ]]; then
+    docker pull openosp/open-osp
+    docker pull openosp/expedius
+    docker pull openosp/faxws
+  fi
 fi
+
+#REGION=on
+
