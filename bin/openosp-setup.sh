@@ -85,7 +85,7 @@ if [ ! -f ./volumes/oscar.properties ]; then
     echo "logintitle=${CLINIC_NAME}" >> ./volumes/oscar.properties
     echo "logintext=${CLINIC_TEXT} ${CLINIC_LINK}" >> ./volumes/oscar.properties
     echo "CLINIC_LINK=${CLINIC_LINK}" >> ./volumes/oscar.properties
-    THE_DATE=date
+    THE_DATE=$(date +"%Y.%m.%d")
     echo "buildDateTime=${THE_DATE}" >> ./volumes/oscar.properties
     echo "buildtag=OpenOSPdocker" >> ./volumes/oscar.properties
     
