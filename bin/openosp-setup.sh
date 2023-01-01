@@ -78,8 +78,12 @@ if [ ! -f ./volumes/oscar.properties ]; then
   if [ $LOCATION == 'ontario' ]
   then
     echo "Using Ontario properties"
-    cp docker/oscar/conf/oscar_mcmaster_on.properties ./volumes/oscar.properties
-
+    cp docker/oscar/conf/oscar_mcmaster_phc.properties ./volumes/oscar.properties
+    echo "logintitle=${CLINIC_NAME}" >> ./volumes/oscar.properties
+    echo "logintext=${CLINIC_TEXT} ${CLINIC_LINK}" >> ./volumes/oscar.properties
+    echo "CLINIC_LINK=${CLINIC_LINK}" >> ./volumes/oscar.properties
+    echo "TAB_NAME=${TAB_NAME}" >> ./volumes/oscar.properties
+    
     # We also might want to use Oscar19 for Ontario builds
     echo "OSCAR_TREEISH=stable" >> ./local.env
     echo "OSCAR_REPO=https://bitbucket.com/oscaremr/oscar.git" >> ./local.env
