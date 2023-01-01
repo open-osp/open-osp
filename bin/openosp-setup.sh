@@ -70,6 +70,9 @@ if [ ! -f local.env ]; then
   echo "LOCATION=${LOCATION}" >> ./local.env
 else
   echo "local.env exists, not configuring."
+  CLINIC_NAME=OSCAR CLINIC
+  CLINIC_TEXT=
+  CLINIC_LINK=
 fi
 
 # if this is a fresh install
@@ -82,7 +85,9 @@ if [ ! -f ./volumes/oscar.properties ]; then
     echo "logintitle=${CLINIC_NAME}" >> ./volumes/oscar.properties
     echo "logintext=${CLINIC_TEXT} ${CLINIC_LINK}" >> ./volumes/oscar.properties
     echo "CLINIC_LINK=${CLINIC_LINK}" >> ./volumes/oscar.properties
-    echo "TAB_NAME=${TAB_NAME}" >> ./volumes/oscar.properties
+    THE_DATE=date
+    echo "buildDateTime=${THE_DATE}" >> ./volumes/oscar.properties
+    echo "buildtag=OpenOSPdocker" >> ./volumes/oscar.properties
     
     # We also might want to use Oscar19 for Ontario builds
     echo "OSCAR_TREEISH=stable" >> ./local.env
