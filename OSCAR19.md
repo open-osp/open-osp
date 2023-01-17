@@ -14,6 +14,8 @@ Then, edit your local.env (2nd/3rd lines) with
 ```
 OSCAR_TREEISH="stable"
 OSCAR_REPO="https://bitbucket.org/oscaremr/oscar.git"
+
+LOCATION=ontario
 ```
 
 Now run:
