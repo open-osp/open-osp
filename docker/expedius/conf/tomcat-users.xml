@@ -27,5 +27,5 @@
   <!.. ..> that surrounds them.
 -->
 <role rolename="expedius"/>
-<user username="" password="" roles="expedius"/>
+
 </tomcat-users>
