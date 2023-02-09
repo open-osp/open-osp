@@ -49,5 +49,15 @@ RUN mkdir -p /var/lib/bc-integrator/export
 
 ADD ./entrypoint.sh /entrypoint.sh
 
+RUN groupadd --gid 10001 oscar \ 
+    && useradd --uid 10001 oscar \
+        --gid 10001 --create-home --home-dir /home/oscar \
+    && chown -R oscar:oscar /usr/local/tomcat/ \
+    && chown -R oscar:oscar /var/lib/ \
+    && chown -R oscar:oscar /usr/local/openjdk-8/lib/security/ \
+    && chown oscar:oscar /startup.sh
+
+USER oscar
+
 ENTRYPOINT [ "/entrypoint.sh" ]
 CMD ["/startup.sh"]
