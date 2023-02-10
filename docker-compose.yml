@@ -4,7 +4,7 @@ services:
 
     db:
       restart: 'always'
-      image: mariadb:10.5
+      image: local-db
       command: 'mysqld --character-set-server=utf8 --collation-server=utf8_general_ci'
       working_dir: /code
       env_file:
@@ -13,12 +13,10 @@ services:
         MYSQL_DATABASE: drugref2
         MYSQL_USER: oscar
         TZ: America/Vancouver
+      user: "999"
       volumes:
-        # TODO: build this in to the image.
-        - ./docker/db/my.cnf:/etc/mysql/my.cnf
-        # TODO: build some scripts in so we need not mount everything.
-        - .:/code
         - mariadb-files:/var/lib/mysql
+        - ./docker/oscar/oscar/database/mysql:/code/docker/oscar/oscar/database/mysql
       networks:
         - back-tier
       deploy:
@@ -29,15 +27,17 @@ services:
 
     oscar:
       restart: 'always'
-      image: openosp/open-osp:latest
+      image: local-oscar
       build: docker/oscar
+      user: "10001:10001"
       volumes:
-        - ./volumes/oscar.properties:/root/oscar.properties
-        - ./volumes/drugref2.properties:/root/drugref2.properties
+        - ./volumes/oscar.properties:/home/oscar/oscar.properties
+        - ./volumes/drugref2.properties:/home/oscar/drugref2.properties
         - ./volumes/OscarDocument:/var/lib/OscarDocument
         - ./volumes/ssl.crt:/usr/local/tomcat/conf/ssl.crt
         - ./volumes/ssl.key:/usr/local/tomcat/conf/ssl.key
         - ./volumes/chain.pem:/usr/local/tomcat/conf/chain.pem
+        - ./volumes/context.xml:/usr/local/tomcat/conf/context.xml
         # Add other volumes to the volumes/ folder, and mount them via docker-compose.override.yml
       networks:
         - back-tier
@@ -53,8 +53,9 @@ services:
 
     expedius:
       restart: 'always'
-      image: openosp/expedius:latest
+      image: local-expedius
       build: docker/expedius
+      user: "10001:10001"
       volumes:
         - ./volumes/ssl.crt:/usr/local/tomcat/conf/ssl.crt
         - ./volumes/ssl.key:/usr/local/tomcat/conf/ssl.key

@@ -26,10 +26,10 @@ docker-compose exec db mysql -h localhost -uroot -p$MYSQL_ROOT_PASSWORD -e "crea
 # Run migrations
 # [cvo] use sql bootstrap instead for now.
 #docker-compose exec faxws bash -c "cd /usr/local/tomcat/webapps/faxWs/META-INF/maven/oscarFax/FaxWs && mvn flyway:migrate -Dflyway.user=root -Dflyway.password=tzcbU/u87wM= -Dflyway.url=jdbc:mysql://db/oscarFax"
-docker-compose cp faxws:/create_database.sql _bootstrap.sql
+# docker-compose cp faxws:/create_database.sql _bootstrap.sql
 
-docker-compose exec db bash -c "mysql -h localhost -uroot -p$MYSQL_ROOT_PASSWORD OscarFax < _bootstrap.sql"
-rm _bootstrap.sql
+docker-compose exec db bash -c "mysql -h localhost -uroot -p$MYSQL_ROOT_PASSWORD OscarFax < bootstrap-faxws.sql"
+# rm _bootstrap.sql
 
 echo "Setting authentication database..."
 docker-compose exec db mysql -h localhost -uroot -p$MYSQL_ROOT_PASSWORD OscarFax -e "insert into users Values('$tomcatUser','$tomcatPassword')"
