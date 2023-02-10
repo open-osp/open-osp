@@ -93,7 +93,7 @@ if [ ! -f ./volumes/oscar.properties ]; then
   echo "db_password=${DB_PASSWORD}" >> ./volumes/oscar.properties
 
   sed '/db_username/d' ./volumes/oscar.properties
-  echo "db_username=root" >> ./volumes/oscar.properties
+  echo "db_username=oscar" >> ./volumes/oscar.properties
 
 fi
 
