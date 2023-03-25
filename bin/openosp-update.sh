@@ -10,5 +10,5 @@ else
   docker pull openosp/expedius:latest
   docker pull openosp/faxws:latest
 
-  docker-compose --compatibility up -d
+  docker compose  --compatibility up -d
 fi

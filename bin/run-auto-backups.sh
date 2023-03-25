@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker-compose up --build -d backups
+docker compose  up --build -d backups

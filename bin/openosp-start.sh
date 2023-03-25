@@ -2,7 +2,7 @@
 
 echo "Starting OpenOSP services."
 
-dc="docker-compose --compatibility"
+dc="docker compose  --compatibility"
 $dc stop oscar
 $dc rm -f oscar
 

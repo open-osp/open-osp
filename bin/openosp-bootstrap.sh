@@ -6,11 +6,11 @@ then
 fi
 
 echo "Setting up database..."
-docker-compose up -d db
+docker compose up -d db
 sleep 10
 
-docker-compose -f docker-compose.build.yml run --rm builder ./bin/clone.sh ${OSCAR_REPO:-""} ${OSCAR_TREEISH:-""}
-docker-compose exec db ./bin/populate-db.sh ${LOCATION:-""}
+docker compose -f docker-compose.build.yml run --rm builder ./bin/clone.sh ${OSCAR_REPO:-""} ${OSCAR_TREEISH:-""}
+docker compose exec db ./bin/populate-db.sh ${LOCATION:-""}
 
 ./bin/setup-faxws.sh
 

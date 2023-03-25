@@ -17,17 +17,17 @@ then
   rm -f docker/oscar/*.war
 
   echo "Removing volumes"
-  docker-compose -f docker-compose.build.yml run --rm builder rm -fr volumes/*
+  docker compose  -f docker-compose.build.yml run --rm builder rm -fr volumes/*
 
   echo "Removing local files (Docker settings, Environment variables)"
   rm -fr ./docker-compose.override.yml
-  docker-compose -f docker-compose.build.yml run --rm builder rm -fr oscar
-  docker-compose -f docker-compose.build.yml run --rm builder rm -fr docker/oscar/oscar
-  docker-compose -f docker-compose.build.yml run --rm builder rm -fr docker/faxws/faxws
-  docker-compose down -v
+  docker compose  -f docker-compose.build.yml run --rm builder rm -fr oscar
+  docker compose  -f docker-compose.build.yml run --rm builder rm -fr docker/oscar/oscar
+  docker compose  -f docker-compose.build.yml run --rm builder rm -fr docker/faxws/faxws
+  docker compose  down -v
   rm -f local.env
 
-  # TODO: Use docker-compose instead of hacking together the name,
+  # TODO: Use docker compose  instead of hacking together the name,
   # or use 'docker volume prune'
   # https://stackoverflow.com/a/46822373
   #dcid=$(pwd | grep -oh "[^/]*$" | sed "s/[^a-z\d_\-]//g")
