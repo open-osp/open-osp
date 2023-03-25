@@ -3,12 +3,12 @@
 set -x
 
 # start up Expedius again on any exit of this script.
-trap 'docker-compose start expedius' EXIT
+trap 'docker compose  start expedius' EXIT
 
 # Do not execute this script during production hours.
 
 # stop Expedius to avoid connection timeouts with OSCAR during the backup process.
-docker-compose stop expedius
+docker compose  stop expedius
 
 if [ -z "$BACKUP_BUCKET" ]
 then
@@ -64,7 +64,7 @@ if [[ $* == *--efs* ]]; then
 fi
 
 if [[ $* == *--hdc* ]]; then
-    docker-compose exec -T db mysqldump -uroot -p${MYSQL_PASSWORD} oscar \
+    docker compose  exec -T db mysqldump -uroot -p${MYSQL_PASSWORD} oscar \
     allergies \
     appointment \
     appointmentType \
@@ -104,12 +104,12 @@ fi
 
 if [[ $* == *--archive-logs* ]]; then
     ARCHIVE_NAME=log_archive_$(date +"%d-%m-%y").sql
-    docker-compose exec -T db mysqldump -uroot -p${MYSQL_ROOT_PASSWORD} oscar log > $ARCHIVE_NAME
+    docker compose  exec -T db mysqldump -uroot -p${MYSQL_ROOT_PASSWORD} oscar log > $ARCHIVE_NAME
     mv $ARCHIVE_NAME volumes/OscarDocument/oscar/
-    docker-compose exec -T db mysql -uroot -p${MYSQL_ROOT_PASSWORD} oscar < bin/archive-logs.sql
+    docker compose  exec -T db mysql -uroot -p${MYSQL_ROOT_PASSWORD} oscar < bin/archive-logs.sql
 fi
 
 # restart OSCAR.
-docker-compose restart oscar
+docker compose  restart oscar
 
 

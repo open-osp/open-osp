@@ -54,7 +54,7 @@ EOF
 }
 
 toLower() {
-    echo $(echo ${@} | tr '[:upper:]' '[:lower:]')
+    echo $(echo "${@}" | tr '[:upper:]' '[:lower:]')
 }
 
 #=============================================================================
@@ -94,7 +94,7 @@ case "${COMMAND}" in
         ./bin/openosp-update.sh $2 $3
         ;;
     health)
-        docker-compose -f docker-compose.admin.yml run health
+        docker compose  -f docker-compose.admin.yml run health
         ;;
     *)
         usage

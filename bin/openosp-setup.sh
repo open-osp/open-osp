@@ -106,7 +106,7 @@ if [ ! -f ./volumes/drugref2.properties ]; then
 fi
 
 if [ ! -f docker-compose.override.yml ]; then
-  echo "copying docker-compose dev template"
+  echo "copying docker compose  dev template"
   cp dc.dev.yml docker-compose.override.yml
 fi
 

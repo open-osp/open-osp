@@ -7,7 +7,7 @@ This repo was originally based on [scoophealth (UVIC)](https://github.com/scooph
 Both the more recent [OpenOscar](https://bitbucket.org/openoscar/oscar) which is also maintained by OpenOSP, and original [Oscar Community Edition](https://bitbucket.org/oscaremr) can be built.
 
 ## Quickstart
-  * Install Docker and docker-compose
+  * Install Docker and docker compose 
   * `git clone https://github.com/open-osp/open-osp.git` (master is the stable branch to use)
   * `cd open-osp`
   * `./openosp setup`
@@ -157,7 +157,7 @@ Add a cronjob for the export to /etc/crontab. ie `55 9    * * *   jenkins cd /ho
 
 For CPCSSN, follow the instructions here (private repo) https://github.com/cpcssn-mt/osp-extract.git, update env vars in docker-compose.override.yml, and run
 
-`docker-compose run docker-compose.admin.yml cpcssn`
+`docker compose  run docker-compose.admin.yml cpcssn`
 
 ### Manual Backups
 To run a manual backup for both local and remote (if avaialble)
@@ -192,7 +192,7 @@ In your environment, override the volume in the `db:` service in `docker-compose
 ```
 Reload the database container
 ```
-docker-compose up -d db
+docker compose  up -d db
 ```
 ## Log Access
 Logs are no longer found in the usual OSCAR server locations: /var/lib/logs/catalina.out, /var/log/mysql.error, etc... Logs are managed and redirected through each Docker container's stdout. Up to 3 days of history is available. 
@@ -201,7 +201,7 @@ Logs are no longer found in the usual OSCAR server locations: /var/lib/logs/cata
 To tail OSCAR logs
 
 ```
-docker-compose ps
+docker compose  ps
 ```
 note the Docker container name for the OSCAR container then
 
@@ -212,7 +212,7 @@ docker logs --tail=3000 -f oscar-docker-containername
 To tail MariaDB logs
 
 ```
-docker-compose ps
+docker compose  ps
 ```
 note the Docker container name for the DB container then
 
@@ -223,7 +223,7 @@ docker logs --tail=3000 -f db-docker-containername
 To dump all the log history for any container: 
 
 ```
-docker-compose ps
+docker compose  ps
 ```
 note the Docker container name for the logs to be dumped
 
@@ -255,7 +255,7 @@ and visit http://localhost:8080
 ## Prerequisites
 * GIT
 * Docker
-* docker-compose
+* docker compose 
 
 ## Docker Image
 
@@ -291,7 +291,7 @@ Shut down Oscar
 
 ```
 cd /home/jenkins/workspace/clinicname
-docker-compose stop oscar
+docker compose  stop oscar
 ```
 
 To package up an installation, use lz4
@@ -334,7 +334,7 @@ cd openosp
 cd docker/oscar/oscar
 git pull
 
-docker-compose exec db bash
+docker compose  exec db bash
 # This will open the database container and inside
 > mysql -uroot -p{PASSWORD} oscar < docker/oscar/oscar/database/mysql/updates/{UPDATE_FILE_NAME}
 # Repeat the above step for the other latest updates

@@ -8,7 +8,7 @@ COMPONENT=$1
 
 if [[ $* == *--test* ]]; then
     export TEST_DURING_BUILD=1
-    docker-compose up -d db # Need database to be up so it can run tests
+    docker compose  up -d db # Need database to be up so it can run tests
 elif [[ $* == *--dev* ]]; then
     export DEVELOPMENT_MODE=1
 elif [[ $2 != *--* ]]; then
@@ -22,7 +22,7 @@ case $COMPONENT in
         # Using an existing warfile or compiling from scratch?
         if [ -z $WARFILE ]; then
             echo "Compiling OSCAR warfile. This may take some time...."
-            docker-compose -f docker-compose.build.yml run --rm builder ./bin/build-oscar.sh
+            docker compose  -f docker-compose.build.yml run --rm builder ./bin/build-oscar.sh
             mv $OSCAR_OUTPUT/oscar/target/oscar-*-SNAPSHOT.war $OSCAR_OUTPUT/oscar.war
         else
             mkdir -p $OSCAR_OUTPUT
@@ -38,17 +38,17 @@ case $COMPONENT in
         fi
 
         echo "Building Oscar Docker Image"
-        docker-compose build oscar
+        docker compose  build oscar
         ;;
     expedius)
         echo "Building Expedius Docker Image"
-        docker-compose build expedius
+        docker compose  build expedius
         ;;
     faxws)
         echo "Compiling FaxWS warfile"
-        docker-compose -f docker-compose.build.yml run --rm builder ./bin/build-faxws.sh
+        docker compose  -f docker-compose.build.yml run --rm builder ./bin/build-faxws.sh
 
         echo "Building FaxWs Docker Image"
-        docker-compose build faxws
+        docker compose  build faxws
         ;;
 esac

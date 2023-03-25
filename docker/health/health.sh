@@ -7,7 +7,7 @@ ping -c 1 db
 ping -c 1 oscar
 
 
-#if [ -z $(docker-compose ps | grep faxws) ]; then
+#if [ -z $(docker compose  ps | grep faxws) ]; then
 #    echo "skipping faxws, not defined."
 #else
     ping -c 1 faxws
