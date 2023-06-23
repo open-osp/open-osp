@@ -1,4 +1,4 @@
-FROM tomcat:9.0.71-jre8
+FROM tomcat:9.0.76-jdk8-corretto
 
 RUN apt-get update \
 #    && apt-get install -y maven \
