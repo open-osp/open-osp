@@ -111,15 +111,7 @@ If delete the local Oscar source code, with `openosp purge`. WARNING: never run 
 ## Using other OSCAR Versions
 By default, the most current release version of Open OSCAR is used when setting up the environment. It is possible to use other versions of Oscar.
 
-If you want to use other versions, you can change the `OSCAR_TREEISH` value from any branch in 
-`https://bitbucket.org/oscaremr/oscar/branches/`
-
-## OSCAR Devlopment Branch
-To use the OSCAR Development branch, on your local.env file, add the following
-```
-OSCAR_TREEISH=oscarDev
-OSCAR_REPO=git@bitbucket.org:oscaremr/oscar.git
-```
+If you want to use other versions, you can change the `OSCAR_TREEISH` value to any other GIT repository
 
 ## OSCAR Backups
 Backup methods will create backups for the OSCAR EMR database and OscarDocuments.
