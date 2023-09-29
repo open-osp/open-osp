@@ -242,8 +242,6 @@ To enable melody performance profiling, run the following script.
 ./bin/setup-melody.sh
 ```
 
-and visit http://localhost:8080
-
 ## Prerequisites
 * GIT
 * Docker
