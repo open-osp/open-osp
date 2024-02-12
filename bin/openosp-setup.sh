@@ -70,6 +70,9 @@ if [ ! -f local.env ]; then
   echo "LOCATION=${LOCATION}" >> ./local.env
 else
   echo "local.env exists, not configuring."
+  CLINIC_NAME=OSCAR CLINIC
+  CLINIC_TEXT=
+  CLINIC_LINK=
 fi
 
 # if this is a fresh install
@@ -78,11 +81,17 @@ if [ ! -f ./volumes/oscar.properties ]; then
   if [ $LOCATION == 'ontario' ]
   then
     echo "Using Ontario properties"
-    cp docker/oscar/conf/oscar_mcmaster_on.properties ./volumes/oscar.properties
-
+    cp docker/oscar/conf/oscar_mcmaster_phc.properties ./volumes/oscar.properties
+    echo "logintitle=${CLINIC_NAME}" >> ./volumes/oscar.properties
+    echo "logintext=${CLINIC_TEXT} ${CLINIC_LINK}" >> ./volumes/oscar.properties
+    echo "CLINIC_LINK=${CLINIC_LINK}" >> ./volumes/oscar.properties
+    THE_DATE=$(date +"%Y.%m.%d")
+    echo "buildDateTime=${THE_DATE}" >> ./volumes/oscar.properties
+    echo "buildtag=OpenOSPdocker" >> ./volumes/oscar.properties
+    
     # We also might want to use Oscar19 for Ontario builds
-    echo "OSCAR_TREEISH=oscar19.1" >> ./local.env
-    echo "OSCAR_REPO=https://countable@bitbucket.com/oscaremr/oscar.git" >> ./local.env
+    echo "OSCAR_TREEISH=stable" >> ./local.env
+    echo "OSCAR_REPO=https://bitbucket.com/oscaremr/oscar.git" >> ./local.env
   else
     echo "Using default BC properties"
     cp docker/oscar/conf/oscar_mcmaster_bc.properties ./volumes/oscar.properties
@@ -128,7 +137,17 @@ ARCH=`uname -m`
 if [[ $ARCH == 'arm64' || $ARCH == 'aarch64' ]]; then
   echo "Not pulling pre-built docker images as you are on an ARM machine; you'll need to build them yourself."
 else
-  docker pull openosp/open-osp
-  docker pull openosp/expedius
-  docker pull openosp/faxws
+  if [[ $* == *--noinput* ]]; then
+    PULL=Y
+  else
+    read -p "Pull images? (Y or N)" PULL
+  fi
+  if [[ $PULL == Y ]]; then
+    docker pull openosp/open-osp
+    docker pull openosp/expedius
+    docker pull openosp/faxws
+  fi
 fi
+
+#REGION=on
+
