@@ -18,10 +18,17 @@ RUN apt-get update \
 #    && ln -s /usr/share/zoneinfo/America/Vancouver /etc/localtime
 
 # Install requirements for wkhtmltopdf
-# These were reverse engineered from the .deb package for Debian
+# TODO this needs to be adapted to execute in different environments than just Ubuntu Jammy.
+
+# UBUNTU Jammy
 RUN apt-get update \
-    && apt-get -qq -y --no-install-recommends install ca-certificates fontconfig libc6 libfreetype6 libjpeg62-turbo libpng16-16 libssl1.1 libstdc++6 libx11-6 libxcb1 libxext6 libxrender1 xfonts-75dpi xfonts-base zlib1g \
-    && apt-get clean
+    && apt-get -qq -y --no-install-recommends install ca-certificates fontconfig libc6 libfreetype6 libjpeg-turbo8 libpng16-16 libssl3 libstdc++6 libx11-6 libxcb1 libxext6 libxrender1 xfonts-75dpi xfonts-base zlib1g \
+    && apt-get clean;
+
+# Other debian installs
+#RUN apt-get update \
+#    && apt-get -qq -y --no-install-recommends install ca-certificates fontconfig libc6 libfreetype6 libjpeg62-turbo libpng16-16 libssl1.1 libstdc++6 libx11-6 libxcb1 libxext6 libxrender1 xfonts-75dpi xfonts-base zlib1g \
+#    && apt-get clean;
 
 ADD oscar.war /usr/local/tomcat/webapps/oscar.war
 ADD drugref2.war /usr/local/tomcat/webapps/drugref2.war
