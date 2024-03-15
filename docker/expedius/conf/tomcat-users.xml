@@ -26,6 +26,4 @@
   and thus are ignored when reading this file. Do not forget to remove
   <!.. ..> that surrounds them.
 -->
-<role rolename="expedius"/>
-<user username="" password="" roles="expedius"/>
 </tomcat-users>
