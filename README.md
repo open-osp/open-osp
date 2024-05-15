@@ -265,10 +265,6 @@ cd /home/jenkins
 tar -I 
 ```
 
-## Host Architecture
-
-[host architecture pdf](!./host-architecture.pdf)
-
 ## Migrating
 
 To migrate an environment across servers, these are the stateful items to move
