@@ -41,7 +41,7 @@ The goal of this repo is to provide a hosting-agnostic (Dockerized) toolkit for 
 ## Scope
 What does this repo do?
 
-* Builds OSCAR from source, for usage locally or to published to DockerHub for use by others.
+* Builds OSCAR from source, for usage locally or to publish to DockerHub for use by others.
 * Bootstraps a MariaDB database from the same source code as you built from.
 * Runs a new containerized OSCAR environment including database, in one command (from source or from a tested image).
 * Runs DrugRef locally.
