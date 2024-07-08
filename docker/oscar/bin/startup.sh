@@ -9,7 +9,7 @@ set -euxo
 catalina.sh start
 
 # move here to make sure that webapps/oscar is created 
-#mv /tmp/melody-web.xml /usr/local/tomcat/webapps/oscar/WEB-INF/web.xml
+# mv /tmp/melody-web.xml /usr/local/tomcat/webapps/oscar/WEB-INF/web.xml
 
 tail -f /usr/local/tomcat/logs/catalina.out
 

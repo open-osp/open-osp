@@ -1,4 +1,4 @@
-FROM tomcat:9.0.56-jre8
+FROM tomcat:9.0.86-jre8
 
 # Set the locale
 RUN apt-get update && apt-get install -y locales curl iputils-ping
@@ -18,10 +18,17 @@ RUN apt-get update \
 #    && ln -s /usr/share/zoneinfo/America/Vancouver /etc/localtime
 
 # Install requirements for wkhtmltopdf
-# These were reverse engineered from the .deb package for Debian
+# TODO this needs to be adapted to execute in different environments than just Ubuntu Jammy.
+
+# UBUNTU Jammy
 RUN apt-get update \
-    && apt-get -qq -y --no-install-recommends install ca-certificates fontconfig libc6 libfreetype6 libjpeg62-turbo libpng16-16 libssl1.1 libstdc++6 libx11-6 libxcb1 libxext6 libxrender1 xfonts-75dpi xfonts-base zlib1g \
-    && apt-get clean
+    && apt-get -qq -y --no-install-recommends install ca-certificates fontconfig libc6 libfreetype6 libjpeg-turbo8 libpng16-16 libssl3 libstdc++6 libx11-6 libxcb1 libxext6 libxrender1 xfonts-75dpi xfonts-base zlib1g \
+    && apt-get clean;
+
+# Other debian installs
+#RUN apt-get update \
+#    && apt-get -qq -y --no-install-recommends install ca-certificates fontconfig libc6 libfreetype6 libjpeg62-turbo libpng16-16 libssl1.1 libstdc++6 libx11-6 libxcb1 libxext6 libxrender1 xfonts-75dpi xfonts-base zlib1g \
+#    && apt-get clean;
 
 ADD oscar.war /usr/local/tomcat/webapps/oscar.war
 ADD drugref2.war /usr/local/tomcat/webapps/drugref2.war
@@ -32,7 +39,8 @@ ADD ./conf/oscar_mcmaster_bc.properties /root/oscar.properties
 ADD ./conf/tomcat-users.xml /usr/local/tomcat/conf/tomcat-users.xml
 ADD ./conf/drugref2.properties /root/drugref2.properties
 ADD ./conf/server.xml /usr/local/tomcat/conf/server.xml
-ADD ./melody-web.xml /tmp/melody-web.xml
+ADD ./conf/context.xml /usr/local/tomcat/conf/context.xml
+# ADD ./melody-web.xml /tmp/melody-web.xml
 
 #clean out Tomcat garbage from the ROOT folder
 RUN rm -rf /usr/local/tomcat/webapps/ROOT/*.*

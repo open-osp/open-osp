@@ -41,7 +41,7 @@ The goal of this repo is to provide a hosting-agnostic (Dockerized) toolkit for 
 ## Scope
 What does this repo do?
 
-* Builds OSCAR from source, for usage locally or to published to DockerHub for use by others.
+* Builds OSCAR from source, for usage locally or to publish to DockerHub for use by others.
 * Bootstraps a MariaDB database from the same source code as you built from.
 * Runs a new containerized OSCAR environment including database, in one command (from source or from a tested image).
 * Runs DrugRef locally.
@@ -111,15 +111,7 @@ If delete the local Oscar source code, with `openosp purge`. WARNING: never run 
 ## Using other OSCAR Versions
 By default, the most current release version of Open OSCAR is used when setting up the environment. It is possible to use other versions of Oscar.
 
-If you want to use other versions, you can change the `OSCAR_TREEISH` value from any branch in 
-`https://bitbucket.org/oscaremr/oscar/branches/`
-
-## OSCAR Devlopment Branch
-To use the OSCAR Development branch, on your local.env file, add the following
-```
-OSCAR_TREEISH=oscarDev
-OSCAR_REPO=git@bitbucket.org:oscaremr/oscar.git
-```
+If you want to use other versions, you can change the `OSCAR_TREEISH` value to any other GIT repository
 
 ## OSCAR Backups
 Backup methods will create backups for the OSCAR EMR database and OscarDocuments.
@@ -250,8 +242,6 @@ To enable melody performance profiling, run the following script.
 ./bin/setup-melody.sh
 ```
 
-and visit http://localhost:8080
-
 ## Prerequisites
 * GIT
 * Docker
@@ -274,10 +264,6 @@ To package up an installation
 cd /home/jenkins
 tar -I 
 ```
-
-## Host Architecture
-
-[host architecture pdf](!./host-architecture.pdf)
 
 ## Migrating
 
