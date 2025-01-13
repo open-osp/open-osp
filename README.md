@@ -1,10 +1,8 @@
 # Open OSP
 
-This project was developed during the formation of the [Open OSP](https://openosp.ca) Service Cooperative. It is a set of open source software tools for deploying and running the Open Source Electronic Medical Record (OSCAR EMR) for Canadian family physicians.
+This project was developed during the formation of the [Open OSP Service Cooperative (OpenOSP)](https://openosp.ca). It is a set of open source software tools for deploying and running software based on Open Source Electronic Medical Record (OSCAR) for Canadian family physicians: [Open-O (also maintained by OpenOSP)](https://github.com/open-osp/Open-O) or [OSCAR Community Edition](https://bitbucket.org/oscaremr) 
 
-This repo was originally based on [scoophealth (UVIC)](https://github.com/scoophealth/oscar-latest-docker)'s fork of [Bell Eapen's](http://nuchange.ca) [Oscar in a Box](https://github.com/dermatologist/oscar-latest-docker).
-
-Both the more recent [OpenOscar](https://bitbucket.org/openoscar/oscar) which is also maintained by OpenOSP, and original [Oscar Community Edition](https://bitbucket.org/oscaremr) can be built.
+This repo is based on [scoophealth (UVIC)](https://github.com/scoophealth/oscar-latest-docker)'s fork of [Bell Eapen's](http://nuchange.ca) [Oscar in a Box](https://github.com/dermatologist/oscar-latest-docker).
 
 ## Quickstart
   * Install Docker and docker compose 
