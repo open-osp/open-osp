@@ -60,7 +60,7 @@ if [ ! -f local.env ]; then
   fi
 
   echo "## Title name in browser tabs (default: OSCAR EMR)" >> ./local.env
-  if [ -z ${TAB_NAME} ];
+  if [ -z "${TAB_NAME}" ];
     then
     	echo "TAB_NAME=\"OSCAR EMR\"" >> ./local.env
 	else
@@ -75,7 +75,7 @@ fi
 # if this is a fresh install
 if [ ! -f ./volumes/oscar.properties ]; then
   echo "copying oscar properties template"
-  if [ $LOCATION == 'ontario' ]
+  if [ "$LOCATION" == 'ontario' ]
   then
     echo "Using Ontario properties"
     cp docker/oscar/conf/oscar_mcmaster_on.properties ./volumes/oscar.properties
@@ -102,7 +102,7 @@ if [ ! -f ./volumes/drugref2.properties ]; then
   cp docker/oscar/conf/drugref2.properties ./volumes/drugref2.properties
 
   echo "Using generated password in Drugref properties file"
-  sed -i "s/^[ ]*[#]*[ ]*db_password=.*/db_password=${DB_PASSWORD}/" ./volumes/drugref2.properties
+  sed -i "s|^[ ]*[#]*[ ]*db_password=.*|db_password=${DB_PASSWORD}|" ./volumes/drugref2.properties
 fi
 
 if [ ! -f docker-compose.override.yml ]; then
