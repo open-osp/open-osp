@@ -4,6 +4,13 @@
 # only set debug logging when absolutely needed
 # set -x
 
+# otherwise use the minimal log entries
+# Function to log messages with timestamp
+log() {
+    echo "$(date '+%Y-%m-%d %H:%M:%S') $1"
+}
+
+# set global variables
 site=$(pwd | grep -oh "[^/]*$")
 filename=$site.$(date +%Y%m%d-%H%M%S)
 folder=$(date +%Y%m)
@@ -14,13 +21,13 @@ if [[ $* == *--hdc* ]]; then
     # check for AWS connection
     if [ -e "$HOME/.aws/credentials" ]
     then
-        echo "aws credentials found."
+        log "aws credentials found."
     else
-        echo "no ~/.aws/credentials file found. please mount one for me."
+        log "ERROR: no ~/.aws/credentials file found. please mount one for me."
         exit 1
     fi
 
-    echo "Executing HDC export for: $site"
+    log "Executing HDC export for: $site"
     docker compose exec -T db mysqldump -uroot -p"${MYSQL_PASSWORD}" --skip-triggers oscar \
     allergies \
     appointment \
@@ -59,9 +66,9 @@ if [[ $* == *--hdc* ]]; then
     rm hdc-$filename.sql.gpg hdc-$filename.sql
 
     if [ $? -eq 0 ]; then
-      echo "HDC export for $site completed"
+      lg "HDC export for $site completed"
     else
-      echo "HDC export for $site failed. Enable debug log for more information"
+      log "ERROR: HDC export for $site failed. Enable debug log for more information"
     fi
 
     # Exit the script immediately
@@ -80,47 +87,47 @@ docker compose stop expedius
 if [ -z "$BACKUP_BUCKET" ]
 then
     BACKUP_BUCKET=backups
-    echo "BACKUP_BUCKET env var not specified, defaulting to the 'backups' bucket."
+    log "WARN: BACKUP_BUCKET env var not specified, defaulting to the 'backups' bucket."
 fi
 
 if [ -z "$BACKUP_CMD" ]
 then
     BACKUP_CMD="mysqldump -u root -p${MYSQL_ROOT_PASSWORD} oscar"
-    echo "BACKUP_CMD env var not specified, executing default backup command."
+    log "WARN: BACKUP_CMD env var not specified, executing default backup command."
 fi
 
 # no AWS account. No go.
 if [ -e "$HOME/.aws/credentials" ]
 then
-    echo "aws credentials found."
+    log "aws credentials found."
 else
-    echo "no ~/.aws/credentials file found. please mount one for me."
+    log "ERROR: no ~/.aws/credentials file found. please mount one for me."
     exit 1
 fi
 
 if [ -z "$DUMP_LOCATION" ]
 then
     DUMP_LOCATION='./dump'
-    echo "DUMP location not specified, using $DUMP_LOCATION"
+    log "ERROR: DUMP location not specified, using $DUMP_LOCATION"
 fi
 
 mkdir -p $DUMP_LOCATION
 
 clinicname="openosp-$site"
 
-echo "done backups"
+log "backup complete"
 
  aws="docker run --rm -t -v $HOME/.aws:/root/.aws -v $(pwd):/open-osp amazon/aws-cli"
 
 if [[ $* == *--s3* ]]; then
-    echo "Exporting to Amazon S3"
+    log "Exporting to Amazon S3"
     docker compose exec -T db "$BACKUP_CMD" | gzip > "$DUMP_LOCATION/db.sql.gz"
 
     # validate gzip file
     if gzip -t "$DUMP_LOCATION/db.sql.gz" >/dev/null 2>&1; then
-        echo "Gzip successful."
+        log "Gzip successful."
     else
-        echo "Gzip failed. Exiting."
+        log "ERROR: Gzip failed. Exiting."
         exit 1
     fi
 
@@ -130,9 +137,9 @@ if [[ $* == *--s3* ]]; then
     $aws s3 mv /open-osp/$DUMP_LOCATION/db.sql.gz s3://$BACKUP_BUCKET/$clinicname/$folder/$filename.sql.gz
 
     if [ $? -eq 0 ]; then
-      echo "Amazon S3 export successful"
+      log "Amazon S3 export successful"
     else
-        echo "Error: S3 upload failed. Check the AWS CLI configuration and try again."
+        log "ERROR: S3 upload failed. Check the AWS CLI configuration and try again."
         exit 1
     fi
 
@@ -143,9 +150,9 @@ if [[ $* == *--efs* ]]; then
 
     # validate gzip file
     if gzip -t "$DUMP_LOCATION/db.sql.gz" >/dev/null 2>&1; then
-        echo "Gzip successful."
+        log "Gzip successful."
     else
-        echo "Gzip failed. Exiting."
+        log "ERROR: Gzip failed. Exiting."
         exit 1
     fi
 
