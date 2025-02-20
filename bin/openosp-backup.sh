@@ -11,6 +11,15 @@ folder=$(date +%Y%m)
 # if an HDC argument, then dump the HDC export and then exit the script
 if [[ $* == *--hdc* ]]; then
 
+    # check for AWS connection
+    if [ -e "$HOME/.aws/credentials" ]
+    then
+        echo "aws credentials found."
+    else
+        echo "no ~/.aws/credentials file found. please mount one for me."
+        exit 1
+    fi
+
     echo "Executing HDC export for: $site"
     docker compose exec -T db mysqldump -uroot -p"${MYSQL_PASSWORD}" --skip-triggers oscar \
     allergies \
@@ -59,6 +68,9 @@ if [[ $* == *--hdc* ]]; then
     exit 0
 fi
 
+# reboot tomcat container on any exit of this script
+trap 'docker compose restart oscar' EXIT
+
 # start up Expedius again on any exit of this script.
 trap 'docker compose start expedius' EXIT
 
@@ -77,7 +89,8 @@ then
     echo "BACKUP_CMD env var not specified, executing default backup command."
 fi
 
-if [ -e $HOME/.aws/credentials ]
+# no AWS account. No go.
+if [ -e "$HOME/.aws/credentials" ]
 then
     echo "aws credentials found."
 else
@@ -148,9 +161,3 @@ if [[ $* == *--archive-logs* ]]; then
     mv $ARCHIVE_NAME volumes/OscarDocument/oscar/
     docker compose exec -T db mysql -uroot -p${MYSQL_ROOT_PASSWORD} oscar < bin/archive-logs.sql
 fi
-
-# restart OSCAR.
-echo "restarting tomcat container: $site"
-docker compose restart oscar
-
-
