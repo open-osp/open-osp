@@ -74,7 +74,7 @@ fi
 if [ -z "$BACKUP_CMD" ]
 then
     BACKUP_CMD="mysqldump -u root -p${MYSQL_ROOT_PASSWORD} oscar"
-    echo "BACKUP_CMD env var not specified, defaulting to '${BACKUP_CMD}'."
+    echo "BACKUP_CMD env var not specified, executing default backup command."
 fi
 
 if [ -e $HOME/.aws/credentials ]
