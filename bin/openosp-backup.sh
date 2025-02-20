@@ -71,7 +71,7 @@ if [[ $* == *--hdc* ]]; then
     #rm hdc-$filename
 
     log "copy to S3: hdc-$filename.sql.gpg s3://openosp-hdc-transit/$clinicname/$folder/hdc-$filename.sql.gpg"
-    aws s3 cp hdc-$filename.sql.gpg s3://openosp-hdc-transit/$clinicname/$folder/hdc-$filename.sql.gpg
+    aws s3 cp --quiet hdc-$filename.sql.gpg s3://openosp-hdc-transit/$clinicname/$folder/hdc-$filename.sql.gpg
     rm hdc-$filename.sql.gpg hdc-$filename.sql
 
     if [ $? -eq 0 ]; then
@@ -130,8 +130,8 @@ if [[ $* == *--s3* ]]; then
 
     # Remove double quotes, user might input value enclosed in "" in local.env
     BACKUP_BUCKET="${BACKUP_BUCKET//\"}"
-    $aws s3 sync /open-osp/volumes s3://$BACKUP_BUCKET/$clinicname/volumes --storage-class STANDARD_IA --exclude ".sync/*"
-    $aws s3 mv /open-osp/$DUMP_LOCATION/db.sql.gz s3://$BACKUP_BUCKET/$clinicname/$folder/$filename.sql.gz
+    $aws s3 sync --quiet /open-osp/volumes s3://$BACKUP_BUCKET/$clinicname/volumes --storage-class STANDARD_IA --exclude ".sync/*"
+    $aws s3 mv --quiet /open-osp/$DUMP_LOCATION/db.sql.gz s3://$BACKUP_BUCKET/$clinicname/$folder/$filename.sql.gz
 
     if [ $? -eq 0 ]; then
       log "Amazon S3 export successful"
