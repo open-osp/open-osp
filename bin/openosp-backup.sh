@@ -105,7 +105,7 @@ fi
 if [ -z "$DUMP_LOCATION" ]
 then
     DUMP_LOCATION='./dump'
-    log "ERROR: DUMP location not specified, using $DUMP_LOCATION"
+    log "WARN: DUMP location not specified, using $DUMP_LOCATION"
 fi
 
 mkdir -p "$DUMP_LOCATION"
@@ -153,9 +153,12 @@ if [[ $* == *--efs* ]]; then
         exit 1
     fi
 
+    log "Copy volumes from ./volumes/ to /srv/efs/$clinicname/volumes/"
     mkdir -p /srv/efs/$clinicname/volumes
     mkdir -p /srv/efs/$clinicname/$folder/
-    rsync -av ./volumes/ /srv/efs/$clinicname/volumes/
+    rsync -a ./volumes/ /srv/efs/$clinicname/volumes/
+
+    log "Moving database archive from $DUMP_LOCATION/db.sql.gz to /srv/efs/$clinicname/$folder/$filename.sql.gz"
     mv $DUMP_LOCATION/db.sql.gz /srv/efs/$clinicname/$folder/$filename.sql.gz
 fi
 
@@ -165,6 +168,7 @@ if [[ $* == *--archive-logs* ]]; then
     log "Archiving database logs"
     ARCHIVE_NAME=log_archive_$(date +"%d-%m-%y").sql
     docker compose exec -T db mysqldump -uroot -p${MYSQL_ROOT_PASSWORD} oscar log > $ARCHIVE_NAME
+    log "Moving log archive $ARCHIVE_NAME to volumes/OscarDocument/oscar/"
     mv $ARCHIVE_NAME volumes/OscarDocument/oscar/
     docker compose exec -T db mysql -uroot -p${MYSQL_ROOT_PASSWORD} oscar < bin/archive-logs.sql
 fi
