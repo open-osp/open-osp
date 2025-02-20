@@ -75,11 +75,8 @@ if [[ $* == *--hdc* ]]; then
     exit 0
 fi
 
-# reboot tomcat container on any exit of this script
-trap 'docker compose restart oscar' EXIT
-
 # start up Expedius again on any exit of this script.
-trap 'docker compose start expedius' EXIT
+trap 'docker compose restart oscar; docker compose start expedius' EXIT
 
 # stop Expedius to avoid connection timeouts with OSCAR during the backup process.
 docker compose stop expedius
