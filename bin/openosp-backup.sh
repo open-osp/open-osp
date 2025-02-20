@@ -18,6 +18,8 @@ folder=$(date +%Y%m)
 # if an HDC argument, then dump the HDC export and then exit the script
 if [[ $* == *--hdc* ]]; then
 
+    log "Executing HDC export for: $site"
+
     # check for AWS connection
     if [ -e "$HOME/.aws/credentials" ]
     then
@@ -27,7 +29,6 @@ if [[ $* == *--hdc* ]]; then
         exit 1
     fi
 
-    log "Executing HDC export for: $site"
     docker compose exec -T db mysqldump -uroot -p"${MYSQL_PASSWORD}" --skip-triggers oscar \
     allergies \
     appointment \
