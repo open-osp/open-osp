@@ -1,11 +1,66 @@
 #!/bin/bash
+# DO NOT execute this script during production hours.
 
-set -x
+# only set debug logging when absolutely needed
+# set -x
+
+site=$(pwd | grep -oh "[^/]*$")
+filename=$site.$(date +%Y%m%d-%H%M%S)
+folder=$(date +%Y%m)
+
+# if an HDC argument, then dump the HDC export and then exit the script
+if [[ $* == *--hdc* ]]; then
+
+    echo "Executing HDC export for: $site"
+    docker compose exec -T db mysqldump -uroot -p"${MYSQL_PASSWORD}" --skip-triggers oscar \
+    allergies \
+    appointment \
+    appointmentType \
+    billing \
+    billing_history \
+    billingmaster \
+    billingservice \
+    billingstatus_types \
+    casemgmt_note \
+    clinic \
+    demographic \
+    demographicArchive \
+    demographicExt \
+    demographicExtArchive \
+    diagnosticcode \
+    drugReason \
+    drugs \
+    dxresearch \
+    LookupListItem \
+    measurements \
+    measurementsExt \
+    measurementType \
+    prescription \
+    preventions \
+    preventionsExt \
+    provider > hdc-$filename.sql
+    rm -f hdc-$filename.sql.gpg
+
+    # encrypt
+    # always trust the key, it's verified manually.
+    gpg --output hdc-$filename.sql.gpg --encrypt --trust-model always --recipient pki-prod@hdcbc.ca hdc-$filename.sql
+    #rm hdc-$filename
+
+    aws s3 cp hdc-$filename.sql.gpg s3://openosp-hdc-transit/$clinicname/$folder/hdc-$filename.sql.gpg
+    rm hdc-$filename.sql.gpg hdc-$filename.sql
+
+    if [ $? -eq 0 ]; then
+      echo "HDC export for $site completed"
+    else
+      echo "HDC export for $site failed. Enable debug log for more information"
+    fi
+
+    # Exit the script immediately
+    exit 0
+fi
 
 # start up Expedius again on any exit of this script.
 trap 'docker compose start expedius' EXIT
-
-# Do not execute this script during production hours.
 
 # stop Expedius to avoid connection timeouts with OSCAR during the backup process.
 docker compose stop expedius
@@ -36,70 +91,55 @@ then
     echo "DUMP location not specified, using $DUMP_LOCATION"
 fi
 
-site=$(pwd | grep -oh "[^/]*$")
-filename=$site.$(date +%Y%m%d-%H%M%S)
-folder=$(date +%Y%m)
-
 mkdir -p $DUMP_LOCATION
 
 clinicname="openosp-$site"
+
 echo "done backups"
 
-aws="docker run --rm -t -v $HOME/.aws:/root/.aws -v $(pwd):/open-osp amazon/aws-cli"
+ aws="docker run --rm -t -v $HOME/.aws:/root/.aws -v $(pwd):/open-osp amazon/aws-cli"
 
 if [[ $* == *--s3* ]]; then
-    docker compose exec -T db $BACKUP_CMD | gzip > $DUMP_LOCATION/db.sql.gz
+    echo "Exporting to Amazon S3"
+    docker compose exec -T db "$BACKUP_CMD" | gzip > "$DUMP_LOCATION/db.sql.gz"
+
+    # validate gzip file
+    if gzip -t "$DUMP_LOCATION/db.sql.gz" >/dev/null 2>&1; then
+        echo "Gzip successful."
+    else
+        echo "Gzip failed. Exiting."
+        exit 1
+    fi
+
     # Remove double quotes, user might input value enclosed in "" in local.env
     BACKUP_BUCKET="${BACKUP_BUCKET//\"}"
     $aws s3 sync /open-osp/volumes s3://$BACKUP_BUCKET/$clinicname/volumes --storage-class STANDARD_IA --exclude ".sync/*"
     $aws s3 mv /open-osp/$DUMP_LOCATION/db.sql.gz s3://$BACKUP_BUCKET/$clinicname/$folder/$filename.sql.gz
+
+    if [ $? -eq 0 ]; then
+      echo "Amazon S3 export successful"
+    else
+        echo "Error: S3 upload failed. Check the AWS CLI configuration and try again."
+        exit 1
+    fi
+
 fi
 
 if [[ $* == *--efs* ]]; then
-    docker compose exec -T db $BACKUP_CMD | gzip > $DUMP_LOCATION/db.sql.gz
+    docker compose exec -T db "$BACKUP_CMD" | gzip > "$DUMP_LOCATION/db.sql.gz"
+
+    # validate gzip file
+    if gzip -t "$DUMP_LOCATION/db.sql.gz" >/dev/null 2>&1; then
+        echo "Gzip successful."
+    else
+        echo "Gzip failed. Exiting."
+        exit 1
+    fi
+
     mkdir -p /srv/efs/$clinicname/volumes
     mkdir -p /srv/efs/$clinicname/$folder/
     rsync -av ./volumes/ /srv/efs/$clinicname/volumes/
     mv $DUMP_LOCATION/db.sql.gz /srv/efs/$clinicname/$folder/$filename.sql.gz
-fi
-
-if [[ $* == *--hdc* ]]; then
-    docker compose exec -T db mysqldump -uroot -p${MYSQL_PASSWORD} --skip-triggers oscar \
-    allergies \
-    appointment \
-    appointmentType \
-    billing \
-    billing_history \
-    billingmaster \
-    billingservice \
-    billingstatus_types \
-    casemgmt_note \
-    clinic \
-    demographic \
-    demographicArchive \
-    demographicExt \
-    demographicExtArchive \
-    diagnosticcode \
-    drugReason \
-    drugs \
-    dxresearch \
-    LookupListItem \
-    measurements \
-    measurementsExt \
-    measurementType \
-    prescription \
-    preventions \
-    preventionsExt \
-    provider > hdc-$filename.sql
-    rm -f hdc-$filename.sql.gpg
-    
-    # encrypt
-    # always trust the key, it's verified manually.
-    gpg --output hdc-$filename.sql.gpg --encrypt --trust-model always --recipient pki-prod@hdcbc.ca hdc-$filename.sql
-    #rm hdc-$filename
-    
-    aws s3 cp hdc-$filename.sql.gpg s3://openosp-hdc-transit/$clinicname/$folder/hdc-$filename.sql.gpg
-    rm hdc-$filename.sql.gpg hdc-$filename.sql
 fi
 
 if [[ $* == *--archive-logs* ]]; then
