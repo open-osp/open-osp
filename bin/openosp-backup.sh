@@ -1,19 +1,32 @@
 #!/bin/bash
 # DO NOT execute this script during production hours.
 
-# only set debug logging when absolutely needed
+# only set debug logging when absolutely needed. otherwise use the minimal log entries
 # set -x
 
-# otherwise use the minimal log entries
-# Function to log messages with timestamp
+#Global functions
+# log messages with timestamp
 log() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') $1"
 }
 
-# set global variables
+# check if an AWS account has been set up on this server.
+validate_aws() {
+    if [ -e "$HOME/.aws/credentials" ]
+    then
+        log "aws credentials found."
+        aws="docker run --rm -t -v $HOME/.aws:/root/.aws -v $(pwd):/open-osp amazon/aws-cli"
+    else
+        log "ERROR: no ~/.aws/credentials file found. please mount one for me."
+        exit 1
+    fi
+}
+
+# Global variables
 site=$(pwd | grep -oh "[^/]*$")
 filename=$site.$(date +%Y%m%d-%H%M%S)
 folder=$(date +%Y%m)
+clinicname="openosp-$site"
 
 # if an HDC argument, then dump the HDC export and then exit the script
 if [[ $* == *--hdc* ]]; then
@@ -21,13 +34,7 @@ if [[ $* == *--hdc* ]]; then
     log "Executing HDC export for: $site"
 
     # check for AWS connection
-    if [ -e "$HOME/.aws/credentials" ]
-    then
-        log "aws credentials found."
-    else
-        log "ERROR: no ~/.aws/credentials file found. please mount one for me."
-        exit 1
-    fi
+    validate_aws
 
     docker compose exec -T db mysqldump -uroot -p"${MYSQL_PASSWORD}" --skip-triggers oscar \
     allergies \
@@ -82,6 +89,7 @@ trap 'docker compose restart oscar; docker compose start expedius' EXIT
 # stop Expedius to avoid connection timeouts with OSCAR during the backup process.
 docker compose stop expedius
 
+# prepare file path for database dump
 if [ -z "$BACKUP_BUCKET" ]
 then
     BACKUP_BUCKET=backups
@@ -94,30 +102,20 @@ then
     log "WARN: BACKUP_CMD env var not specified, executing default backup command."
 fi
 
-# no AWS account. No go.
-if [ -e "$HOME/.aws/credentials" ]
-then
-    log "aws credentials found."
-else
-    log "ERROR: no ~/.aws/credentials file found. please mount one for me."
-    exit 1
-fi
-
 if [ -z "$DUMP_LOCATION" ]
 then
     DUMP_LOCATION='./dump'
     log "ERROR: DUMP location not specified, using $DUMP_LOCATION"
 fi
 
-mkdir -p $DUMP_LOCATION
+mkdir -p "$DUMP_LOCATION"
 
-clinicname="openosp-$site"
-
-log "backup complete"
-
- aws="docker run --rm -t -v $HOME/.aws:/root/.aws -v $(pwd):/open-osp amazon/aws-cli"
-
+# dump database backup and then push to Amazon S3 storage.
 if [[ $* == *--s3* ]]; then
+
+    # no AWS account. No go.
+    validate_aws
+
     log "Exporting to Amazon S3"
     docker compose exec -T db "$BACKUP_CMD" | gzip > "$DUMP_LOCATION/db.sql.gz"
 
@@ -140,12 +138,13 @@ if [[ $* == *--s3* ]]; then
         log "ERROR: S3 upload failed. Check the AWS CLI configuration and try again."
         exit 1
     fi
-
 fi
 
+# dump database and then store locally at the given location
 if [[ $* == *--efs* ]]; then
     docker compose exec -T db "$BACKUP_CMD" | gzip > "$DUMP_LOCATION/db.sql.gz"
 
+    log "Executing backup to local file storage"
     # validate gzip file
     if gzip -t "$DUMP_LOCATION/db.sql.gz" >/dev/null 2>&1; then
         log "Gzip successful."
@@ -160,9 +159,14 @@ if [[ $* == *--efs* ]]; then
     mv $DUMP_LOCATION/db.sql.gz /srv/efs/$clinicname/$folder/$filename.sql.gz
 fi
 
+# dump the database LOG table, compress, then store locally for archive, and then truncate table.
 if [[ $* == *--archive-logs* ]]; then
+
+    log "Archiving database logs"
     ARCHIVE_NAME=log_archive_$(date +"%d-%m-%y").sql
     docker compose exec -T db mysqldump -uroot -p${MYSQL_ROOT_PASSWORD} oscar log > $ARCHIVE_NAME
     mv $ARCHIVE_NAME volumes/OscarDocument/oscar/
     docker compose exec -T db mysql -uroot -p${MYSQL_ROOT_PASSWORD} oscar < bin/archive-logs.sql
 fi
+
+log "backup complete"
