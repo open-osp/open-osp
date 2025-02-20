@@ -150,6 +150,7 @@ if [[ $* == *--archive-logs* ]]; then
 fi
 
 # restart OSCAR.
-docker compose  restart oscar
+echo "restarting tomcat container: $site"
+docker compose restart oscar
 
 
