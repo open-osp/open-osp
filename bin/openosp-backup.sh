@@ -65,16 +65,17 @@ if [[ $* == *--hdc* ]]; then
     provider > hdc-$filename.sql
     rm -f hdc-$filename.sql.gpg
 
-    # encrypt
+    log "Encrypt HDC export"
     # always trust the key, it's verified manually.
     gpg --output hdc-$filename.sql.gpg --encrypt --trust-model always --recipient pki-prod@hdcbc.ca hdc-$filename.sql
     #rm hdc-$filename
 
+    log "copy to S3: hdc-$filename.sql.gpg s3://openosp-hdc-transit/$clinicname/$folder/hdc-$filename.sql.gpg"
     aws s3 cp hdc-$filename.sql.gpg s3://openosp-hdc-transit/$clinicname/$folder/hdc-$filename.sql.gpg
     rm hdc-$filename.sql.gpg hdc-$filename.sql
 
     if [ $? -eq 0 ]; then
-      lg "HDC export for $site completed"
+      log "HDC export for $site completed"
     else
       log "ERROR: HDC export for $site failed. Enable debug log for more information"
     fi
