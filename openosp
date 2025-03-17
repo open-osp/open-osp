@@ -74,10 +74,12 @@ case "${COMMAND}" in
         ;;
     backup)
         if  [[ $2 = "-m" ]]; then
-            echo "Manually Backing up files"
+            echo ""
+            echo "$(date '+%Y-%m-%d %H:%M:%S') Manually Backing up files"
             ./bin/openosp-backup.sh $2 $3
         else
-            echo "Running Auto backups"
+            echo ""
+            echo "$(date '+%Y-%m-%d %H:%M:%S') Running Auto backups"
             ./bin/run-auto-backups.sh
         fi
         ;;

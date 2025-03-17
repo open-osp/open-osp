@@ -1,70 +1,42 @@
 #!/bin/bash
+# DO NOT execute this script during production hours.
 
-set -x
+# only set debug logging when absolutely needed. otherwise use the minimal log entries
+# set -x
 
-# start up Expedius again on any exit of this script.
-trap 'docker compose start expedius' EXIT
+#Global functions
+# log messages with timestamp
+log() {
+    echo "$(date '+%Y-%m-%d %H:%M:%S') $1"
+}
 
-# Do not execute this script during production hours.
+# check if an AWS account has been set up on this server.
+validate_aws() {
+    if [ -e "$HOME/.aws/credentials" ]
+    then
+        log "aws credentials found."
+        aws="docker run --rm -t -v $HOME/.aws:/root/.aws -v $(pwd):/open-osp amazon/aws-cli"
+    else
+        log "ERROR: no ~/.aws/credentials file found. please mount one for me."
+        exit 1
+    fi
+}
 
-# stop Expedius to avoid connection timeouts with OSCAR during the backup process.
-docker compose stop expedius
-
-if [ -z "$BACKUP_BUCKET" ]
-then
-    BACKUP_BUCKET=backups
-    echo "BACKUP_BUCKET env var not specified, defaulting to the 'backups' bucket."
-fi
-
-if [ -z "$BACKUP_CMD" ]
-then
-    BACKUP_CMD="mysqldump -u root -p${MYSQL_ROOT_PASSWORD} oscar"
-    echo "BACKUP_CMD env var not specified, defaulting to '${BACKUP_CMD}'."
-fi
-
-if [ -e $HOME/.aws/credentials ]
-then
-    echo "aws credentials found."
-else
-    echo "no ~/.aws/credentials file found. please mount one for me."
-    exit 1
-fi
-
-if [ -z "$DUMP_LOCATION" ]
-then
-    DUMP_LOCATION='./dump'
-    echo "DUMP location not specified, using $DUMP_LOCATION"
-fi
-
+# Global variables
 site=$(pwd | grep -oh "[^/]*$")
 filename=$site.$(date +%Y%m%d-%H%M%S)
 folder=$(date +%Y%m)
-
-mkdir -p $DUMP_LOCATION
-
 clinicname="openosp-$site"
-echo "done backups"
 
-aws="docker run --rm -t -v $HOME/.aws:/root/.aws -v $(pwd):/open-osp amazon/aws-cli"
-
-if [[ $* == *--s3* ]]; then
-    docker compose exec -T db $BACKUP_CMD | gzip > $DUMP_LOCATION/db.sql.gz
-    # Remove double quotes, user might input value enclosed in "" in local.env
-    BACKUP_BUCKET="${BACKUP_BUCKET//\"}"
-    $aws s3 sync /open-osp/volumes s3://$BACKUP_BUCKET/$clinicname/volumes --storage-class STANDARD_IA --exclude ".sync/*"
-    $aws s3 mv /open-osp/$DUMP_LOCATION/db.sql.gz s3://$BACKUP_BUCKET/$clinicname/$folder/$filename.sql.gz
-fi
-
-if [[ $* == *--efs* ]]; then
-    docker compose exec -T db $BACKUP_CMD | gzip > $DUMP_LOCATION/db.sql.gz
-    mkdir -p /srv/efs/$clinicname/volumes
-    mkdir -p /srv/efs/$clinicname/$folder/
-    rsync -av ./volumes/ /srv/efs/$clinicname/volumes/
-    mv $DUMP_LOCATION/db.sql.gz /srv/efs/$clinicname/$folder/$filename.sql.gz
-fi
-
+# if an HDC argument, then dump the HDC export and then exit the script
 if [[ $* == *--hdc* ]]; then
-    docker compose exec -T db mysqldump -uroot -p${MYSQL_PASSWORD} --skip-triggers oscar \
+
+    log "Executing HDC export for: $site"
+
+    # check for AWS connection
+    validate_aws
+
+    docker compose exec -T db mysqldump -uroot -p"${MYSQL_PASSWORD}" --skip-triggers oscar \
     allergies \
     appointment \
     appointmentType \
@@ -92,24 +64,114 @@ if [[ $* == *--hdc* ]]; then
     preventionsExt \
     provider > hdc-$filename.sql
     rm -f hdc-$filename.sql.gpg
-    
-    # encrypt
+
+    log "Encrypt HDC export"
     # always trust the key, it's verified manually.
     gpg --output hdc-$filename.sql.gpg --encrypt --trust-model always --recipient pki-prod@hdcbc.ca hdc-$filename.sql
     #rm hdc-$filename
-    
-    aws s3 cp hdc-$filename.sql.gpg s3://openosp-hdc-transit/$clinicname/$folder/hdc-$filename.sql.gpg
+
+    log "copy to S3: hdc-$filename.sql.gpg s3://openosp-hdc-transit/$clinicname/$folder/hdc-$filename.sql.gpg"
+    aws s3 cp --quiet hdc-$filename.sql.gpg s3://openosp-hdc-transit/$clinicname/$folder/hdc-$filename.sql.gpg
     rm hdc-$filename.sql.gpg hdc-$filename.sql
+
+    if [ $? -eq 0 ]; then
+      log "HDC export for $site completed"
+    else
+      log "ERROR: HDC export for $site failed. Enable debug log for more information"
+    fi
+
+    # Exit the script immediately
+    exit 0
 fi
 
+# start up Expedius again on any exit of this script.
+trap 'docker compose restart oscar; docker compose start expedius' EXIT
+
+# stop Expedius to avoid connection timeouts with OSCAR during the backup process.
+docker compose stop expedius
+
+# prepare file path for database dump
+if [ -z "$BACKUP_BUCKET" ]
+then
+    BACKUP_BUCKET=backups
+    log "WARN: BACKUP_BUCKET env var not specified, defaulting to the 'backups' bucket."
+fi
+
+if [ -z "$BACKUP_CMD" ]
+then
+    BACKUP_CMD="mysqldump -u root -p${MYSQL_ROOT_PASSWORD} oscar"
+    log "WARN: BACKUP_CMD env var not specified, executing default backup command."
+fi
+
+if [ -z "$DUMP_LOCATION" ]
+then
+    DUMP_LOCATION='./dump'
+    log "WARN: DUMP location not specified, using $DUMP_LOCATION"
+fi
+
+mkdir -p "$DUMP_LOCATION"
+
+# dump database backup and then push to Amazon S3 storage.
+if [[ $* == *--s3* ]]; then
+
+    # no AWS account. No go.
+    validate_aws
+
+    log "Exporting to Amazon S3"
+    docker compose exec -T db "$BACKUP_CMD" | gzip > "$DUMP_LOCATION/db.sql.gz"
+
+    # validate gzip file
+    if gzip -t "$DUMP_LOCATION/db.sql.gz" >/dev/null 2>&1; then
+        log "Gzip successful."
+    else
+        log "ERROR: Gzip failed. Exiting."
+        exit 1
+    fi
+
+    # Remove double quotes, user might input value enclosed in "" in local.env
+    BACKUP_BUCKET="${BACKUP_BUCKET//\"}"
+    $aws s3 sync --quiet /open-osp/volumes s3://$BACKUP_BUCKET/$clinicname/volumes --storage-class STANDARD_IA --exclude ".sync/*"
+    $aws s3 mv --quiet /open-osp/$DUMP_LOCATION/db.sql.gz s3://$BACKUP_BUCKET/$clinicname/$folder/$filename.sql.gz
+
+    if [ $? -eq 0 ]; then
+      log "Amazon S3 export successful"
+    else
+        log "ERROR: S3 upload failed. Check the AWS CLI configuration and try again."
+        exit 1
+    fi
+fi
+
+# dump database and then store locally at the given location
+if [[ $* == *--efs* ]]; then
+    docker compose exec -T db "$BACKUP_CMD" | gzip > "$DUMP_LOCATION/db.sql.gz"
+
+    log "Executing backup to local file storage"
+    # validate gzip file
+    if gzip -t "$DUMP_LOCATION/db.sql.gz" >/dev/null 2>&1; then
+        log "Gzip successful."
+    else
+        log "ERROR: Gzip failed. Exiting."
+        exit 1
+    fi
+
+    log "Copy volumes from ./volumes/ to /srv/efs/$clinicname/volumes/"
+    mkdir -p /srv/efs/$clinicname/volumes
+    mkdir -p /srv/efs/$clinicname/$folder/
+    rsync -a ./volumes/ /srv/efs/$clinicname/volumes/
+
+    log "Moving database archive from $DUMP_LOCATION/db.sql.gz to /srv/efs/$clinicname/$folder/$filename.sql.gz"
+    mv $DUMP_LOCATION/db.sql.gz /srv/efs/$clinicname/$folder/$filename.sql.gz
+fi
+
+# dump the database LOG table, compress, then store locally for archive, and then truncate table.
 if [[ $* == *--archive-logs* ]]; then
+
+    log "Archiving database logs"
     ARCHIVE_NAME=log_archive_$(date +"%d-%m-%y").sql
     docker compose exec -T db mysqldump -uroot -p${MYSQL_ROOT_PASSWORD} oscar log > $ARCHIVE_NAME
+    log "Moving log archive $ARCHIVE_NAME to volumes/OscarDocument/oscar/"
     mv $ARCHIVE_NAME volumes/OscarDocument/oscar/
     docker compose exec -T db mysql -uroot -p${MYSQL_ROOT_PASSWORD} oscar < bin/archive-logs.sql
 fi
 
-# restart OSCAR.
-docker compose  restart oscar
-
-
+log "backup complete"
