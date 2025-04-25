@@ -1,4 +1,4 @@
-FROM tomcat:9.0.102-jre8
+FROM tomcat:9.0.102-jre8-temurin-jammy
 
 # Fetch Expedius binary
 RUN wget https://bitbucket.org/colcamexdev/expediusbinary/downloads/Expedius-4.12.21.war
