@@ -12,6 +12,7 @@ docker/oscar/oscar
 docker/faxws/faxws
 
 tmp/
+tmp-mysql/
 .vagrant
 .vagrant.v1.*
 .DS_Store
