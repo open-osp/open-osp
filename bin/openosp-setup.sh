@@ -102,7 +102,8 @@ if [ ! -f ./volumes/drugref2.properties ]; then
   cp docker/oscar/conf/drugref2.properties ./volumes/drugref2.properties
 
   echo "Using generated password in Drugref properties file"
-  sed -i "s|^[ ]*[#]*[ ]*db_password=.*|db_password=${DB_PASSWORD}|" ./volumes/drugref2.properties
+  # sed -i syntax differs between macOS (BSD) and Linux (GNU)
+  sed -i.bak "s|^[ ]*[#]*[ ]*db_password=.*|db_password=${DB_PASSWORD}|" ./volumes/drugref2.properties && rm -f ./volumes/drugref2.properties.bak
 fi
 
 if [ ! -f docker-compose.override.yml ]; then

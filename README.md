@@ -15,9 +15,9 @@ This repo is based on [scoophealth (UVIC)](https://github.com/scoophealth/oscar-
   * Browse to OSCAR EMR on http://localhost:8080/oscar!
 
   * Log in with the initial credentials. You will be prompted to change your password upon initial login.
-      - Username: oscardoc
-      - Password: mac2002
-      - 2nd Level Passcode: 1117
+      - Username: openodoc
+      - Password: openo2025
+      - PIN: 2025
 
 Note: for Oscar 19 (rather than OpenOscar) setup instructions, see [here](./OSCAR19.md).
 
