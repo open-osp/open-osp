@@ -17,20 +17,21 @@ services:
         - ./docker/db/my.cnf:/etc/mysql/my.cnf
         # TODO: build some scripts in so we need not mount everything.
         - .:/code
-        - mariadb-files:/var/lib/mysql
-      networks:
-        - back-tier
-      deploy:
-        resources:
-          limits:
-            cpus: '2'
-            memory: 15G
-
-    oscar:
+            db:
       restart: 'always'
-      image: openosp/open-osp:latest
-      build: docker/oscar
+      build: docker/db
+      command: 'mysqld --character-set-server=utf8 --collation-server=utf8_general_ci'
+      working_dir: /code
+      env_file:
+        - local.env
+      environment:
+        MYSQL_DATABASE: drugref2
+        MYSQL_USER: oscar
+        TZ: America/Vancouver
       volumes:
+        # TODO: build some scripts in so we need not mount everything.
+        - .:/code
+        - mariadb-files:/var/lib/mysql
         - ./volumes/oscar.properties:/root/oscar.properties
         - ./volumes/drugref2.properties:/root/drugref2.properties
         - ./volumes/OscarDocument:/var/lib/OscarDocument
