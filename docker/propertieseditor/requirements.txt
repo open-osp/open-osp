@@ -1,4 +1,0 @@
-flask
-markdown==3.8.1
-flask-pagedown==0.2.2
-flask-wtf
