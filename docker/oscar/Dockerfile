@@ -1,4 +1,4 @@
-FROM tomcat:9.0.102-jre21-temurin-jammy
+FROM tomcat:9.0.102-jre8-temurin-jammy
 
 # Set the locale
 RUN apt-get update && apt-get install -y locales curl iputils-ping
