@@ -37,6 +37,9 @@ case $COMPONENT in
             docker run --rm -v $(pwd):/code/ alpine sh -c "apk add curl && cd /code/ && curl -Lo $OSCAR_OUTPUT/drugref2.war $DRUGREF_WAR"
         fi
 
+        echo "Copying Java TZUpdater into the Oscar build context"
+        cp bin/ziupdater-1.1.3.1.jar $OSCAR_OUTPUT/
+
         echo "Building Oscar Docker Image"
         docker compose  build oscar
         ;;
