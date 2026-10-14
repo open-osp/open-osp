@@ -10,7 +10,7 @@ This repo is based on [scoophealth (UVIC)](https://github.com/scoophealth/oscar-
   * `cd open-osp`
   * `./openosp setup`
   * If building a custom Oscar branch not on DockerHub, do `openosp build oscar`
-  * if you need a database, `./openosp bootstrap`
+  * `./openosp bootstrap` (required for fresh installs to create the database; skip only if importing an existing database)
   * `./openosp start`
   * Browse to OSCAR EMR on http://localhost:8080/oscar!
 
