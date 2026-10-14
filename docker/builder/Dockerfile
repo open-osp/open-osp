@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21-jdk
+FROM eclipse-temurin:8-jdk
 
 # This container builds oscar, and runs mvn tests.
 # Install the mariadb-client so we can run tests.
