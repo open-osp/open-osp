@@ -37,15 +37,22 @@ case $COMPONENT in
             docker run --rm -v $(pwd):/code/ alpine sh -c "apk add curl && cd /code/ && curl -Lo $OSCAR_OUTPUT/drugref2.war $DRUGREF_WAR"
         fi
 
+        echo "Copying Java TZUpdater into the Oscar build context"
+        cp bin/ziupdater-1.1.3.1.jar $OSCAR_OUTPUT/
+
         echo "Building Oscar Docker Image"
         docker compose  build oscar
         ;;
     expedius)
         echo "Building Expedius Docker Image"
+        echo "Copying Java TZUpdater into the Expedius build context"
+        cp bin/ziupdater-1.1.3.1.jar docker/expedius/
         docker compose  build expedius
         ;;
     faxws)
         echo "Compiling FaxWS warfile"
+        echo "Copying Java TZUpdater into the FaxWS build context"
+        cp bin/ziupdater-1.1.3.1.jar docker/faxws/
         docker compose  -f docker-compose.build.yml run --rm builder ./bin/build-faxws.sh
 
         echo "Building FaxWs Docker Image"

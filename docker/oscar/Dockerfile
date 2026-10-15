@@ -13,9 +13,20 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends gettext \
     && apt-get clean
 
-# Use the TZ env var instead
-#RUN rm -f /etc/localtime \
-#    && ln -s /usr/share/zoneinfo/America/Vancouver /etc/localtime
+# Update the JRE timezone data. The jar is copied into the build context by bin/openosp-build.sh.
+# ziupdater only accepts file:// URLs, so the IANA tzdata bundle is downloaded first.
+ARG TZDATA_URL="https://data.iana.org/time-zones/tzdata-latest.tar.gz"
+ADD ziupdater-1.1.3.1.jar /tmp/ziupdater.jar
+
+RUN echo "Installing Java TZUpdater..." \
+    && echo "Java TZDB before update:" \
+    && java -jar /tmp/ziupdater.jar -V \
+    && curl -fsSL "${TZDATA_URL}" -o /tmp/tzdata.tar.gz \
+    && echo "Updating Java TZDB..." \
+    && java -jar /tmp/ziupdater.jar -l file:///tmp/tzdata.tar.gz \
+    && echo "Java TZDB after update:" \
+    && java -jar /tmp/ziupdater.jar -V \
+    && rm -f /tmp/ziupdater.jar /tmp/tzdata.tar.gz
 
 # Install requirements for wkhtmltopdf
 # TODO this needs to be adapted to execute in different environments than just Ubuntu Jammy.
