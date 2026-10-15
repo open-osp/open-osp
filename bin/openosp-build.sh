@@ -45,10 +45,14 @@ case $COMPONENT in
         ;;
     expedius)
         echo "Building Expedius Docker Image"
+        echo "Copying Java TZUpdater into the Expedius build context"
+        cp bin/ziupdater-1.1.3.1.jar docker/expedius/
         docker compose  build expedius
         ;;
     faxws)
         echo "Compiling FaxWS warfile"
+        echo "Copying Java TZUpdater into the FaxWS build context"
+        cp bin/ziupdater-1.1.3.1.jar docker/faxws/
         docker compose  -f docker-compose.build.yml run --rm builder ./bin/build-faxws.sh
 
         echo "Building FaxWs Docker Image"

@@ -6,17 +6,20 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends gettext \
     && apt-get clean
 
+# Update the JRE timezone data. The jar is copied into the build context by bin/openosp-build.sh.
+# ziupdater only accepts file:// URLs, so the IANA tzdata bundle is downloaded first.
+ARG TZDATA_URL="https://data.iana.org/time-zones/tzdata-latest.tar.gz"
+ADD ziupdater-1.1.3.1.jar /tmp/ziupdater.jar
 
-#RUN wget -P /opt https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/5.2.4/flyway-commandline-5.2.4-linux-x64.tar.gz && \
-#    cd /opt && \
-#    tar -xvf flyway-commandline-5.2.4-linux-x64.tar.gz && \
-#    rm flyway-commandline-5.2.4-linux-x64.tar.gz && \
-#    wget -P /opt https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.3.0.1492-linux.zip && \
-#    unzip sonar-scanner-cli-3.3.0.1492-linux.zip && \
-#    rm sonar-scanner-cli-3.3.0.1492-linux.zip
-
-#ENV PATH $PATH:/opt/flyway-5.2.4:/opt/sonar-scanner-3.3.0.1492-linux/bin
-#ENV SONAR_RUNNER_HOME /opt/sonar-scanner-3.3.0.1492-linux
+RUN echo "Installing Java TZUpdater..." \
+    && echo "Java TZDB before update:" \
+    && java -jar /tmp/ziupdater.jar -V \
+    && curl -fsSL "${TZDATA_URL}" -o /tmp/tzdata.tar.gz \
+    && echo "Updating Java TZDB..." \
+    && java -jar /tmp/ziupdater.jar -l file:///tmp/tzdata.tar.gz \
+    && echo "Java TZDB after update:" \
+    && java -jar /tmp/ziupdater.jar -V \
+    && rm -f /tmp/ziupdater.jar /tmp/tzdata.tar.gz \
 
 # Deploy the war file
 ADD ./faxws/target/FaxWs*SNAPSHOT.war /usr/local/tomcat/webapps/faxWs.war
