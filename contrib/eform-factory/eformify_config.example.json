@@ -1,0 +1,12 @@
+{
+  "_comment": "Copy to eformify_config.json and edit. doctors: the signing-physician dropdown, in display order. msp = the practitioner number printed on requisitions (provider.ohip_no in OSCAR, NOT billing_no which is usually a clinic group number). sig = signature image filename inside OSCAR's eform images directory (/var/lib/OscarDocument/oscar/eform/images/) — omit it to fall back to the handwriting pad.",
+  "doctors": [
+    { "provider_no": "101", "last_name": "Example", "first_name": "Alice", "msp": "99901", "sig": "docsig_99901.png" },
+    { "provider_no": "102", "last_name": "Sample",  "first_name": "Bob",   "msp": "99902" }
+  ],
+  "forward_options": [
+    "Family physician on file",
+    "Patient copy"
+  ],
+  "clinic_phone": "604-555-0100"
+}
