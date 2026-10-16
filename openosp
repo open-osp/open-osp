@@ -60,23 +60,24 @@ toLower() {
 #=============================================================================
 
 
-COMMAND=$(toLower ${1})
+COMMAND=$(toLower "${1}")
 
 case "${COMMAND}" in
     setup)
-        ./bin/openosp-setup.sh $2 $3
+        ./bin/openosp-setup.sh "$2" "$3"
         ;;
     purge)
-        ./bin/openosp-purge.sh $2 $3
+        # shellcheck disable=SC2086
+        ./bin/openosp-purge.sh "$2" "$3"
         ;;
     start)
-       ./bin/openosp-start.sh $2 $3
+       ./bin/openosp-start.sh "$2" "$3"
         ;;
     backup)
         if  [[ $2 = "-m" ]]; then
             echo ""
             echo "$(date '+%Y-%m-%d %H:%M:%S') Manually Backing up files"
-            ./bin/openosp-backup.sh $2 $3
+            ./bin/openosp-backup.sh "$2" "$3"
         else
             echo ""
             echo "$(date '+%Y-%m-%d %H:%M:%S') Running Auto backups"
@@ -84,16 +85,16 @@ case "${COMMAND}" in
         fi
         ;;
     build)
-        ./bin/openosp-build.sh $2 $3 $4
+        ./bin/openosp-build.sh "$2" "$3" "$4"
         ;;
     publish)
-        ./bin/openosp-publish.sh $2 $3
+        ./bin/openosp-publish.sh "$2" "$3"
         ;;
     bootstrap)
-        ./bin/openosp-bootstrap.sh $2 $3
+        ./bin/openosp-bootstrap.sh "$2" "$3"
         ;;
     update)
-        ./bin/openosp-update.sh $2 $3
+        ./bin/openosp-update.sh "$2" "$3"
         ;;
     health)
         docker compose  -f docker-compose.admin.yml run health

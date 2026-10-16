@@ -6,9 +6,14 @@ if [ -f './local.env' ]; then
   source ./local.env
 fi
 
-./bin/clone.sh ${OSCAR_REPO:-""} ${OSCAR_TREEISH:-""}
+./bin/clone.sh "${OSCAR_REPO:-""}" "${OSCAR_TREEISH:-""}"
 
-cd docker/oscar/oscar
+if [ ! -d docker/oscar/oscar ]; then
+  echo "ERROR: docker/oscar/oscar was not created. Check the output of ./bin/clone.sh above." >&2
+  exit 1
+fi
+
+cd docker/oscar/oscar || { echo "ERROR: unable to enter docker/oscar/oscar." >&2; exit 1; }
 
 # increase java perm and gen memory for build
 # other switches can be added here for debugging the build.

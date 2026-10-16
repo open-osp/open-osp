@@ -37,7 +37,7 @@ if [ ! -f local.env ]; then
   if [[ $* == *--noinput* ]]; then
     CLINIC_TEXT=TEST
   else
-    read -p "Clinic sub text (address, phone): " CLINIC_TEXT
+    read -pr "Clinic sub text (address, phone): " CLINIC_TEXT
   fi
   echo "## clinic subtext such as address phone etc." >> ./local.env
   echo "CLINIC_TEXT=\"${CLINIC_TEXT}\"" >> ./local.env
@@ -46,7 +46,7 @@ if [ ! -f local.env ]; then
   then
     CLINIC_LINK=https://test.com
   else
-    read -p "Clinic website link, including HTTP(S): " CLINIC_LINK
+    read -pr "Clinic website link, including HTTP(S): " CLINIC_LINK
   fi
 
   echo "## clinic HTML link to a clinic website if one is supplied." >> ./local.env
@@ -56,7 +56,7 @@ if [ ! -f local.env ]; then
   then
     TAB_NAME=TEST
   else
-    read -p "Title name in browser tabs (default: OSCAR EMR): " TAB_NAME
+    read -pr "Title name in browser tabs (default: OSCAR EMR): " TAB_NAME
   fi
 
   echo "## Title name in browser tabs (default: OSCAR EMR)" >> ./local.env
@@ -124,7 +124,7 @@ if [ ! -d "./volumes/OscarDocument/oscar" ]; then
   mkdir ./volumes/OscarDocument/oscar/document
 fi
 
-ARCH=`uname -m`
+ARCH=$(uname -m)
 if [[ $ARCH == 'arm64' || $ARCH == 'aarch64' ]]; then
   echo "Not pulling pre-built docker images as you are on an ARM machine; you'll need to build them yourself."
 else

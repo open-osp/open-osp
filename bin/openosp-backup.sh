@@ -62,17 +62,18 @@ if [[ $* == *--hdc* ]]; then
     prescription \
     preventions \
     preventionsExt \
-    provider > hdc-$filename.sql
-    rm -f hdc-$filename.sql.gpg
+    provider > hdc-"$filename".sql
+    rm -f hdc-"$filename".sql.gpg
 
     log "Encrypt HDC export"
     # always trust the key, it's verified manually.
-    gpg --output hdc-$filename.sql.gpg --encrypt --trust-model always --recipient pki-prod@hdcbc.ca hdc-$filename.sql
+    gpg --output hdc-"$filename".sql.gpg --encrypt --trust-model always --recipient pki-prod@hdcbc.ca hdc-"$filename".sql
     #rm hdc-$filename
 
     log "copy to S3: hdc-$filename.sql.gpg s3://openosp-hdc-transit/$clinicname/$folder/hdc-$filename.sql.gpg"
-    aws s3 cp --quiet hdc-$filename.sql.gpg s3://openosp-hdc-transit/$clinicname/$folder/hdc-$filename.sql.gpg
-    rm hdc-$filename.sql.gpg hdc-$filename.sql
+    # shellcheck disable=SC2086
+    aws s3 cp --quiet hdc-"$filename".sql.gpg s3://openosp-hdc-transit/"$clinicname"/"$folder"/hdc-"$filename".sql.gpg
+    rm hdc-"$filename".sql.gpg hdc-"$filename".sql
 
     if [ $? -eq 0 ]; then
       log "HDC export for $site completed"
@@ -130,8 +131,9 @@ if [[ $* == *--s3* ]]; then
 
     # Remove double quotes, user might input value enclosed in "" in local.env
     BACKUP_BUCKET="${BACKUP_BUCKET//\"}"
-    $aws s3 sync --quiet /open-osp/volumes s3://$BACKUP_BUCKET/$clinicname/volumes --storage-class STANDARD_IA --exclude ".sync/*"
-    $aws s3 mv --quiet /open-osp/$DUMP_LOCATION/db.sql.gz s3://$BACKUP_BUCKET/$clinicname/$folder/$filename.sql.gz
+    $aws s3 sync --quiet /open-osp/volumes s3://"$BACKUP_BUCKET"/"$clinicname"/volumes --storage-class STANDARD_IA --exclude ".sync/*"
+    # shellcheck disable=SC2086
+    $aws s3 mv --quiet /open-osp/"$DUMP_LOCATION"/db.sql.gz s3://"$BACKUP_BUCKET"/"$clinicname"/"$folder"/"$filename".sql.gz
 
     if [ $? -eq 0 ]; then
       log "Amazon S3 export successful"
@@ -155,12 +157,12 @@ if [[ $* == *--efs* ]]; then
     fi
 
     log "Copy volumes from ./volumes/ to /srv/efs/$clinicname/volumes/"
-    mkdir -p /srv/efs/$clinicname/volumes
-    mkdir -p /srv/efs/$clinicname/$folder/
-    rsync -a ./volumes/ /srv/efs/$clinicname/volumes/
+    mkdir -p /srv/efs/"$clinicname"/volumes
+    mkdir -p /srv/efs/"$clinicname"/"$folder"/
+    rsync -a ./volumes/ /srv/efs/"$clinicname"/volumes/
 
     log "Moving database archive from $DUMP_LOCATION/db.sql.gz to /srv/efs/$clinicname/$folder/$filename.sql.gz"
-    mv $DUMP_LOCATION/db.sql.gz /srv/efs/$clinicname/$folder/$filename.sql.gz
+    mv "$DUMP_LOCATION"/db.sql.gz /srv/efs/"$clinicname"/"$folder"/"$filename".sql.gz
 fi
 
 # dump the database LOG table, compress, then store locally for archive, and then truncate table.
@@ -168,10 +170,10 @@ if [[ $* == *--archive-logs* ]]; then
 
     log "Archiving database logs"
     ARCHIVE_NAME=log_archive_$(date +"%d-%m-%y").sql
-    docker compose exec -T db mysqldump -uroot -p${MYSQL_ROOT_PASSWORD} oscar log > $ARCHIVE_NAME
+    docker compose exec -T db mysqldump -uroot -p"${MYSQL_ROOT_PASSWORD}" oscar log > "$ARCHIVE_NAME"
     log "Moving log archive $ARCHIVE_NAME to volumes/OscarDocument/oscar/"
-    mv $ARCHIVE_NAME volumes/OscarDocument/oscar/
-    docker compose exec -T db mysql -uroot -p${MYSQL_ROOT_PASSWORD} oscar < bin/archive-logs.sql
+    mv "$ARCHIVE_NAME" volumes/OscarDocument/oscar/
+    docker compose exec -T db mysql -uroot -p"${MYSQL_ROOT_PASSWORD}" oscar < bin/archive-logs.sql
 fi
 
 log "backup complete"

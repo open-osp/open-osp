@@ -19,9 +19,12 @@ while ! mysqladmin --user=root --password="${MYSQL_ROOT_PASSWORD}" --host "127.0
     sleep 10
 done
 
-#./wait-for-it.sh localhost 3306
 echo "Populating oscar database"
-cd docker/oscar/oscar/database/mysql
+DB_SCRIPT_DIR="docker/oscar/oscar/database/mysql"
+if ! cd "${DB_SCRIPT_DIR}"; then
+    echo "Error: database script directory '${DB_SCRIPT_DIR}' not found. Has the oscar source been cloned?" >&2
+    exit 1
+fi
 
 if [[ $DB == "ontario" ]]; then
     ./createdatabase_on.sh root "${MYSQL_ROOT_PASSWORD}" oscar

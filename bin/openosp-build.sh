@@ -20,18 +20,18 @@ case $COMPONENT in
         OSCAR_OUTPUT=docker/oscar
 
         # Using an existing warfile or compiling from scratch?
-        if [ -z $WARFILE ]; then
+        if [ -z "$WARFILE" ]; then
             echo "Compiling OSCAR warfile. This may take some time...."
             docker compose  -f docker-compose.build.yml run --rm builder ./bin/build-oscar.sh
             mv $OSCAR_OUTPUT/oscar/target/oscar-*-SNAPSHOT.war $OSCAR_OUTPUT/oscar.war
         else
             mkdir -p $OSCAR_OUTPUT
-            cp $WARFILE $OSCAR_OUTPUT/oscar.war
+            cp "$WARFILE" $OSCAR_OUTPUT/oscar.war
         fi
 
         # Download drugref if we need it
         # For some reason this is only when not testing during build and not in development mode
-        if [ -z $TEST_DURING_BUILD ] && [ -z $DEVELOPMENT_MODE ]; then
+        if [ -z "$TEST_DURING_BUILD" ] && [ -z "$DEVELOPMENT_MODE" ]; then
             echo "Retrieving current DrugRef2 binary"
             export DRUGREF_WAR=${DRUGREF_WAR:-"https://bitbucket.org/openoscar/drugref/downloads/drugref2.war"}
             docker run --rm -v $(pwd):/code/ alpine sh -c "apk add curl && cd /code/ && curl -Lo $OSCAR_OUTPUT/drugref2.war $DRUGREF_WAR"

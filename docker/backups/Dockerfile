@@ -5,7 +5,7 @@ RUN apk add --update --no-cache  \
    lrzip \
    py-pip \
    docker \
-  && pip install awscli \ 
+  && pip install awscli \
   && rm -fr /var/cache/apk/*
 
 COPY ./backups.sh /backups.sh

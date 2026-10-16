@@ -12,9 +12,9 @@ then
   touch local.env
 
   echo "Removing OSCAR files..."
-  rm -f *.war.*
-  rm -f *.war
-  rm -f docker/oscar/*.war
+  rm -f ./*glob*.war.*
+  rm -f ./*glob*.war
+  rm -f docker/oscar/*glob*.war
 
   echo "Removing volumes"
   docker compose  -f docker-compose.build.yml run --rm builder rm -fr volumes/*

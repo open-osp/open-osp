@@ -12,7 +12,7 @@ else
   git clone $repo_url $repo_path --branch $repo_branch
 fi
 
-cd $repo_path
+cd $repo_path || exit
 
 echo "Remove context xml so we can replace it after WAR extraction."
 rm -f src/main/webapp/META-INF/context.xml
