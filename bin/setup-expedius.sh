@@ -63,16 +63,16 @@ mv -f expedius.properties.tmp volumes/expedius/expedius.properties
 
 echo "------##### Expedius Interface Login #####------"
 echo
-echo "      username: "$EXPEDIUS_USERNAME"
-echo "      password: "$EXPEDIUS_PASSWORD
+echo "      username: $EXPEDIUS_USERNAME"
+echo "      password: $EXPEDIUS_PASSWORD"
 echo "      url:      https://<your url>:8081/Expedius"
 echo
 echo "------####################################------"
 
 echo "------##### OSCAR Expedius Account #####------"
 echo
-echo "      username: "${OSCAR_USERNAME}
-echo "      password: "${OSCAR_PASSWORD}
-echo "      Oscar ID  "${OSCAR_NUMBER}
+echo "      username: ${OSCAR_USERNAME}"
+echo "      password: ${OSCAR_PASSWORD}"
+echo "      Oscar ID  ${OSCAR_NUMBER}"
 echo
 echo "------##################################------"
