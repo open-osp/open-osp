@@ -1,0 +1,42 @@
+# Timezone-data overlay layer for Open OSP (tracked template).
+# The update script (bin/update-timezones.sh) merges these service blocks into
+# your local docker-compose.override.yml (which is gitignored), preserving any
+# existing settings such as port mappings.
+#
+# Donor images (verified 2026-09-08):
+#   - JVM tzdb.dat: eclipse-temurin:8-jre      -> IANA tzdata 2026b (BC permanent UTC-7)
+#   - OS zoneinfo : ubuntu:22.04 + apt tzdata  -> IANA tzdata 2026c
+#
+# To drop the overlays once upstream images ship tzdata >= 2026b:
+#   bin/update-timezones.sh --rollback
+services:
+
+  oscar:
+    image: openosp/open-osp:tz2026b
+    build:
+      context: .
+      dockerfile: docker/tzupdate/jre.Dockerfile
+      args:
+        BASE: openosp/open-osp:latest
+
+  expedius:
+    image: openosp/expedius:tz2026b
+    build:
+      context: .
+      dockerfile: docker/tzupdate/jre.Dockerfile
+      args:
+        BASE: openosp/expedius:latest
+
+  faxws:
+    image: openosp/faxws:tz2026b
+    build:
+      context: .
+      dockerfile: docker/tzupdate/jre.Dockerfile
+      args:
+        BASE: openosp/faxws:latest
+
+  db:
+    image: openosp/mariadb105:tz2026c
+    build:
+      context: .
+      dockerfile: docker/tzupdate/db.Dockerfile
