@@ -24,7 +24,11 @@ git config --global --add safe.directory "$(pwd)"
 if [[ -z "${BUILD_NUMBER:-}" ]]; then
   BUILD_NUMBER="$(git describe --tags --abbrev=0 2>/dev/null || echo 0)"
 fi
+if [[ -z "${JOB_NAME:-}" ]]; then
+  JOB_NAME="Open O"
+fi
 export BUILD_NUMBER
+export JOB_NAME
 
 # increase java perm and gen memory for build
 # other switches can be added here for debugging the build.
