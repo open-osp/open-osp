@@ -15,6 +15,21 @@ fi
 
 cd docker/oscar/oscar || { echo "ERROR: unable to enter docker/oscar/oscar." >&2; exit 1; }
 
+# The repo is bind-mounted from the host, so git inside the container
+# may refuse it as "dubious ownership" unless it's marked safe.
+git config --global --add safe.directory "$(pwd)"
+
+# Use the latest tag of the OSCAR checkout as the build number,
+# unless BUILD_NUMBER was already passed in (e.g. by CI).
+if [[ -z "${BUILD_NUMBER:-}" ]]; then
+  BUILD_NUMBER="$(git describe --tags --abbrev=0 2>/dev/null || echo 0)"
+fi
+if [[ -z "${JOB_NAME:-}" ]]; then
+  JOB_NAME="Open O"
+fi
+export BUILD_NUMBER
+export JOB_NAME
+
 # increase java perm and gen memory for build
 # other switches can be added here for debugging the build.
 export MAVEN_OPTS="-Xms2g -Xmx4g -Djava.net.preferIPv4Stack=true"
