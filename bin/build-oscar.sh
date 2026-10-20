@@ -44,4 +44,6 @@ else
   mvn -Dcheckstyle.skip=true -Dmaven.test.skip=true clean package
 fi
 
+unset BUILD_NUMBER JOB_NAME
+
 chmod 777 -R ./target/
