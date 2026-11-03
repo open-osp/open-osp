@@ -18,6 +18,8 @@ services:
         # TODO: build some scripts in so we need not mount everything.
         - .:/code
         - mariadb-files:/var/lib/mysql
+        # Ensure that the database uses the host's system timezone
+        - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
       networks:
         - back-tier
       deploy:

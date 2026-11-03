@@ -49,6 +49,14 @@ usage() {
 
         start - to bring up containers if needed.
 
+        tzdata - Reload MariaDB time zone tables from the host's tzdata and restart db.
+                Run after updating the host tzdata package. Briefly interrupts db connections.
+                Examples:
+                - Reload and restart db.
+                    $0 tzdata
+                - Reload without restarting db.
+                    $0 tzdata --no-restart
+
 EOF
     exit 1
 }
@@ -98,6 +106,9 @@ case "${COMMAND}" in
         ;;
     health)
         docker compose -f docker-compose.admin.yml run health
+        ;;
+    tzdata)
+        ./bin/openosp-update-db-tzdata.sh "$2"
         ;;
     *)
         usage
