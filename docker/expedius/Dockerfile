@@ -1,5 +1,7 @@
 FROM tomcat:9.0.102-jre8-temurin-jammy
 
+RUN apt update && apt install --only-upgrade ca-certificates
+
 # Fetch Expedius binary
 RUN wget https://bitbucket.org/colcamexdev/expediusbinary/downloads/Expedius-4.12.21.war
 RUN mv Expedius-4.12.21.war /usr/local/tomcat/webapps/Expedius.war
@@ -17,7 +19,17 @@ RUN echo "Installing Java TZUpdater..." \
     && java -jar /tmp/ziupdater.jar -l file:///tmp/tzdata.tar.gz \
     && echo "Java TZDB after update:" \
     && java -jar /tmp/ziupdater.jar -V \
-    && rm -f /tmp/ziupdater.jar /tmp/tzdata.tar.gz
+    && echo "Updating system zoneinfo..." \
+    && mkdir -p /tmp/tzdata \
+    && tar -xzf /tmp/tzdata.tar.gz -C /tmp/tzdata \
+    && cd /tmp/tzdata \
+    && zic -d /usr/share/zoneinfo \
+         africa antarctica asia australasia europe northamerica \
+         southamerica etcetera backward factory \
+    && cp zone.tab zone1970.tab iso3166.tab /usr/share/zoneinfo/ \
+    && echo "System tzdata version: $(cat version)" \
+    && cd / \
+    && rm -rf /tmp/ziupdater.jar /tmp/tzdata.tar.gz /tmp/tzdata
 
 # Modified server.xml is set with a 8444 port 
 ADD ./conf/server.xml /usr/local/tomcat/conf/server.xml
