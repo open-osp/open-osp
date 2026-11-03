@@ -1,7 +1,7 @@
 FROM tomcat:9.0.102-jre8-temurin-jammy
 
 # Set the locale
-RUN apt-get update && apt-get install -y locales curl iputils-ping
+RUN apt update && apt install -y locales curl iputils-ping
 
 RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
     locale-gen
@@ -9,9 +9,9 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en  
 ENV LC_ALL en_US.UTF-8 
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends gettext \
-    && apt-get clean
+RUN apt update \
+    && apt install -y --no-install-recommends gettext \
+    && apt clean
 
 # Update the JRE timezone data. The jar is copied into the build context by bin/openosp-build.sh.
 # ziupdater only accepts file:// URLs, so the IANA tzdata bundle is downloaded first.
@@ -26,20 +26,30 @@ RUN echo "Installing Java TZUpdater..." \
     && java -jar /tmp/ziupdater.jar -l file:///tmp/tzdata.tar.gz \
     && echo "Java TZDB after update:" \
     && java -jar /tmp/ziupdater.jar -V \
-    && rm -f /tmp/ziupdater.jar /tmp/tzdata.tar.gz
+    && echo "Updating system zoneinfo..." \
+    && mkdir -p /tmp/tzdata \
+    && tar -xzf /tmp/tzdata.tar.gz -C /tmp/tzdata \
+    && cd /tmp/tzdata \
+    && zic -d /usr/share/zoneinfo \
+         africa antarctica asia australasia europe northamerica \
+         southamerica etcetera backward factory \
+    && cp zone.tab zone1970.tab iso3166.tab /usr/share/zoneinfo/ \
+    && echo "System tzdata version: $(cat version)" \
+    && cd / \
+    && rm -rf /tmp/ziupdater.jar /tmp/tzdata.tar.gz /tmp/tzdata
 
 # Install requirements for wkhtmltopdf
 # TODO this needs to be adapted to execute in different environments than just Ubuntu Jammy.
 
 # UBUNTU Jammy
-RUN apt-get update \
-    && apt-get -qq -y --no-install-recommends install ca-certificates fontconfig libc6 libfreetype6 libjpeg-turbo8 libpng16-16 libssl3 libstdc++6 libx11-6 libxcb1 libxext6 libxrender1 xfonts-75dpi xfonts-base zlib1g \
-    && apt-get clean;
+RUN apt update \
+    && apt -qq -y --no-install-recommends install ca-certificates fontconfig libc6 libfreetype6 libjpeg-turbo8 libpng16-16 libssl3 libstdc++6 libx11-6 libxcb1 libxext6 libxrender1 xfonts-75dpi xfonts-base zlib1g \
+    && apt clean;
 
 # Other debian installs
-#RUN apt-get update \
-#    && apt-get -qq -y --no-install-recommends install ca-certificates fontconfig libc6 libfreetype6 libjpeg62-turbo libpng16-16 libssl1.1 libstdc++6 libx11-6 libxcb1 libxext6 libxrender1 xfonts-75dpi xfonts-base zlib1g \
-#    && apt-get clean;
+#RUN apt update \
+#    && apt -qq -y --no-install-recommends install ca-certificates fontconfig libc6 libfreetype6 libjpeg62-turbo libpng16-16 libssl1.1 libstdc++6 libx11-6 libxcb1 libxext6 libxrender1 xfonts-75dpi xfonts-base zlib1g \
+#    && apt clean;
 
 ADD oscar.war /usr/local/tomcat/webapps/oscar.war
 ADD drugref2.war /usr/local/tomcat/webapps/drugref2.war
