@@ -29,14 +29,30 @@ expect_http_code() {
 }
 
 check_db() {
-    # mysqladmin ping exits 0 whenever the server is up, even if access is denied,
-    # so no credentials are needed.
-    if mysqladmin ping -h "${1:-db}" --silent >/dev/null 2>&1; then
-        echo "OK      db (${1:-db})"
-    else
-        echo "FAILED  db (${1:-db}) is not accepting connections"
+    db_host="${1:-db}"
+    # Newer images name the client mariadb-admin; older ones only ship mysqladmin.
+    admin=$(command -v mariadb-admin || command -v mysqladmin || true)
+    if [ -z "$admin" ]; then
+        echo "FAILED  db ($db_host): mariadb-admin/mysqladmin not installed"
         exit 1
     fi
+
+    # No credentials are used: any reply from the server, including an
+    # authentication refusal, proves it is up and accepting connections.
+    # --skip-ssl: MariaDB 11.x clients require SSL by default; the 10.5 server has none.
+    if out=$("$admin" ping -h "$db_host" --skip-ssl --connect-timeout=5 2>&1); then
+        echo "OK      db ($db_host)"
+        return
+    fi
+    case "$out" in
+        *"Access denied"*|*"is not allowed to connect"*)
+            echo "OK      db ($db_host) (server responded: authentication refused)"
+            ;;
+        *)
+            echo "FAILED  db ($db_host) is not accepting connections: $out"
+            exit 1
+            ;;
+    esac
 }
 
 check_oscar() {
