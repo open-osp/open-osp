@@ -1,7 +1,6 @@
 FROM alpine
 
-RUN apk add curl && apk add iputils
-RUN apk add openssl
+RUN apk add --no-cache curl mariadb-client
 
 ADD ./health.sh /health.sh
-CMD /health.sh
+CMD ["sh", "/health.sh"]

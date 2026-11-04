@@ -1,22 +1,71 @@
 #!/bin/sh
+#
+# OpenOSP health checks.
+#
+# Usage: health.sh [service] [host]
+#
+#   service  db | oscar | faxws | expedius | all   (default: all)
+#   host     host to probe (default: the compose service name)
+#
+# As a Docker Compose healthcheck this runs inside the target container,
+# e.g. `health.sh oscar localhost`. From the admin `health` container
+# (bin/openosp-health.sh) it runs with no arguments and checks every
+# service in startup priority order: DB, Oscar, SRFax (faxws), Expedius.
 
-set -euxo
+set -eu
 
-#ping -c 1 expedius
-#ping -c 1 db
-#ping -c 1 oscar
-#ping -c 1 faxws
+service="${1:-all}"
+host="${2:-}"
 
-openssl x509 -in /usr/local/tomcat/conf/ssl.crt -out /tmp/ssl.pem -outform PEM
+# expect_http_code <expected> <url>
+expect_http_code() {
+    code=$(curl -s -o /dev/null -w "%{http_code}" -Ik --max-time 10 "$2" || true)
+    if [ "$code" = "$1" ]; then
+        echo "OK      $2 ($code)"
+    else
+        echo "FAILED  $2 (got $code, expected $1)"
+        exit 1
+    fi
+}
 
-faxws_http_code=$(curl -s -o /dev/null -w "%{http_code}" -Ik -O --cacert /tmp/ssl.pem https://faxws/faxWs || true)
-/health-checker.sh "$faxws_http_code" "401"
+check_db() {
+    # mysqladmin ping exits 0 whenever the server is up, even if access is denied,
+    # so no credentials are needed.
+    if mysqladmin ping -h "${1:-db}" --silent >/dev/null 2>&1; then
+        echo "OK      db (${1:-db})"
+    else
+        echo "FAILED  db (${1:-db}) is not accepting connections"
+        exit 1
+    fi
+}
 
-expedius_http_code=$(curl -s -o /dev/null -w "%{http_code}" -Ik http://expedius:8081/Expedius/ || true)
-/health-checker.sh "$expedius_http_code" "200"
+check_oscar() {
+    expect_http_code 200 "https://${1:-oscar}/oscar/ops/health/heartbeat"
+    expect_http_code 200 "https://${1:-oscar}/drugref2/"
+}
 
-oscar_http_code=$(curl -s -o /dev/null -w "%{http_code}" -Ik -O https://oscar/oscar/ops/health/heartbeat || true)
-/health-checker.sh "$oscar_http_code" "200"
+check_faxws() {
+    # 401: the web service is up and requires authentication.
+    expect_http_code 401 "https://${1:-faxws}/faxWs"
+}
 
-drugref_http_code=$(curl -s -o /dev/null -w "%{http_code}" -Ik -O https://oscar/drugref2/ || true)
-/health-checker.sh "$drugref_http_code" "200"
+check_expedius() {
+    expect_http_code 200 "http://${1:-expedius}:8081/Expedius/"
+}
+
+case "$service" in
+    db)       check_db "$host" ;;
+    oscar)    check_oscar "$host" ;;
+    faxws)    check_faxws "$host" ;;
+    expedius) check_expedius "$host" ;;
+    all)
+        check_db
+        check_oscar
+        check_faxws
+        check_expedius
+        ;;
+    *)
+        echo "Unknown service: $service (expected db, oscar, faxws, expedius or all)"
+        exit 2
+        ;;
+esac

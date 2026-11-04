@@ -20,8 +20,15 @@ services:
         - mariadb-files:/var/lib/mysql
         # Ensure that the database uses the host's system timezone
         - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
+        - ./docker/health/health.sh:/health.sh:ro
       networks:
         - back-tier
+      healthcheck:
+        test: ["CMD", "sh", "/health.sh", "db", "localhost"]
+        interval: 10s
+        timeout: 15s
+        retries: 6
+        start_period: 30s
       deploy:
         resources:
           limits:
@@ -39,9 +46,19 @@ services:
         - ./volumes/ssl.crt:/usr/local/tomcat/conf/ssl.crt
         - ./volumes/ssl.key:/usr/local/tomcat/conf/ssl.key
         - ./volumes/chain.pem:/usr/local/tomcat/conf/chain.pem
+        - ./docker/health/health.sh:/health.sh:ro
         # Add other volumes to the volumes/ folder, and mount them via docker-compose.override.yml
       networks:
         - back-tier
+      depends_on:
+        db:
+          condition: service_healthy
+      healthcheck:
+        test: ["CMD", "sh", "/health.sh", "oscar", "localhost"]
+        interval: 30s
+        timeout: 25s
+        retries: 5
+        start_period: 300s
       environment:
         TZ: America/Vancouver
         CATALINA_OPTS: -Djava.awt.headless=true
@@ -61,8 +78,18 @@ services:
         - ./volumes/ssl.key:/usr/local/tomcat/conf/ssl.key
         - ./volumes/expedius:/var/lib/expedius
         - ./volumes/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
+        - ./docker/health/health.sh:/health.sh:ro
       networks:
         - back-tier
+      depends_on:
+        oscar:
+          condition: service_healthy
+      healthcheck:
+        test: ["CMD", "sh", "/health.sh", "expedius", "localhost"]
+        interval: 30s
+        timeout: 15s
+        retries: 5
+        start_period: 180s
       environment:
         TZ: America/Vancouver
         JAVA_OPTS: -Dlog4j2.formatMsgNoLookups=true
@@ -80,8 +107,18 @@ services:
         - ./volumes/OscarDocument:/var/lib/OscarDocument
         - ./volumes/ssl.crt:/usr/local/tomcat/conf/ssl.crt
         - ./volumes/ssl.key:/usr/local/tomcat/conf/ssl.key
+        - ./docker/health/health.sh:/health.sh:ro
       networks:
         - back-tier
+      depends_on:
+        oscar:
+          condition: service_healthy
+      healthcheck:
+        test: ["CMD", "sh", "/health.sh", "faxws", "localhost"]
+        interval: 30s
+        timeout: 15s
+        retries: 5
+        start_period: 180s
       env_file:
         - local.env
       environment:
