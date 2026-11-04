@@ -105,7 +105,7 @@ case "${COMMAND}" in
         ./bin/openosp-update.sh "$2" "$3"
         ;;
     health)
-        docker compose -f docker-compose.admin.yml run health
+        ./bin/openosp-health.sh "${@:2}"
         ;;
     tzdata)
         ./bin/openosp-update-db-tzdata.sh "$2"
