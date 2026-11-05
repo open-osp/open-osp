@@ -2,10 +2,7 @@ services:
     health:
       build: docker/health
       volumes:
-        - ./docker/health/health.sh:/health.sh
-        - ./docker/health/health-checker.sh:/health-checker.sh
-        - ./volumes/ssl.crt:/usr/local/tomcat/conf/ssl.crt
-        - ./volumes/ssl.key:/usr/local/tomcat/conf/ssl.key
+        - ./docker/health/health.sh:/health.sh:ro
       networks:
         - back-tier
       env_file:
