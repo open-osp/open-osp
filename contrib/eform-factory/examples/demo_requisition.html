@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Demo Requisition (eform-factory example)</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, Helvetica, sans-serif; background: #eee; }
+#page {
+  width: 1020px; min-height: 1320px; margin: 0 auto; background: #fff;
+  padding: 26px 32px 14px; position: relative; font-size: 13px; color: #000;
+}
+input[type="checkbox"] { width: 13px; height: 13px; vertical-align: -2px; margin: 0 4px 0 0; }
+input.line {
+  border: 0; border-bottom: 1px solid #000; font: inherit; font-size: 13px;
+  padding: 0 2px 1px; background: transparent; outline: none; height: 17px;
+}
+textarea { border: 1px solid #000; font: inherit; outline: none; width: 100%; padding: 4px; resize: none; }
+.b { font-weight: bold; }
+.row { display: flex; align-items: flex-end; margin-bottom: 10px; }
+.hr { border-top: 2px solid #000; margin: 10px 0; }
+.cap { display: block; font-size: 10px; color: #333; }
+.sigcell { display: flex; flex-direction: column; }
+.sig-printed { font-weight: bold; font-size: 12px; }
+#title { text-align: center; font-size: 20px; font-weight: bold; margin-bottom: 12px; }
+@media print {
+  @page { size: letter; margin: 0.15in; }
+  body { background: #fff; }
+  #page { zoom: 0.78; }
+}
+</style>
+</head>
+<body>
+<div id="page">
+  <div id="title">DEMO CLINIC &mdash; TEST REQUISITION</div>
+
+  <div class="row">
+    <span>Patient name:&nbsp;</span><input class="line" name="patient_name" style="flex:1">
+    <span style="margin-left:16px">PHN:&nbsp;</span>
+    <input class="line" name="phn" data-oscar-key="patient_phn" style="width:200px">
+  </div>
+
+  <div class="row">
+    <span>Address:&nbsp;</span><input class="line" name="address1" data-oscar-key="patient_address_street" style="flex:1">
+    <span style="margin-left:16px">City/Prov/Postal:&nbsp;</span><input class="line" name="address2" style="width:240px">
+  </div>
+
+  <div class="row">
+    <span>Phone:&nbsp;</span><input class="line" name="tel" data-oscar-key="patient_phone" style="width:200px">
+    <span style="margin-left:16px; white-space:nowrap">DOB:&nbsp;</span>
+    <input class="line" name="dob_dd" placeholder="DD" style="width:44px;text-align:center">
+    <input class="line" name="dob_mon" placeholder="MMM" style="width:56px;text-align:center;margin-left:6px">
+    <input class="line" name="dob_yyyy" placeholder="YYYY" style="width:64px;text-align:center;margin-left:6px">
+    <span style="margin-left:16px">Sex:&nbsp;</span>
+    <span><input type="checkbox" name="sex_m">M</span>
+    <span style="margin-left:8px"><input type="checkbox" name="sex_f">F</span>
+  </div>
+
+  <div class="hr"></div>
+  <div class="b" style="margin-bottom:8px">TESTS REQUESTED</div>
+  <div class="row"><span><input type="checkbox" name="test_a">Example test A</span>
+    <span style="margin-left:30px"><input type="checkbox" name="test_b">Example test B</span>
+    <span style="margin-left:30px"><input type="checkbox" name="test_c">Example test C</span></div>
+
+  <div class="b" style="margin:8px 0 4px">Clinical information:</div>
+  <textarea name="clinical_info" rows="6"></textarea>
+
+  <div class="hr"></div>
+  <div class="b">REFERRING PHYSICIAN</div>
+  <div class="row" style="margin-top:10px">
+    <span>Signature:&nbsp;</span>
+    <div class="sigcell" style="flex:0 0 280px">
+      <input class="line" name="physician_signature" style="width:100%">
+      <span class="cap">Physician&rsquo;s signature</span>
+    </div>
+    <span style="margin-left:14px">Printed name:&nbsp;</span>
+    <input class="line" name="physician_name" style="flex:1">
+  </div>
+  <div class="row">
+    <span>MSP No:&nbsp;</span><input class="line" name="msp_billing" data-oscar-key="provider_billing" style="width:130px">
+    <span style="margin-left:16px">Phone:&nbsp;</span><input class="line" name="physician_tel" style="width:170px">
+  </div>
+  <div class="row">
+    <span class="b">COPY TO:&nbsp;</span><input class="line" name="copies_to" style="flex:1">
+  </div>
+</div>
+</body>
+</html>
