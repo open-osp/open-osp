@@ -40,6 +40,7 @@ The script must be run from the root of the clinic's OpenOSP directory. It uses 
 | `MYSQL_ROOT_PASSWORD` | `local.env`, read **inside the db container** | none | Used for `root` dumps and always for the log `DELETE` |
 | `BACKUP_CMD` | env | not set | Optional legacy custom dump command, run with `sh -c` inside the `db` container |
 | `BACKUP_MIN_BYTES` | env | `10240` | Smallest dump size accepted as a successful backup |
+| `BACKUP_MIN_FREE_MB` | env | `2048` | Disk space that must stay free after a dump is written |
 | `BACKUP_HEALTHCHECK_URL` | env | not set | URL pinged after the backup modes (`<url>/fail` on failure) |
 | `HDC_HEALTHCHECK_URL` | env | not set | Same as above, for `--hdc` runs |
 | `DUMP_LOCATION` | env | `./dump` | Where the dump is staged on disk |
@@ -67,6 +68,12 @@ Then add `BACKUP_DB_USER=backup` and `BACKUP_DB_PASSWORD=<password>` to `local.e
 - **`db_exec <user> <program> …`** runs `mysqldump` or `mysql` inside the db container. The password comes from the container's own environment (`MYSQL_ROOT_PASSWORD` or `BACKUP_DB_PASSWORD`) and is passed to the client through `MYSQL_PWD`, so it never appears on a command line.
 - **`dump_db`** produces the main dump with `mysqldump --single-transaction --quick --no-tablespaces --routines --events --triggers oscar`, or runs the custom `BACKUP_CMD` if one is set.
 - **`verify_dump <file> <min bytes>`** accepts a dump only if three checks pass: the file is at least the minimum size, it passes `gzip -t` (for `.gz` files), and its last line is mysqldump's `-- Dump completed` line, which mysqldump writes only when it finishes successfully.
+- **`require_space <dir> <bytes> <label>`** runs before any file is written. It exits the script if writing an estimated `<bytes>` would leave less than `BACKUP_MIN_FREE_MB` (default 2048 MB) free on that disk. The reserve protects MySQL and the OS, because dumps are usually written to the same disk the database runs on. The estimates are:
+  - **Database dump (gzipped):** 1.5 × the size of the last successful dump, recorded in `<DUMP_LOCATION>/.last-dump-bytes`. On the first run, a quarter of the database's uncompressed data size (from `information_schema`), since SQL dumps usually compress 5–10×. Any space used by a `db.sql.gz` left over from a failed run is subtracted, because that file gets overwritten.
+  - **HDC export:** 2 × the data size of the 26 exported tables, because the plain-text file and its encrypted copy exist together for a moment.
+  - **Log archive:** the data size of the `log` table.
+  - **EFS copy:** the size of the dump, checked on the target, but only when the target is on a different file system (moving the file within one file system needs no extra space).
+  - If no estimate is possible (for example, the size query fails), only the reserve is checked and a warning is logged.
 - **`log`** and **`validate_aws`** work as before: timestamped logging, and checking for AWS credentials and setting up the `amazon/aws-cli` command (`$aws`).
 
 ### 1.4 Mode: `--hdc` (HDC export)
@@ -74,7 +81,7 @@ Then add `BACKUP_DB_USER=backup` and `BACKUP_DB_PASSWORD=<password>` to `local.e
 This mode runs on its own and exits before any of the other steps.
 
 1. Checks the AWS credentials.
-2. Dumps 26 clinical tables with `--single-transaction --quick --skip-triggers` to `hdc-<filename>.sql`, using the same database user as the backups. The dump is then verified. On failure the partial file is deleted and the script exits 1.
+2. Checks the free disk space, then dumps 26 clinical tables with `--single-transaction --quick --skip-triggers` to `hdc-<filename>.sql`, using the same database user as the backups. The dump is then verified. On failure the partial file is deleted and the script exits 1.
 3. Encrypts the dump with GPG for `pki-prod@hdcbc.ca` (`--trust-model always`; the key is checked by hand). If encryption fails, both files are deleted and the script exits 1. On success, the plain-text file is deleted straight away.
 4. Uploads the `.gpg` file to `s3://openosp-hdc-transit/openosp-<site>/<YYYYMM>/` with the `aws` CLI installed on the host.
 5. If the upload succeeds, deletes the `.gpg` file and exits 0. If it fails, keeps the `.gpg` file for a retry, logs its path and exits 1.
@@ -87,7 +94,7 @@ This mode runs on its own and exits before any of the other steps.
 ### 1.6 Mode: `--s3` (off-site backup to Amazon S3)
 
 1. Checks the AWS credentials and sets up the AWS CLI command.
-2. Dumps the database, gzips it to `<DUMP_LOCATION>/db.sql.gz` and verifies it. The script exits 1 if the dump or the verification fails.
+2. Checks the free disk space, dumps the database, gzips it to `<DUMP_LOCATION>/db.sql.gz` and verifies it. The script exits 1 if the dump or the verification fails.
 3. Removes any double quotes from `BACKUP_BUCKET`.
 4. **Uploads the database first**, because it is the most important part of the backup: `aws s3 mv` to `s3://<bucket>/openosp-<site>/<YYYYMM>/<site>.<timestamp>.sql.gz`. A failure is recorded and the script carries on.
 5. **Syncs documents:** runs `aws s3 sync` from `./volumes` to `s3://<bucket>/openosp-<site>/volumes` (`STANDARD_IA`, skipping `.sync/*`) in the `amazon/aws-cli` container. Exit code 2 (some files skipped) and any other non-zero code are recorded as failures.
@@ -96,13 +103,13 @@ This mode runs on its own and exits before any of the other steps.
 ### 1.7 Mode: `--efs` (backup to file storage)
 
 1. Checks that `BACKUP_EFS_ROOT` (default `/srv/efs`) is a mount point, and exits 1 if it is not. This stops the backup from quietly filling the local disk.
-2. Dumps, gzips and verifies the database, as in the S3 mode.
+2. Checks the free disk space, then dumps, gzips and verifies the database, as in the S3 mode. If the target is on a different file system, also checks that the target has room for the dump.
 3. Creates `<root>/openosp-<site>/volumes` and `<root>/openosp-<site>/<YYYYMM>/`.
 4. Moves the dump to `<root>/openosp-<site>/<YYYYMM>/<filename>.sql.gz`, then runs `rsync -a ./volumes/ <root>/openosp-<site>/volumes/`. A failure in either step is recorded.
 
 ### 1.8 Mode: `--archive-logs` (trim the audit log)
 
-1. Dumps the OSCAR `log` table (the audit trail) to `log_archive_DD-MM-YY.sql` with `--single-transaction --quick`, then checks that the dump completed.
+1. Checks the free disk space, then dumps the OSCAR `log` table (the audit trail) to `log_archive_DD-MM-YY.sql` with `--single-transaction --quick`, then checks that the dump completed.
 2. **If the export or the check fails:** deletes the partial file, records the failure, and does **not** delete any log rows.
 3. Otherwise, moves the archive into `volumes/OscarDocument/oscar/` (so the next S3 or EFS run backs it up), then runs `bin/archive-logs.sql` **as root**, which deletes rows older than 3 months.
 
@@ -184,7 +191,7 @@ The wrapper passes only `$2 $3`, so `backup -m --s3 --archive-logs` silently dro
 Two runs at once (cron plus a manual run, or a long sync) write to the same `db.sql.gz` and restart OSCAR in the middle of each other's backup.
 *Fix:* wrap the script in `flock -n /var/lock/openosp-backup.lock`.
 
-**🟡 12. No disk space check.**
+**🟡 12. No disk space check.** **✅ Fixed**
 The dump is staged on the same server before upload. A large database can fill the disk that MySQL is running on.
 *Fix:* check free space against the size of the last dump before starting, or stream the dump straight to S3 (`… | gzip | aws s3 cp - s3://…`).
 
@@ -249,6 +256,6 @@ The 3-month window is hard-coded in the SQL file. Make it configurable and docum
 4. **Harden S3:** versioning, Object Lock, SSE-KMS, least-privilege IAM, lifecycle rules (items 20 and 22).
 5. ✅ **Make the dump consistent and lock-free** with `--single-transaction --quick`, a dedicated backup user and no passwords on the command line (items 9, 17 and 18).
 6. **Avoid unnecessary downtime:** no OSCAR restart unless needed, and exit early when no mode flag is given (item 8).
-7. **Make it robust to run unattended:** `flock`, a disk space check, a fixed working directory, `CLINIC_NAME`, proper flag parsing, a pinned image and no `-t` (items 10–16).
+7. **Make it robust to run unattended:** `flock`, ✅ a disk space check (done), a fixed working directory, `CLINIC_NAME`, proper flag parsing, a pinned image and no `-t` (items 10–16).
 8. **Clean up plain-text files** with `umask 077` and a cleanup trap, and stream data to `gpg` or S3 where possible (item 19).
 9. **Test restores** automatically and document the restore procedure (item 23).

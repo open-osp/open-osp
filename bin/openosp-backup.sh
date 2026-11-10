@@ -122,8 +122,84 @@ verify_dump() {
     log "Verified $file ($size bytes)."
 }
 
+# bytes -> human-readable MB, for log messages.
+mb() {
+    echo "$(( $1 / 1048576 )) MB"
+}
+
+# free space in bytes on the file system that holds a path (empty if unknown).
+# the multiplication is done in bash: some awk versions (mawk) print large numbers in exponent form.
+free_bytes() {
+    local kb
+    kb=$(df -Pk "$1" 2>/dev/null | awk 'NR==2 {print $4}') || true
+    [[ $kb =~ ^[0-9]+$ ]] && echo $(( kb * 1024 ))
+    return 0
+}
+
+# exit before writing a file if the disk holding <dir> would drop below the reserve:
+#   require_space <dir> <estimated bytes needed> <label>
+# The reserve (BACKUP_MIN_FREE_MB, default 2048) stays free for MySQL and the OS, because the dump is
+# usually written to the same disk the database runs on.
+require_space() {
+    local dir=$1 needed=$2 label=$3 free reserve
+    reserve=$(( ${BACKUP_MIN_FREE_MB:-2048} * 1048576 ))
+    free=$(free_bytes "$dir")
+    if [ -z "$free" ]; then
+        log "WARN: could not determine the free disk space in $dir. Skipping the disk space check."
+        return 0
+    fi
+    if [ $(( needed + reserve )) -gt "$free" ]; then
+        log "ERROR: not enough disk space in $dir for the $label: about $(mb "$needed") needed plus a $(mb "$reserve") reserve, but only $(mb "$free") free. Exiting."
+        exit 1
+    fi
+    log "Disk space OK for the $label: $(mb "$free") free in $dir, about $(mb "$needed") needed plus a $(mb "$reserve") reserve."
+}
+
+# file system that holds a path, used to tell whether a move needs extra space.
+filesystem_of() {
+    df -P "$1" 2>/dev/null | awk 'NR==2 {print $1}' || true
+}
+
+# sum of the data size of the given oscar tables, in bytes (empty if it cannot be read).
+# an uncompressed dump of a table is roughly the size of its data.
+table_bytes() {
+    local list total
+    list=$(printf "'%s'," "$@")
+    total=$(db_exec "$db_user" mysql -N -B -e "SELECT COALESCE(SUM(data_length), 0)
+        FROM information_schema.tables WHERE table_schema = 'oscar' AND table_name IN (${list%,})" 2>/dev/null) || true
+    [[ $total =~ ^[0-9]+$ ]] && echo "$total"
+    return 0
+}
+
+# estimate the size of the next compressed database dump:
+# 1.5 x the last successful dump (recorded in $last_dump_file), or on the first run, a quarter of the
+# uncompressed data size (SQL dumps usually compress 5-10x). Prints nothing if no estimate is possible.
+estimate_db_dump_bytes() {
+    local last data
+    last=$(cat "$last_dump_file" 2>/dev/null) || true
+    if [[ $last =~ ^[0-9]+$ ]]; then
+        echo $(( last * 3 / 2 ))
+        return 0
+    fi
+    data=$(db_exec "$db_user" mysql -N -B -e "SELECT COALESCE(SUM(data_length), 0)
+        FROM information_schema.tables WHERE table_schema = 'oscar'" 2>/dev/null) || true
+    [[ $data =~ ^[0-9]+$ ]] && echo $(( data / 4 ))
+    return 0
+}
+
 # dump the database to $DUMP_LOCATION/db.sql.gz and verify it. Exits the script if it fails.
 dump_and_verify_db() {
+    local needed existing
+    needed=$(estimate_db_dump_bytes)
+    if [ -z "$needed" ]; then
+        log "WARN: could not estimate the dump size, only checking the free space reserve."
+        needed=0
+    fi
+    # a db.sql.gz left over from a failed run is overwritten, so its space will be reused.
+    existing=$(wc -c 2>/dev/null < "$DUMP_LOCATION/db.sql.gz") || existing=0
+    needed=$(( needed > existing ? needed - existing : 0 ))
+    require_space "$DUMP_LOCATION" "$needed" "database dump"
+
     if ! dump_db | gzip > "$DUMP_LOCATION/db.sql.gz"; then
         log "ERROR: database dump failed. Exiting."
         exit 1
@@ -132,6 +208,9 @@ dump_and_verify_db() {
         log "ERROR: database dump verification failed. Exiting."
         exit 1
     fi
+    # remember the size, to estimate the space needed by the next run.
+    wc -c < "$DUMP_LOCATION/db.sql.gz" | tr -d ' ' > "$last_dump_file" \
+        || log "WARN: could not record the dump size in $last_dump_file."
 }
 
 # runs on every exit of this script: restarts the services that were stopped for the backup,
@@ -184,34 +263,47 @@ if [[ $* == *--hdc* ]]; then
     # check for AWS connection
     validate_aws
 
+    hdc_tables=(
+        allergies
+        appointment
+        appointmentType
+        billing
+        billing_history
+        billingmaster
+        billingservice
+        billingstatus_types
+        casemgmt_note
+        clinic
+        demographic
+        demographicArchive
+        demographicExt
+        demographicExtArchive
+        diagnosticcode
+        drugReason
+        drugs
+        dxresearch
+        LookupListItem
+        measurements
+        measurementsExt
+        measurementType
+        prescription
+        preventions
+        preventionsExt
+        provider
+    )
+
+    # the export is written uncompressed, and the encrypted copy exists next to it for a moment,
+    # so allow twice the data size of the exported tables.
+    hdc_data=$(table_bytes "${hdc_tables[@]}")
+    if [ -z "$hdc_data" ]; then
+        log "WARN: could not estimate the HDC export size, only checking the free space reserve."
+        hdc_data=0
+    fi
+    require_space . $(( hdc_data * 2 )) "HDC export"
+
     hdc_file="hdc-$filename.sql"
     if ! db_exec "$db_user" mysqldump --single-transaction --quick --no-tablespaces --skip-triggers oscar \
-    allergies \
-    appointment \
-    appointmentType \
-    billing \
-    billing_history \
-    billingmaster \
-    billingservice \
-    billingstatus_types \
-    casemgmt_note \
-    clinic \
-    demographic \
-    demographicArchive \
-    demographicExt \
-    demographicExtArchive \
-    diagnosticcode \
-    drugReason \
-    drugs \
-    dxresearch \
-    LookupListItem \
-    measurements \
-    measurementsExt \
-    measurementType \
-    prescription \
-    preventions \
-    preventionsExt \
-    provider > "$hdc_file"; then
+        "${hdc_tables[@]}" > "$hdc_file"; then
         rm -f "$hdc_file"
         log "ERROR: HDC database dump failed."
         exit 1
@@ -272,6 +364,9 @@ fi
 
 mkdir -p "$DUMP_LOCATION"
 
+# size of the last successful database dump, used to estimate the disk space the next one needs.
+last_dump_file="$DUMP_LOCATION/.last-dump-bytes"
+
 # dump database backup and then push to Amazon S3 storage.
 if [[ $* == *--s3* ]]; then
 
@@ -327,6 +422,11 @@ if [[ $* == *--efs* ]]; then
     mkdir -p "$efs_root"/"$clinicname"/volumes
     mkdir -p "$efs_root"/"$clinicname"/"$folder"/
 
+    # moving to another file system copies the archive, so the target needs room for it.
+    if [ "$(filesystem_of "$DUMP_LOCATION")" != "$(filesystem_of "$efs_root")" ]; then
+        require_space "$efs_root" "$(wc -c < "$DUMP_LOCATION"/db.sql.gz)" "database archive copy"
+    fi
+
     log "Moving database archive from $DUMP_LOCATION/db.sql.gz to $efs_root/$clinicname/$folder/$filename.sql.gz"
     if ! mv "$DUMP_LOCATION"/db.sql.gz "$efs_root"/"$clinicname"/"$folder"/"$filename".sql.gz; then
         fail "could not move the database archive to $efs_root/$clinicname/$folder/"
@@ -345,6 +445,12 @@ if [[ $* == *--archive-logs* ]]; then
 
     log "Archiving database logs"
     ARCHIVE_NAME=log_archive_$(date +"%d-%m-%y").sql
+    log_data=$(table_bytes log)
+    if [ -z "$log_data" ]; then
+        log "WARN: could not estimate the log table size, only checking the free space reserve."
+        log_data=0
+    fi
+    require_space . "$log_data" "log table archive"
     if ! db_exec "$db_user" mysqldump --single-transaction --quick --no-tablespaces oscar log > "$ARCHIVE_NAME" \
         || ! verify_dump "$ARCHIVE_NAME" 0; then
         # never delete audit log rows that have not been archived.
