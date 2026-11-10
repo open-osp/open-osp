@@ -10,12 +10,37 @@ log() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') $1"
 }
 
+# resolve the whole-disk block device (e.g. /dev/nvme0n1) backing a path.
+# docker's --device-read-* limits only apply to whole disks, not partitions or LVM volumes.
+resolve_disk() {
+    local dev parent
+    dev=$(df --output=source "$1" 2>/dev/null | tail -1)
+    [ -b "$dev" ] || return 0
+    dev=$(readlink -f "$dev")
+    while parent=$(lsblk -ndo PKNAME "$dev" 2>/dev/null | head -1) && [ -n "$parent" ]; do
+        dev="/dev/$parent"
+    done
+    echo "$dev"
+}
+
 # check if an AWS account has been set up on this server.
 validate_aws() {
     if [ -e "$HOME/.aws/credentials" ]
     then
         log "aws credentials found."
         aws="docker run --rm -t -v $HOME/.aws:/root/.aws -v $(pwd):/open-osp amazon/aws-cli"
+
+        # Throttled variant for the volumes sync, to avoid read bursts on production disks.
+        # Override limits with BACKUP_READ_BPS / BACKUP_READ_IOPS, and the disk with BACKUP_DISK.
+        local disk throttle=""
+        disk="${BACKUP_DISK:-$(resolve_disk ./volumes)}"
+        if [ -n "$disk" ] && [ -b "$disk" ]; then
+            throttle="--device-read-bps $disk:${BACKUP_READ_BPS:-30mb} --device-read-iops $disk:${BACKUP_READ_IOPS:-500}"
+            log "S3 sync disk reads limited on $disk to ${BACKUP_READ_BPS:-30mb}/s and ${BACKUP_READ_IOPS:-500} IOPS."
+        else
+            log "WARN: could not determine block device for ./volumes, S3 sync will not be I/O throttled."
+        fi
+        aws_throttled="docker run --rm -t $throttle -v $HOME/.aws:/root/.aws -v $(pwd)/volumes:/open-osp/volumes:ro amazon/aws-cli"
     else
         log "ERROR: no ~/.aws/credentials file found. please mount one for me."
         exit 1
@@ -131,7 +156,8 @@ if [[ $* == *--s3* ]]; then
 
     # Remove double quotes, user might input value enclosed in "" in local.env
     BACKUP_BUCKET="${BACKUP_BUCKET//\"}"
-    $aws s3 sync --quiet /open-osp/volumes s3://"$BACKUP_BUCKET"/"$clinicname"/volumes --storage-class STANDARD_IA --exclude ".sync/*"
+    # shellcheck disable=SC2086
+    $aws_throttled s3 sync --quiet /open-osp/volumes s3://"$BACKUP_BUCKET"/"$clinicname"/volumes --storage-class STANDARD_IA --exclude ".sync/*"
     # shellcheck disable=SC2086
     $aws s3 mv --quiet /open-osp/"$DUMP_LOCATION"/db.sql.gz s3://"$BACKUP_BUCKET"/"$clinicname"/"$folder"/"$filename".sql.gz
 
