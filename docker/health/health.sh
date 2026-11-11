@@ -62,7 +62,7 @@ check_oscar() {
 
 check_faxws() {
     # 401: the web service is up and requires authentication.
-    expect_http_code 404 "https://${1:-faxws}/faxWs"
+    expect_http_code 401 "https://${1:-faxws}/faxWs"
 }
 
 check_expedius() {
