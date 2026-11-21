@@ -1,10 +1,13 @@
-FROM tomcat:9.0.102-jre8-temurin-jammy
+FROM tomcat:jre21-temurin-noble
 
 RUN apt update && apt install --only-upgrade ca-certificates
 
 # Fetch Expedius binary
-RUN wget https://bitbucket.org/colcamexdev/expediusbinary/downloads/Expedius-4.12.21.war
-RUN mv Expedius-4.12.21.war /usr/local/tomcat/webapps/Expedius.war
+ARG EXPEDIUS_URL=https://github.com/open-osp/expedius/releases/download/latest/Expedius-rc4.11.26.war
+ARG EXPEDIUS_SHA256=fa663e95dec82b85f51e7c011009a46055651d288c2666a6cee6bcc1c7d7776b
+RUN wget -q -O /tmp/Expedius.war "${EXPEDIUS_URL}" \
+    && echo "${EXPEDIUS_SHA256}  /tmp/Expedius.war" | sha256sum -c - \
+    && mv /tmp/Expedius.war /usr/local/tomcat/webapps/Expedius.war
 
 # Update the JRE timezone data. The jar is copied into the build context by bin/openosp-build.sh.
 # ziupdater only accepts file:// URLs, so the IANA tzdata bundle is downloaded first.
