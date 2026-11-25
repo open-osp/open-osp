@@ -184,6 +184,22 @@ Reload the database container
 ```
 docker compose  up -d db
 ```
+## Database Admin User
+
+`./openosp bootstrap` creates a MariaDB account (`dbadmin` by default) for day-to-day DBA work so `root` is not needed.
+It can manage the `oscar`, `drugref2` and `OscarFax` schemas (data changes, OSCAR update scripts, schema changes,
+backups with `mysqldump`, `ANALYZE`/`OPTIMIZE`/`REPAIR`) and view all sessions (`SHOW PROCESSLIST`).
+It cannot touch the `mysql` system schema, manage users or grants, read/write server files, or shut down the server.
+
+On an existing deployment, create it (or reset its grants and password to match `local.env`) with:
+```
+./openosp dbadmin
+./openosp dbadmin --show   # print current grants
+```
+The credentials are saved in `local.env` as `DB_ADMIN_USER` / `DB_ADMIN_PASSWORD`. Optional overrides in `local.env`:
+`DB_ADMIN_HOST` (default `%`; restrict it where possible, since `dc.prod.yml` publishes port 3306) and
+`DB_ADMIN_DATABASES` (default `oscar drugref2 OscarFax`). To rotate the password, change `DB_ADMIN_PASSWORD` and re-run.
+
 ## Log Access
 Logs are no longer found in the usual OSCAR server locations: /var/lib/logs/catalina.out, /var/log/mysql.error, etc... Logs are managed and redirected through each Docker container's stdout. Up to 3 days of history is available. 
 

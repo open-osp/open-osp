@@ -12,5 +12,7 @@ sleep 10
 docker compose -f docker-compose.build.yml run --rm builder ./bin/clone.sh "${OSCAR_REPO:-""}" "${OSCAR_TREEISH:-""}"
 docker compose exec db ./bin/populate-db.sh "${LOCATION:-""}"
 
+./bin/openosp-db-admin-user.sh
+
 ./bin/setup-faxws.sh
 
