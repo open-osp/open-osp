@@ -49,6 +49,14 @@ usage() {
 
         start - to bring up containers if needed.
 
+        health - Check that every OpenOSP service is up, in startup order:
+                db, Oscar (and drugref2), faxws, Expedius.
+                Runs a one-off health container on the back-tier network and
+                exits non-zero at the first service that fails.
+                Examples:
+                - Check all services.
+                    $0 health
+
         tzdata - Reload MariaDB time zone tables from the host's tzdata and restart db.
                 Run after updating the host tzdata package. Briefly interrupts db connections.
                 Examples:
