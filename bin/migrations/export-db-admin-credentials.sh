@@ -5,20 +5,22 @@
 # The file is created owner-read/write only (600). If it already exists the pairs are appended
 # to the end; nothing is overwritten. Delete the file once the credentials have been handed off.
 #
+# Each entry is headed by the name of the folder containing local.env and followed by a blank line:
+#   <folder-name>
+#   DB_ADMIN_USER=...
+#   DB_ADMIN_PASSWORD=...
+#   <blank line>
+#
 # Usage: ./bin/export-db-admin-credentials.sh [output-file]
 #        default output-file: db-admin-credentials.txt (git-ignored)
-
 set -euo pipefail
-
 ENV_FILE="local.env"
 OUTPUT_FILE="${1:-db-admin-credentials.txt}"
 KEYS=(DB_ADMIN_USER DB_ADMIN_PASSWORD)
-
 if [ ! -f "$ENV_FILE" ]; then
     echo "ERROR: $ENV_FILE not found. Run this from the OpenOSP directory." >&2
     exit 1
 fi
-
 # Collect the lines first so a missing key leaves no partial output file behind.
 LINES=()
 for key in "${KEYS[@]}"; do
@@ -32,17 +34,16 @@ for key in "${KEYS[@]}"; do
     line=$(printf '%s' "$line" | sed -E 's/^[[:space:]]*(export[[:space:]]+)?//')
     LINES+=("$line")
 done
-
 if [ -e "$OUTPUT_FILE" ] && [ ! -f "$OUTPUT_FILE" ]; then
     echo "ERROR: $OUTPUT_FILE exists and is not a regular file." >&2
     exit 1
 fi
-
+# Heading: name of the folder that contains local.env (identifies the deployment).
+HEADING=$(basename "$(cd "$(dirname "$ENV_FILE")" && pwd -P)")
 # umask 077: a newly created file is readable by its owner only.
 (
     umask 077
-    printf '%s\n' "${LINES[@]}" >> "$OUTPUT_FILE"
+    printf '%s\n' "$HEADING" "${LINES[@]}" "" >> "$OUTPUT_FILE"
 )
 chmod 600 "$OUTPUT_FILE"
-
 echo "Appended ${KEYS[*]} to $OUTPUT_FILE"
