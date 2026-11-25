@@ -11,7 +11,7 @@
 #   DB_ADMIN_PASSWORD=...
 #   <blank line>
 #
-# Usage: ./bin/export-db-admin-credentials.sh [output-file]
+# Usage: ./bin/migrations/export-db-admin-credentials.sh [output-file]
 #        default output-file: db-admin-credentials.txt (git-ignored)
 set -euo pipefail
 ENV_FILE="local.env"
