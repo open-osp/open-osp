@@ -26,3 +26,4 @@ tmp/
 local.env
 *.lrz
 
+/dump/
